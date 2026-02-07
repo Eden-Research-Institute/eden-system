@@ -76,7 +76,6 @@
         .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
         .page-title p { margin: 5px 0 0; color: var(--text-sub); font-size: 12px; }
         
-        /* 시계 스타일 */
         .clock-area { text-align: right; }
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
@@ -121,47 +120,72 @@
         .system-list div { padding: 8px 0; font-size: 13px; display: flex; justify-content: space-between; }
         .ok { color: var(--accent); } .warn { color: #ffaa00; } .lock { color: var(--danger); }
 
-        /* ▼▼▼ [중요] 모바일 최적화 코드 ▼▼▼ */
+        /* ▼▼▼ [수정됨] 모바일 최적화 코드 ▼▼▼ */
         @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; overflow: auto; }
-            
-            /* 사이드바 (상단 탭) */
-            .sidebar { 
-                width: 100%; height: 55px; flex-direction: row; padding: 0 10px; align-items: center;
-                border-right: none; border-bottom: 1px solid var(--border); background: var(--bg-color);
-                position: sticky; top: 0; z-index: 100; padding-right: 120px; overflow-x: auto; overflow-y: hidden;
+            body { 
+                flex-direction: column; 
+                height: auto; 
+                overflow: auto; /* 전체 스크롤 가능 */
             }
+            
+            /* 사이드바 (메뉴) */
+            .sidebar { 
+                width: 100%; height: 55px; 
+                flex-direction: row; align-items: center;
+                border-right: none; border-bottom: 1px solid var(--border); 
+                background: var(--bg-color);
+                
+                position: sticky; top: 0; z-index: 100; /* 상단바 고정 */
+                
+                padding: 0 10px;
+                padding-right: 130px; /* ★중요: 프로필이 가리지 않게 오른쪽 공간 비워둠 */
+                
+                overflow-x: auto; /* 메뉴만 좌우 스크롤 */
+                overflow-y: hidden;
+                white-space: nowrap; /* 줄바꿈 방지 */
+            }
+            /* 스크롤바 숨기기 (깔끔하게) */
+            .sidebar::-webkit-scrollbar { display: none; } 
+
             .logo { display: none; }
-            .menu-item { margin-bottom: 0; margin-right: 5px; padding: 6px 10px; background: #222; flex-shrink: 0; height: 36px; }
+            .menu-item { 
+                margin-bottom: 0; margin-right: 5px; padding: 6px 10px; 
+                background: #222; flex-shrink: 0; height: 36px; 
+            }
             .menu-item span:last-child { display: inline; font-size: 12px; }
             
-            /* 프로필 박스 (고정) */
+            /* ▼▼▼ [수정됨] 프로필 박스: 화면에 완전 고정 (Fixed) ▼▼▼ */
             .profile-box { 
-                display: flex !important; position: absolute; right: 0; top: 0; width: 115px; height: 100%;
-                background: #1a1a1a; border-top: none; padding: 0; margin: 0; border-left: 2px solid var(--border);
-                justify-content: center; box-shadow: -5px 0 10px rgba(0,0,0,0.5);
+                display: flex !important;
+                position: fixed; /* ★화면에 딱풀로 붙임★ */
+                top: 0; right: 0; 
+                width: 120px; height: 55px; /* 사이드바 높이랑 맞춤 */
+                
+                background: #1a1a1a; /* 메뉴가 뒤로 지나가도 안 비치게 */
+                border-top: none; padding: 0; margin: 0; 
+                border-left: 2px solid var(--border);
+                justify-content: center; 
+                box-shadow: -5px 0 10px rgba(0,0,0,0.5);
+                z-index: 1000; /* 제일 위에 표시 */
             }
             .avatar { width: 24px; height: 24px; font-size: 12px; margin-right: 8px;}
             .user-info h4 { font-size: 12px; }
             .user-info p { font-size: 10px; margin-top: 1px; }
 
             /* 메인 콘텐츠 */
-            .main-content { grid-template-columns: 1fr; display: flex; flex-direction: column; padding: 15px; }
-            
-            /* ▼▼▼ [복구완료] 모바일 헤더 (제목 + 시계) ▼▼▼ */
-            .header-area { 
-                flex-direction: column; /* 세로로 쌓기 */
-                align-items: flex-start; /* 왼쪽 정렬 */
-                gap: 10px; /* 간격 */
+            .main-content { 
+                grid-template-columns: 1fr; 
+                display: flex; flex-direction: column; 
+                padding: 15px; 
             }
+            
+            /* 헤더 (제목+시계) */
+            .header-area { flex-direction: column; align-items: flex-start; gap: 5px;}
             .page-title h1 { font-size: 18px; }
             
-            /* 시계 강제 표시 */
-            .clock-area { 
-                display: block !important; /* 무조건 보여라! */
-                text-align: left; /* 제목이랑 같이 왼쪽 정렬 */
-            }
-            .clock-time { font-size: 20px; } /* 모바일에선 조금 작게 */
+            /* 시계 (모바일에서도 보이게) */
+            .clock-area { display: block !important; text-align: left; margin-top: 5px; }
+            .clock-time { font-size: 20px; }
             .clock-date { text-align: left; }
         }
     </style>
@@ -215,55 +239,4 @@
         <div class="card stats-card">
             <div class="card-header"><span class="card-title">SUBJECT STATUS</span></div>
             <div class="mono">
-                <div class="stat-row"><span class="stat-label">총 실험체 수 (Total)</span><span class="stat-num" id="stat-total">Loading...</span></div>
-                <div class="stat-row"><span class="stat-label">현재 수용 (In Custody)</span><span class="stat-num" id="stat-active" style="color:var(--accent);">Loading...</span></div>
-                <div class="stat-row"><span class="stat-label">사망/폐기 (Deceased)</span><span class="stat-num" id="stat-dead" style="color:#666;">Loading...</span></div>
-                <div class="stat-row"><span class="stat-label">금일 신규 입소 (New)</span><span class="stat-num" id="stat-new" style="color:#fff;">Loading...</span></div>
-            </div>
-        </div>
-
-        <div class="card info-card">
-            <div class="card-header"><span class="card-title">SYSTEM CHECK</span></div>
-            <div class="system-list mono">
-                <div><span>메인 서버 (Main Server)</span> <span class="ok">ONLINE</span></div>
-                <div><span>보안망 (Security Grid)</span> <span class="ok">ARMED</span></div>
-                <div><span>격리 시스템 (Containment)</span> <span class="warn">CHECK</span></div>
-                <div><span>외부 통신망 (Network)</span> <span class="lock">OFFLINE</span></div>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        function updateClock() {
-            const now = new Date();
-            const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
-            const kstDate = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-            document.getElementById('clock').innerText = kstTime;
-            document.getElementById('date').innerText = kstDate;
-        }
-        setInterval(updateClock, 1000); updateClock();
-
-        function updateStats() {
-            const startDate = new Date("2026-01-01T00:00:00+09:00").getTime();
-            const today = new Date().getTime();
-            const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-
-            const total = 1000 + (daysPassed * 3); 
-            const dead = Math.floor(total * 0.58);
-            const active = total - dead;
-            const newIn = (daysPassed % 10) + 5; 
-
-            document.getElementById('stat-total').innerText = total.toLocaleString();
-            document.getElementById('stat-active').innerText = active.toLocaleString();
-            document.getElementById('stat-dead').innerText = dead.toLocaleString();
-            document.getElementById('stat-new').innerText = "+" + newIn;
-        }
-        updateStats();
-
-        setInterval(() => {
-            const bpmElement = document.getElementById('bpm');
-            bpmElement.innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70;
-        }, 2000);
-    </script>
-</body>
-</html>
+                <div class="stat-row"><span
