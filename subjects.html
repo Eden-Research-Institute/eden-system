@@ -26,15 +26,25 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            display: flex; height: 100vh; overflow: hidden;
+            /* ▼▼▼ [핵심 수정] 높이 고정 삭제! 스크롤 자유롭게! ▼▼▼ */
+            min-height: 100vh;
+            overflow-x: hidden; /* 가로 스크롤만 방지 */
         }
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* === 사이드바 === */
+        /* === 사이드바 (PC: 왼쪽에 고정) === */
         .sidebar {
-            width: 240px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
-            display: flex; flex-direction: column; padding: 20px; flex-shrink: 0;
+            width: 240px; 
+            height: 100vh; /* 화면 전체 높이 */
+            background-color: var(--sidebar-bg); 
+            border-right: 1px solid var(--border);
+            position: fixed; /* ★화면에 딱 고정★ */
+            top: 0; left: 0;
+            display: flex; flex-direction: column; 
+            padding: 20px; 
+            z-index: 100; /* 내용보다 위에 */
+            overflow-y: auto; /* 메뉴 길어지면 스크롤 */
         }
         .logo {
             font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px;
@@ -42,10 +52,13 @@
         }
         .logo::before { content: '❖'; font-size: 20px; }
 
+        /* 메뉴 아이템 (글자 잘림 방지) */
         .menu-item {
             padding: 12px 15px; color: var(--text-sub); border-radius: 6px;
-            margin-bottom: 4px; cursor: pointer; transition: 0.2s; font-size: 14px;
-            display: flex; align-items: center; gap: 12px; font-weight: 500; text-decoration: none;
+            margin-bottom: 4px; transition: 0.2s; font-size: 14px;
+            display: flex; align-items: center; gap: 12px; font-weight: 500;
+            text-decoration: none; /* 링크 밑줄 제거 */
+            flex-shrink: 0; /* 찌그러짐 방지 */
         }
         .menu-item:hover, .menu-item.active { background-color: rgba(0, 255, 157, 0.05); color: var(--accent); }
 
@@ -60,10 +73,12 @@
         .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
         .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
 
-        /* === 메인 콘텐츠 === */
+        /* === 메인 콘텐츠 (PC: 사이드바만큼 밀기) === */
         .main-content {
-            flex: 1; padding: 30px; overflow-y: auto;
+            margin-left: 240px; /* ★사이드바 공간 확보★ */
+            padding: 30px; 
             display: flex; flex-direction: column; gap: 20px;
+            min-height: 100vh;
         }
 
         .header-area {
@@ -77,44 +92,28 @@
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
 
-        /* 카드 공통 */
+        /* 카드 스타일 (잘림 방지) */
         .card {
             background-color: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 8px; 
-            padding: 30px; 
-            position: relative; overflow: hidden;
+            border-radius: 8px; padding: 30px; 
+            position: relative; /* overflow hidden 삭제함 */
         }
         .card-header { 
             display: flex; justify-content: space-between; align-items: center; 
             margin-bottom: 25px; 
-            padding-bottom: 5px; 
         }
         .card-title { 
             font-size: 12px; font-weight: 700; color: var(--text-sub); 
             text-transform: uppercase; letter-spacing: 1px; 
-            line-height: 2; 
-            display: inline-block;
+            line-height: 1.5; /* 줄 간격 확보 */
         }
 
         /* 1. 상단 요약 */
         .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .summary-item { 
-            text-align: center; 
-            border-right: 1px solid #444; 
-            padding: 10px 0; 
-        }
+        .summary-item { text-align: center; border-right: 1px solid #444; padding: 10px 0; }
         .summary-item:last-child { border-right: none; }
-        
-        .phase-label { 
-            font-size: 13px; color: #aaa; 
-            display: block; margin-bottom: 12px; 
-            letter-spacing: 0.5px;
-        }
-        .phase-count { 
-            font-size: 36px; 
-            font-weight: bold; color: #fff; 
-            display: block; margin-bottom: 8px; 
-        }
+        .phase-label { font-size: 13px; color: #aaa; display: block; margin-bottom: 12px; }
+        .phase-count { font-size: 36px; font-weight: bold; color: #fff; display: block; margin-bottom: 8px; }
         .phase-desc { font-size: 12px; color: #666; }
 
         /* 2. 리플리 스케줄 */
@@ -124,48 +123,52 @@
             display: flex; align-items: center; padding: 15px 0; 
             border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; 
         }
-        .schedule-time { width: 80px; color: var(--accent); font-weight: bold; }
-        .schedule-task { flex: 1; color: #ddd; }
-        .schedule-status { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: #333; color: #aaa; }
+        .schedule-time { width: 80px; color: var(--accent); font-weight: bold; flex-shrink: 0; }
+        .schedule-task { flex: 1; color: #ddd; line-height: 1.5; margin-right: 10px; }
+        .schedule-status { font-size: 11px; padding: 4px 8px; border-radius: 4px; background: #333; color: #aaa; white-space: nowrap; }
         .status-done { background: rgba(0, 255, 157, 0.1); color: var(--accent); }
         .status-prog { background: rgba(255, 170, 0, 0.1); color: var(--warning); }
         
-        /* 3. 일반 실험체 리스트 */
-        .table-container {
-            width: 100%;
-            overflow-x: auto; 
-            white-space: nowrap;
-            padding-bottom: 10px; 
-        }
-        .mob-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; min-width: 500px; }
-        .mob-table th { color: #666; font-weight: normal; padding: 12px 10px; border-bottom: 1px solid #444; }
-        .mob-table td { padding: 15px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); color: #ccc; }
+        /* 3. 일반 실험체 리스트 (테이블) */
+        .table-container { width: 100%; overflow-x: auto; padding-bottom: 10px; }
+        .mob-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; min-width: 600px; }
+        .mob-table th { color: #666; font-weight: normal; padding: 15px 10px; border-bottom: 1px solid #444; }
+        .mob-table td { padding: 18px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); color: #ccc; vertical-align: middle; line-height: 1.5; }
         
-        .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: bold; letter-spacing: 0.5px;}
+        .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: bold; }
         .s-adapt { background: rgba(255,255,255,0.1); color: #fff; }
         .s-fail { background: rgba(255, 75, 75, 0.2); color: var(--danger); }
         .s-wait { background: rgba(255, 170, 0, 0.2); color: var(--warning); }
 
-        /* 모바일 최적화 */
+        /* ▼▼▼ 모바일 최적화 (여기가 핵심) ▼▼▼ */
         @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; overflow: auto; }
+            /* 사이드바: 상단 고정 (가로 스크롤) */
             .sidebar { 
-                width: 100%; height: 55px; flex-direction: row; align-items: center;
+                width: 100%; height: 55px; 
+                flex-direction: row; align-items: center;
                 border-right: none; border-bottom: 1px solid var(--border); 
-                position: sticky; top: 0; z-index: 100; padding-right: 130px; 
-                overflow-x: auto; white-space: nowrap; 
+                position: sticky; top: 0; padding: 0 10px; padding-right: 130px; 
+                overflow-x: auto; overflow-y: hidden; white-space: nowrap;
             }
             .sidebar::-webkit-scrollbar { display: none; }
             .logo { display: none; }
+            
+            /* 메뉴 아이템 모바일용 */
             .menu-item { margin-bottom: 0; margin-right: 5px; background: #222; padding: 6px 10px; height: 36px; }
+            
+            /* 프로필 박스: 우측 상단 고정 (절대 안 움직임) */
             .profile-box { 
                 position: fixed; top: 0; right: 0; width: 120px; height: 55px;
-                background: #1a1a1a; border-left: 2px solid var(--border);
+                background: #1a1a1a; border-left: 2px solid var(--border); border-top: none;
                 display: flex !important; justify-content: center; z-index: 1000;
+                padding: 0; margin: 0; box-shadow: -5px 0 10px rgba(0,0,0,0.5);
             }
-            .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
-            .clock-area { text-align: left; margin-top: 5px;}
             
+            /* 메인 콘텐츠: 마진 제거 (사이드바가 위로 갔으니까) */
+            .main-content { margin-left: 0; padding: 15px; }
+            
+            .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .clock-area { text-align: left; margin-top: 5px; }
             .summary-grid { grid-template-columns: 1fr; gap: 20px; }
             .summary-item { border-right: none; border-bottom: 1px solid #333; padding-bottom: 20px; }
         }
@@ -252,7 +255,6 @@
     </main>
 
     <script>
-        // 시계
         function updateClock() {
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
@@ -265,7 +267,6 @@
         }
         setInterval(updateClock, 1000); updateClock();
 
-        // [기능 1] 날짜에 따라 리플리 스케줄 변경
         function updateSchedule() {
             const today = new Date().getDate(); 
             const scheduleList = document.getElementById('ripley-schedule');
@@ -288,7 +289,6 @@
         }
         updateSchedule();
 
-        // [기능 2] 매번 바뀌는 모브 로그
         function updateMobLogs() {
             const tbody = document.getElementById('mob-logs');
             const statuses = [
@@ -318,7 +318,6 @@
         }
         updateMobLogs();
 
-        // [기능 3] 숫자 계산 로직
         function updateCount() {
             const startDate = new Date("2026-01-01T00:00:00+09:00").getTime();
             const today = new Date().getTime();
