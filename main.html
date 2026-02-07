@@ -43,10 +43,12 @@
         }
         .logo::before { content: '❖'; font-size: 20px; }
 
+        /* 메뉴 아이템 스타일 (링크 태그 a도 포함되도록 수정) */
         .menu-item {
             padding: 12px 15px; color: var(--text-sub); border-radius: 6px;
             margin-bottom: 4px; cursor: pointer; transition: 0.2s; font-size: 14px;
             display: flex; align-items: center; gap: 12px; font-weight: 500;
+            text-decoration: none; /* 링크 밑줄 제거 */
         }
         .menu-item:hover, .menu-item.active { background-color: rgba(0, 255, 157, 0.05); color: var(--accent); }
 
@@ -76,11 +78,7 @@
         .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
         .page-title p { margin: 5px 0 0; color: var(--text-sub); font-size: 12px; }
         
-        /* 시계 스타일 (절대 숨겨지지 않게 설정) */
-        .clock-area { 
-            text-align: right; 
-            display: block !important; /* 강제 표시 */
-        }
+        .clock-area { text-align: right; display: block !important; }
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
 
@@ -124,63 +122,27 @@
         .system-list div { padding: 8px 0; font-size: 13px; display: flex; justify-content: space-between; }
         .ok { color: var(--accent); } .warn { color: #ffaa00; } .lock { color: var(--danger); }
 
-        /* ▼▼▼ 모바일 최적화 ▼▼▼ */
+        /* 모바일 최적화 */
         @media (max-width: 768px) {
-            body { 
-                flex-direction: column; height: auto; overflow: auto; 
-            }
-            
-            /* 사이드바 */
+            body { flex-direction: column; height: auto; overflow: auto; }
             .sidebar { 
-                width: 100%; height: 55px; 
-                flex-direction: row; align-items: center;
+                width: 100%; height: 55px; flex-direction: row; align-items: center;
                 border-right: none; border-bottom: 1px solid var(--border); 
-                background: var(--bg-color);
-                position: sticky; top: 0; z-index: 100;
-                padding: 0 10px; padding-right: 130px; 
-                overflow-x: auto; overflow-y: hidden; white-space: nowrap; 
+                position: sticky; top: 0; z-index: 100; padding-right: 130px; 
+                overflow-x: auto; white-space: nowrap; 
             }
-            .sidebar::-webkit-scrollbar { display: none; } 
-
+            .sidebar::-webkit-scrollbar { display: none; }
             .logo { display: none; }
-            .menu-item { 
-                margin-bottom: 0; margin-right: 5px; padding: 6px 10px; 
-                background: #222; flex-shrink: 0; height: 36px; 
-            }
+            .menu-item { margin-bottom: 0; margin-right: 5px; background: #222; padding: 6px 10px; height: 36px; }
             .menu-item span:last-child { display: inline; font-size: 12px; }
             
-            /* 프로필 박스 (오른쪽 상단 고정) */
             .profile-box { 
-                display: flex !important;
-                position: fixed; top: 0; right: 0; 
-                width: 120px; height: 55px;
-                background: #1a1a1a; border-left: 2px solid var(--border); border-top: none;
-                justify-content: center; z-index: 1000;
-                padding: 0; margin: 0;
-                box-shadow: -5px 0 10px rgba(0,0,0,0.5);
+                position: fixed; top: 0; right: 0; width: 120px; height: 55px;
+                background: #1a1a1a; border-left: 2px solid var(--border);
+                display: flex !important; justify-content: center; z-index: 1000;
             }
-            .avatar { width: 24px; height: 24px; font-size: 12px; margin-right: 8px;}
-            .user-info h4 { font-size: 12px; }
-            .user-info p { font-size: 10px; margin-top: 1px; }
-
-            /* 메인 콘텐츠 */
-            .main-content { 
-                grid-template-columns: 1fr; 
-                display: flex; flex-direction: column; 
-                padding: 15px; 
-            }
-            
-            /* 헤더 (제목+시계) */
-            .header-area { flex-direction: column; align-items: flex-start; gap: 5px;}
-            .page-title h1 { font-size: 18px; }
-            
-            /* 시계 (모바일 설정) */
-            .clock-area { 
-                display: block !important; 
-                text-align: left; margin-top: 5px; 
-            }
-            .clock-time { font-size: 20px; }
-            .clock-date { text-align: left; }
+            .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .clock-area { text-align: left; margin-top: 5px;}
         }
     </style>
 </head>
@@ -188,12 +150,11 @@
     <nav class="sidebar">
         <div class="logo">EDEN LAB.</div>
         
-        <div class="menu-item active"><span>📊</span> <span>대시보드</span></div>
-        <div class="menu-item"><span>🧬</span> <span>실험체 관리</span></div>
-        <div class="menu-item"><span>🏢</span> <span>시설 관리</span></div>
-        <div class="menu-item"><span>👥</span> <span>조직/인사</span></div>
-        <div class="menu-item"><span>🌐</span> <span>대외 홈페이지</span></div>
-        
+        <a href="main.html" class="menu-item active"><span>📊</span> <span>대시보드</span></a>
+        <a href="subjects.html" class="menu-item"><span>🧬</span> <span>실험체 관리</span></a>
+        <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>🏢</span> <span>시설 관리</span></a>
+        <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>👥</span> <span>조직/인사</span></a>
+        <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>🌐</span> <span>대외 홈페이지</span></a>
         <div class="profile-box">
             <div class="avatar">K</div>
             <div class="user-info" onclick="alert('수신된 메시지가 없습니다.')">
@@ -211,7 +172,7 @@
                 <div class="clock-time" id="clock">00:00:00</div>
                 <div class="clock-date" id="date">YYYY-MM-DD</div>
             </div>
-            </div>
+        </div>
 
         <div class="card ripley-card">
             <div class="card-header">
@@ -252,22 +213,18 @@
     </main>
 
     <script>
-        // 시계 함수
         function updateClock() {
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
             const kstDate = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
             
-            // 만약 요소가 없으면 에러 안 나게 체크
             const clockEl = document.getElementById('clock');
             const dateEl = document.getElementById('date');
-            
             if (clockEl) clockEl.innerText = kstTime;
             if (dateEl) dateEl.innerText = kstDate;
         }
         setInterval(updateClock, 1000); updateClock();
 
-        // 통계 함수
         function updateStats() {
             const startDate = new Date("2026-01-01T00:00:00+09:00").getTime();
             const today = new Date().getTime();
@@ -285,7 +242,6 @@
         }
         updateStats();
 
-        // 심박수
         setInterval(() => {
             const bpmElement = document.getElementById('bpm');
             bpmElement.innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70;
