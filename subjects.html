@@ -26,25 +26,25 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            /* ▼▼▼ [핵심 수정] 높이 고정 삭제! 스크롤 자유롭게! ▼▼▼ */
+            /* 높이 제한 해제 & 가로 스크롤 방지 */
             min-height: 100vh;
-            overflow-x: hidden; /* 가로 스크롤만 방지 */
+            overflow-x: hidden; 
         }
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* === 사이드바 (PC: 왼쪽에 고정) === */
+        /* === 사이드바 === */
         .sidebar {
             width: 240px; 
-            height: 100vh; /* 화면 전체 높이 */
+            height: 100vh; 
             background-color: var(--sidebar-bg); 
             border-right: 1px solid var(--border);
-            position: fixed; /* ★화면에 딱 고정★ */
+            position: fixed; 
             top: 0; left: 0;
             display: flex; flex-direction: column; 
             padding: 20px; 
-            z-index: 100; /* 내용보다 위에 */
-            overflow-y: auto; /* 메뉴 길어지면 스크롤 */
+            z-index: 100;
+            overflow-y: auto;
         }
         .logo {
             font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px;
@@ -52,13 +52,11 @@
         }
         .logo::before { content: '❖'; font-size: 20px; }
 
-        /* 메뉴 아이템 (글자 잘림 방지) */
         .menu-item {
             padding: 12px 15px; color: var(--text-sub); border-radius: 6px;
             margin-bottom: 4px; transition: 0.2s; font-size: 14px;
             display: flex; align-items: center; gap: 12px; font-weight: 500;
-            text-decoration: none; /* 링크 밑줄 제거 */
-            flex-shrink: 0; /* 찌그러짐 방지 */
+            text-decoration: none; flex-shrink: 0;
         }
         .menu-item:hover, .menu-item.active { background-color: rgba(0, 255, 157, 0.05); color: var(--accent); }
 
@@ -70,12 +68,15 @@
             width: 32px; height: 32px; background: #333; border-radius: 4px;
             display: flex; justify-content: center; align-items: center; font-weight: bold; color: #fff; font-size: 14px;
         }
+        /* ▼▼▼ [수정] 프로필 클릭 가능하게 커서 변경 ▼▼▼ */
+        .user-info { cursor: pointer; }
+        .user-info:hover h4 { color: var(--accent); text-decoration: underline; }
         .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
         .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
 
-        /* === 메인 콘텐츠 (PC: 사이드바만큼 밀기) === */
+        /* === 메인 콘텐츠 === */
         .main-content {
-            margin-left: 240px; /* ★사이드바 공간 확보★ */
+            margin-left: 240px; 
             padding: 30px; 
             display: flex; flex-direction: column; gap: 20px;
             min-height: 100vh;
@@ -92,11 +93,10 @@
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
 
-        /* 카드 스타일 (잘림 방지) */
+        /* 카드 스타일 */
         .card {
             background-color: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 8px; padding: 30px; 
-            position: relative; /* overflow hidden 삭제함 */
+            border-radius: 8px; padding: 30px; position: relative; 
         }
         .card-header { 
             display: flex; justify-content: space-between; align-items: center; 
@@ -105,7 +105,7 @@
         .card-title { 
             font-size: 12px; font-weight: 700; color: var(--text-sub); 
             text-transform: uppercase; letter-spacing: 1px; 
-            line-height: 1.5; /* 줄 간격 확보 */
+            line-height: 1.5; 
         }
 
         /* 1. 상단 요약 */
@@ -129,7 +129,7 @@
         .status-done { background: rgba(0, 255, 157, 0.1); color: var(--accent); }
         .status-prog { background: rgba(255, 170, 0, 0.1); color: var(--warning); }
         
-        /* 3. 일반 실험체 리스트 (테이블) */
+        /* 3. 일반 실험체 리스트 */
         .table-container { width: 100%; overflow-x: auto; padding-bottom: 10px; }
         .mob-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; min-width: 600px; }
         .mob-table th { color: #666; font-weight: normal; padding: 15px 10px; border-bottom: 1px solid #444; }
@@ -140,9 +140,8 @@
         .s-fail { background: rgba(255, 75, 75, 0.2); color: var(--danger); }
         .s-wait { background: rgba(255, 170, 0, 0.2); color: var(--warning); }
 
-        /* ▼▼▼ 모바일 최적화 (여기가 핵심) ▼▼▼ */
+        /* 모바일 최적화 */
         @media (max-width: 768px) {
-            /* 사이드바: 상단 고정 (가로 스크롤) */
             .sidebar { 
                 width: 100%; height: 55px; 
                 flex-direction: row; align-items: center;
@@ -152,11 +151,8 @@
             }
             .sidebar::-webkit-scrollbar { display: none; }
             .logo { display: none; }
-            
-            /* 메뉴 아이템 모바일용 */
             .menu-item { margin-bottom: 0; margin-right: 5px; background: #222; padding: 6px 10px; height: 36px; }
             
-            /* 프로필 박스: 우측 상단 고정 (절대 안 움직임) */
             .profile-box { 
                 position: fixed; top: 0; right: 0; width: 120px; height: 55px;
                 background: #1a1a1a; border-left: 2px solid var(--border); border-top: none;
@@ -164,9 +160,7 @@
                 padding: 0; margin: 0; box-shadow: -5px 0 10px rgba(0,0,0,0.5);
             }
             
-            /* 메인 콘텐츠: 마진 제거 (사이드바가 위로 갔으니까) */
             .main-content { margin-left: 0; padding: 15px; }
-            
             .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
             .clock-area { text-align: left; margin-top: 5px; }
             .summary-grid { grid-template-columns: 1fr; gap: 20px; }
@@ -185,7 +179,7 @@
         
         <div class="profile-box">
             <div class="avatar">K</div>
-            <div class="user-info">
+            <div class="user-info" onclick="alert('수신된 메시지가 없습니다.')">
                 <h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p>
             </div>
         </div>
@@ -213,7 +207,7 @@
                 <div class="summary-item">
                     <span class="phase-label" style="color:var(--accent);">PHASE 2 (Regeneration)</span>
                     <span class="phase-count" style="color:var(--accent);">1</span>
-                    <span class="phase-desc">유일 개체 (R-001)</span>
+                    <span class="phase-desc">유일 개체 (ER-S-02-001)</span>
                 </div>
                 <div class="summary-item">
                     <span class="phase-label" style="color:var(--text-sub);">PHASE 3 (Immortality)</span>
@@ -225,8 +219,8 @@
 
         <div class="card schedule-card">
             <div class="card-header">
-                <span class="card-title" style="color:var(--accent);">CORE ASSET SCHEDULE (R-001)</span>
-                <span style="font-size:11px; color:#888;">담당: 소장 카이로 (Dir. Kairo)</span>
+                <span class="card-title" style="color:var(--accent);">CORE ASSET SCHEDULE (ER-S-02-001)</span>
+                <span style="font-size:11px; color:#888;">담당: 소장 카이로</span>
             </div>
             <ul class="schedule-list mono" id="ripley-schedule"></ul>
         </div>
@@ -318,15 +312,22 @@
         }
         updateMobLogs();
 
+        // ▼▼▼ [수정] 대시보드(main.html)와 숫자 계산 로직 100% 통일 ▼▼▼
         function updateCount() {
             const startDate = new Date("2026-01-01T00:00:00+09:00").getTime();
             const today = new Date().getTime();
             const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
 
-            const total = 1200 + (daysPassed * 3);
-            const dead = Math.floor(total * 0.6);
-            const ripley = 1;
-            const phase1Active = total - dead - ripley;
+            // 대시보드와 같은 기본값(1000) 사용
+            const total = 1000 + (daysPassed * 3); 
+            // 대시보드와 같은 사망률(0.58) 사용
+            const dead = Math.floor(total * 0.58);
+            
+            const activeTotal = total - dead; // 이게 '현재 수용' 인원
+            const ripley = 1; // 2단계
+            
+            // 1단계 인원 = 현재 수용 - 리플리
+            const phase1Active = activeTotal - ripley;
 
             const el = document.getElementById('count-p1');
             if(el) el.innerText = phase1Active.toLocaleString();
