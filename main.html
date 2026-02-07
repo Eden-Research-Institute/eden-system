@@ -32,7 +32,7 @@
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* === 사이드바 === */
+        /* === 사이드바 (PC) === */
         .sidebar {
             width: 240px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
             display: flex; flex-direction: column; padding: 20px; flex-shrink: 0;
@@ -43,7 +43,6 @@
         }
         .logo::before { content: '❖'; font-size: 20px; }
 
-        /* 메뉴 아이템 스타일 (링크 태그 a도 포함되도록 수정) */
         .menu-item {
             padding: 12px 15px; color: var(--text-sub); border-radius: 6px;
             margin-bottom: 4px; cursor: pointer; transition: 0.2s; font-size: 14px;
@@ -122,27 +121,51 @@
         .system-list div { padding: 8px 0; font-size: 13px; display: flex; justify-content: space-between; }
         .ok { color: var(--accent); } .warn { color: #ffaa00; } .lock { color: var(--danger); }
 
-        /* 모바일 최적화 */
+        /* ▼▼▼ [필수] 모바일 최적화 코드 복구 ▼▼▼ */
         @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; overflow: auto; }
+            body { 
+                flex-direction: column; height: auto; overflow: auto; 
+            }
+            
+            /* 사이드바 (가로 스크롤) */
             .sidebar { 
-                width: 100%; height: 55px; flex-direction: row; align-items: center;
+                width: 100%; height: 55px; 
+                flex-direction: row; align-items: center;
                 border-right: none; border-bottom: 1px solid var(--border); 
-                position: sticky; top: 0; z-index: 100; padding-right: 130px; 
+                background: var(--bg-color);
+                position: sticky; top: 0; z-index: 100; 
+                padding: 0 10px; padding-right: 130px; /* 프로필 공간 */
                 overflow-x: auto; white-space: nowrap; 
             }
             .sidebar::-webkit-scrollbar { display: none; }
+
             .logo { display: none; }
             .menu-item { margin-bottom: 0; margin-right: 5px; background: #222; padding: 6px 10px; height: 36px; }
             .menu-item span:last-child { display: inline; font-size: 12px; }
             
+            /* 프로필 박스 (고정) */
             .profile-box { 
                 position: fixed; top: 0; right: 0; width: 120px; height: 55px;
                 background: #1a1a1a; border-left: 2px solid var(--border);
                 display: flex !important; justify-content: center; z-index: 1000;
+                padding: 0; margin: 0; border-top: none;
+                box-shadow: -5px 0 10px rgba(0,0,0,0.5);
             }
-            .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
-            .clock-area { text-align: left; margin-top: 5px;}
+            .avatar { width: 24px; height: 24px; font-size: 12px; margin-right: 8px;}
+            .user-info h4 { font-size: 12px; }
+            .user-info p { font-size: 10px; margin-top: 1px; }
+
+            /* 메인 콘텐츠 */
+            .main-content { grid-template-columns: 1fr; display: flex; flex-direction: column; padding: 15px; }
+            
+            /* 헤더 (제목+시계) */
+            .header-area { flex-direction: column; align-items: flex-start; gap: 5px;}
+            .page-title h1 { font-size: 18px; }
+            
+            /* 시계 모바일용 */
+            .clock-area { display: block !important; text-align: left; margin-top: 5px; }
+            .clock-time { font-size: 20px; }
+            .clock-date { text-align: left; }
         }
     </style>
 </head>
@@ -155,6 +178,7 @@
         <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>🏢</span> <span>시설 관리</span></a>
         <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>👥</span> <span>조직/인사</span></a>
         <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>🌐</span> <span>대외 홈페이지</span></a>
+        
         <div class="profile-box">
             <div class="avatar">K</div>
             <div class="user-info" onclick="alert('수신된 메시지가 없습니다.')">
