@@ -32,7 +32,7 @@
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* 사이드바 */
+        /* === 사이드바 (PC 버전) === */
         .sidebar {
             width: 240px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
             display: flex; flex-direction: column; padding: 20px; flex-shrink: 0;
@@ -63,7 +63,7 @@
         .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
         .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
 
-        /* 메인 콘텐츠 */
+        /* === 메인 콘텐츠 === */
         .main-content {
             flex: 1; padding: 30px; overflow-y: auto;
             display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 20px;
@@ -118,13 +118,50 @@
         .system-list div { padding: 8px 0; font-size: 13px; display: flex; justify-content: space-between; }
         .ok { color: var(--accent); } .warn { color: #ffaa00; } .lock { color: var(--danger); }
 
+        /* ▼▼▼ [중요] 모바일 최적화 코드 ▼▼▼ */
         @media (max-width: 768px) {
-            body { flex-direction: column; overflow: auto; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; padding: 15px; overflow-x: auto; gap: 20px;}
-            .menu-item span:last-child { display: none; }
-            .profile-box { display: none; }
-            .main-content { grid-template-columns: 1fr; display: flex; flex-direction: column; }
-            .clock-area { display: none; }
+            body { 
+                flex-direction: column; 
+                height: auto; /* 스크롤 가능하게 변경 */
+                overflow: auto; 
+            }
+            
+            /* 사이드바를 상단 탭 메뉴로 변경 */
+            .sidebar { 
+                width: 100%; 
+                height: auto; 
+                flex-direction: row; 
+                padding: 10px; 
+                overflow-x: auto; /* 가로 스크롤 허용 */
+                white-space: nowrap; /* 줄바꿈 금지 */
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                background: var(--bg-color);
+                position: sticky; top: 0; z-index: 100; /* 상단 고정 */
+            }
+            
+            .logo { display: none; } /* 공간 확보를 위해 로고 숨김 */
+            
+            .menu-item {
+                margin-bottom: 0; margin-right: 10px;
+                padding: 8px 12px; background: #222; /* 탭처럼 보이게 배경색 추가 */
+                flex-shrink: 0; /* 찌그러짐 방지 */
+            }
+            .menu-item span:last-child { display: inline; font-size: 12px; } /* 글씨 다시 보이게! */
+            
+            .profile-box { display: none; } /* 프로필 숨김 */
+            
+            /* 메인 콘텐츠를 세로로 길게 배치 */
+            .main-content { 
+                grid-template-columns: 1fr; 
+                display: flex; 
+                flex-direction: column; 
+                padding: 15px; 
+            }
+            
+            .clock-area { display: none; } /* 시계 숨김 */
+            .header-area { flex-direction: column; align-items: flex-start; }
+            .page-title h1 { font-size: 18px; }
         }
     </style>
 </head>
@@ -133,9 +170,10 @@
         <div class="logo">EDEN LAB.</div>
         <div class="menu-item active"><span>📊</span> <span>대시보드</span></div>
         <div class="menu-item"><span>🧬</span> <span>실험체 관리</span></div>
-        <div class="menu-item"><span>🏢</span> <span>시설 관리</span></div>
+        <div class="menu-item"><span>🗺️</span> <span>시설 안내도</span></div>
         <div class="menu-item"><span>👥</span> <span>조직/인사</span></div>
-        <div class="menu-item"><span>🌐</span> <span>대외 홈페이지 (Public)</span></div>
+        <div class="menu-item"><span>🌐</span> <span>대외 홈페이지</span></div>
+        
         <div class="profile-box">
             <div class="avatar">K</div>
             <div class="user-info" onclick="alert('수신된 메시지가 없습니다.')">
