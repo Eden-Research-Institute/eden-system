@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDEN INSTITUTE - SECURITY ACCESS</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --panel-color: #0a0a0a;
+            /* ▼▼▼ [색상 변경] 금색 -> 다크 그린 ▼▼▼ */
+            --accent-green: #0e4d2a; /* 깊은 다크 그린 색상 */
+            /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+            --text-gray: #888;
+            --text-white: #e0e0e0;
+            --alert-red: #8b0000;
+            --font-code: 'Consolas', monospace;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            font-family: var(--font-code);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* 스크롤바 숨김 */
+        }
+
+        /* 배경 스캔라인 */
+        .scan-line {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.2) 50%);
+            background-size: 100% 4px; pointer-events: none; z-index: 10;
+        }
+
+        .container {
+            /* ▼▼▼ [반응형 설정] 모바일/PC 대응 ▼▼▼ */
+            width: 90%;          /* 모바일: 화면의 90%만 차지 */
+            max-width: 450px;    /* PC: 최대 450px까지만 커짐 */
+            box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 (중요) */
+            /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+            
+            background: var(--panel-color);
+            border: 1px solid #333;
+            /* 다크 그린 테두리 적용 */
+            border-top: 3px solid var(--accent-green);
+            padding: 40px;
+            box-shadow: 0 0 40px rgba(14, 77, 42, 0.2); /* 그림자도 그린 계열로 */
+            text-align: center;
+        }
+
+        /* 로고 영역 */
+        .logo { font-size: 28px; color: var(--accent-green); letter-spacing: 5px; margin-bottom: 5px; }
+        .sub-logo { font-size: 10px; color: #555; margin-bottom: 40px; letter-spacing: 2px; }
+
+        /* 입력 폼 디자인 */
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .label { display: block; font-size: 11px; color: var(--text-gray); margin-bottom: 8px; }
+        
+        input {
+            width: 100%; background: #111; border: 1px solid #333; color: #fff;
+            padding: 12px; font-size: 14px; box-sizing: border-box; outline: none;
+            font-family: var(--font-code); transition: 0.3s;
+        }
+        /* 포커스 시 다크 그린 */
+        input:focus { border-color: var(--accent-green); background: #151515; }
+
+        /* 버튼 디자인 */
+        button {
+            width: 100%; background: #222;
+            /* 텍스트 및 테두리 다크 그린 */
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            padding: 15px;
+            cursor: pointer; font-weight: bold; font-size: 13px; letter-spacing: 2px;
+            margin-top: 20px; transition: 0.2s;
+        }
+        button:hover { background: var(--accent-green); color: #e0e0e0; }
+
+        /* 경고 메시지 */
+        #msg-area { margin-top: 20px; font-size: 12px; min-height: 20px; }
+
+        /* 로그인 성공 후 화면 */
+        #success-screen { display: none; text-align: left; }
+        .welcome-text { font-size: 16px; color: var(--accent-green); margin-bottom: 20px; }
+        .log-list { font-size: 12px; color: #666; line-height: 1.8; }
+
+        /* ▼▼▼ 모바일 화면 최적화 (작은 화면에서 패딩 조절) ▼▼▼ */
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px; /* 모바일에서는 내부 여백을 줄임 */
+            }
+            .logo {
+                font-size: 22px; /* 로고 크기 약간 축소 */
+                letter-spacing: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scan-line"></div>
+
+    <div class="container">
+        <div id="login-form">
+            <div class="logo">EDEN</div>
+            <div class="sub-logo">SYSTEM SECURITY ACCESS</div>
+
+            <div class="input-group">
+                <span class="label">RESEARCHER ID</span>
+                <input type="text" id="userId" placeholder="ID INPUT" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <span class="label">ACCESS CODE</span>
+                <input type="password" id="userPw" placeholder="PASSWORD INPUT">
+            </div>
+
+            <button onclick="checkLogin()">LOGIN</button>
+            <div id="msg-area"></div>
+        </div>
+
+        <div id="success-screen">
+            <div class="logo" style="font-size: 20px;">ACCESS GRANTED</div>
+            <div class="sub-logo" style="margin-bottom: 20px;">WELCOME, DIRECTOR.</div>
+            
+            <div class="welcome-text">
+                시스템 접속 승인 완료.<br>
+                에덴 중앙 제어권을 획득했습니다.
+            </div>
+
+            <div class="log-list">
+                > System initializing... OK<br>
+                > Security protocol... RELEASED<br>
+                > Bio-metric scan... MATCHED<br>
+                > Connecting to main server... 100%
+            </div>
+            
+            <button onclick="alert('시스템 관리 페이지로 이동합니다. (구현 예정)')">ENTER MAIN SYSTEM</button>
+        </div>
+    </div>
+
+    <script>
+        // ▼ 설정하신 ID와 비번입니다. ▼
+        const SET_ID = "000-0000-0001";
+        const SET_PW = "240826";
+
+        function checkLogin() {
+            const idInput = document.getElementById('userId').value;
+            const pwInput = document.getElementById('userPw').value;
+            const msgArea = document.getElementById('msg-area');
+            const loginForm = document.getElementById('login-form');
+            const successScreen = document.getElementById('success-screen');
+            const container = document.querySelector('.container');
+
+            if (idInput === SET_ID && pwInput === SET_PW) {
+                // [성공 시]
+                msgArea.style.color = "var(--accent-green)"; // 성공 메시지도 그린으로
+                msgArea.innerText = "ACCESS GRANTED.";
+                
+                setTimeout(() => {
+                    loginForm.style.display = 'none';
+                    successScreen.style.display = 'block';
+                }, 500);
+
+            } else {
+                // [실패 시]
+                msgArea.style.color = "#8b0000";
+                msgArea.innerText = "ACCESS DENIED : 아이디 또는 비밀번호 불일치";
+                
+                // 흔들림 효과
+                container.style.transform = "translateX(5px)";
+                setTimeout(() => container.style.transform = "translateX(0)", 100);
+            }
+        }
+    </script>
+</body>
+</html>
