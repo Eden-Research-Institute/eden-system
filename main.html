@@ -32,7 +32,7 @@
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* === 사이드바 (PC) === */
+        /* === 사이드바 === */
         .sidebar {
             width: 240px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
             display: flex; flex-direction: column; padding: 20px; flex-shrink: 0;
@@ -76,7 +76,11 @@
         .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
         .page-title p { margin: 5px 0 0; color: var(--text-sub); font-size: 12px; }
         
-        .clock-area { text-align: right; }
+        /* 시계 스타일 (절대 숨겨지지 않게 설정) */
+        .clock-area { 
+            text-align: right; 
+            display: block !important; /* 강제 표시 */
+        }
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
 
@@ -120,31 +124,22 @@
         .system-list div { padding: 8px 0; font-size: 13px; display: flex; justify-content: space-between; }
         .ok { color: var(--accent); } .warn { color: #ffaa00; } .lock { color: var(--danger); }
 
-        /* ▼▼▼ [수정됨] 모바일 최적화 코드 ▼▼▼ */
+        /* ▼▼▼ 모바일 최적화 ▼▼▼ */
         @media (max-width: 768px) {
             body { 
-                flex-direction: column; 
-                height: auto; 
-                overflow: auto; /* 전체 스크롤 가능 */
+                flex-direction: column; height: auto; overflow: auto; 
             }
             
-            /* 사이드바 (메뉴) */
+            /* 사이드바 */
             .sidebar { 
                 width: 100%; height: 55px; 
                 flex-direction: row; align-items: center;
                 border-right: none; border-bottom: 1px solid var(--border); 
                 background: var(--bg-color);
-                
-                position: sticky; top: 0; z-index: 100; /* 상단바 고정 */
-                
-                padding: 0 10px;
-                padding-right: 130px; /* ★중요: 프로필이 가리지 않게 오른쪽 공간 비워둠 */
-                
-                overflow-x: auto; /* 메뉴만 좌우 스크롤 */
-                overflow-y: hidden;
-                white-space: nowrap; /* 줄바꿈 방지 */
+                position: sticky; top: 0; z-index: 100;
+                padding: 0 10px; padding-right: 130px; 
+                overflow-x: auto; overflow-y: hidden; white-space: nowrap; 
             }
-            /* 스크롤바 숨기기 (깔끔하게) */
             .sidebar::-webkit-scrollbar { display: none; } 
 
             .logo { display: none; }
@@ -154,19 +149,15 @@
             }
             .menu-item span:last-child { display: inline; font-size: 12px; }
             
-            /* ▼▼▼ [수정됨] 프로필 박스: 화면에 완전 고정 (Fixed) ▼▼▼ */
+            /* 프로필 박스 (오른쪽 상단 고정) */
             .profile-box { 
                 display: flex !important;
-                position: fixed; /* ★화면에 딱풀로 붙임★ */
-                top: 0; right: 0; 
-                width: 120px; height: 55px; /* 사이드바 높이랑 맞춤 */
-                
-                background: #1a1a1a; /* 메뉴가 뒤로 지나가도 안 비치게 */
-                border-top: none; padding: 0; margin: 0; 
-                border-left: 2px solid var(--border);
-                justify-content: center; 
+                position: fixed; top: 0; right: 0; 
+                width: 120px; height: 55px;
+                background: #1a1a1a; border-left: 2px solid var(--border); border-top: none;
+                justify-content: center; z-index: 1000;
+                padding: 0; margin: 0;
                 box-shadow: -5px 0 10px rgba(0,0,0,0.5);
-                z-index: 1000; /* 제일 위에 표시 */
             }
             .avatar { width: 24px; height: 24px; font-size: 12px; margin-right: 8px;}
             .user-info h4 { font-size: 12px; }
@@ -183,8 +174,11 @@
             .header-area { flex-direction: column; align-items: flex-start; gap: 5px;}
             .page-title h1 { font-size: 18px; }
             
-            /* 시계 (모바일에서도 보이게) */
-            .clock-area { display: block !important; text-align: left; margin-top: 5px; }
+            /* 시계 (모바일 설정) */
+            .clock-area { 
+                display: block !important; 
+                text-align: left; margin-top: 5px; 
+            }
             .clock-time { font-size: 20px; }
             .clock-date { text-align: left; }
         }
@@ -196,7 +190,7 @@
         
         <div class="menu-item active"><span>📊</span> <span>대시보드</span></div>
         <div class="menu-item"><span>🧬</span> <span>실험체 관리</span></div>
-        <div class="menu-item"><span>🗺️</span> <span>시설 관리</span></div>
+        <div class="menu-item"><span>🏢</span> <span>시설 관리</span></div>
         <div class="menu-item"><span>👥</span> <span>조직/인사</span></div>
         <div class="menu-item"><span>🌐</span> <span>대외 홈페이지</span></div>
         
@@ -217,7 +211,7 @@
                 <div class="clock-time" id="clock">00:00:00</div>
                 <div class="clock-date" id="date">YYYY-MM-DD</div>
             </div>
-        </div>
+            </div>
 
         <div class="card ripley-card">
             <div class="card-header">
@@ -239,4 +233,63 @@
         <div class="card stats-card">
             <div class="card-header"><span class="card-title">SUBJECT STATUS</span></div>
             <div class="mono">
-                <div class="stat-row"><span
+                <div class="stat-row"><span class="stat-label">총 실험체 수 (Total)</span><span class="stat-num" id="stat-total">Loading...</span></div>
+                <div class="stat-row"><span class="stat-label">현재 수용 (In Custody)</span><span class="stat-num" id="stat-active" style="color:var(--accent);">Loading...</span></div>
+                <div class="stat-row"><span class="stat-label">사망/폐기 (Deceased)</span><span class="stat-num" id="stat-dead" style="color:#666;">Loading...</span></div>
+                <div class="stat-row"><span class="stat-label">금일 신규 입소 (New)</span><span class="stat-num" id="stat-new" style="color:#fff;">Loading...</span></div>
+            </div>
+        </div>
+
+        <div class="card info-card">
+            <div class="card-header"><span class="card-title">SYSTEM CHECK</span></div>
+            <div class="system-list mono">
+                <div><span>메인 서버 (Main Server)</span> <span class="ok">ONLINE</span></div>
+                <div><span>보안망 (Security Grid)</span> <span class="ok">ARMED</span></div>
+                <div><span>격리 시스템 (Containment)</span> <span class="warn">CHECK</span></div>
+                <div><span>외부 통신망 (Network)</span> <span class="lock">OFFLINE</span></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 시계 함수
+        function updateClock() {
+            const now = new Date();
+            const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
+            const kstDate = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+            
+            // 만약 요소가 없으면 에러 안 나게 체크
+            const clockEl = document.getElementById('clock');
+            const dateEl = document.getElementById('date');
+            
+            if (clockEl) clockEl.innerText = kstTime;
+            if (dateEl) dateEl.innerText = kstDate;
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        // 통계 함수
+        function updateStats() {
+            const startDate = new Date("2026-01-01T00:00:00+09:00").getTime();
+            const today = new Date().getTime();
+            const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+
+            const total = 1000 + (daysPassed * 3); 
+            const dead = Math.floor(total * 0.58);
+            const active = total - dead;
+            const newIn = (daysPassed % 10) + 5; 
+
+            document.getElementById('stat-total').innerText = total.toLocaleString();
+            document.getElementById('stat-active').innerText = active.toLocaleString();
+            document.getElementById('stat-dead').innerText = dead.toLocaleString();
+            document.getElementById('stat-new').innerText = "+" + newIn;
+        }
+        updateStats();
+
+        // 심박수
+        setInterval(() => {
+            const bpmElement = document.getElementById('bpm');
+            bpmElement.innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70;
+        }, 2000);
+    </script>
+</body>
+</html>
