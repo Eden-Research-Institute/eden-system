@@ -6,6 +6,7 @@
     <title>EDEN INSTITUTE - Advancing Humanity</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&family=Playfair+Display:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap'); /* 서명용 폰트 */
 
         :root {
             --primary: #002B5B; --secondary: #00A8CC; --bg: #F8F9FA; --text: #333;
@@ -31,7 +32,7 @@
         .logo span { color: var(--secondary); font-family: 'Inter', sans-serif; }
         
         .nav-links { display: flex; gap: 40px; align-items: center; }
-        .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; white-space: nowrap; }
+        .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; cursor: pointer; white-space: nowrap; }
         .nav-item:hover { color: var(--primary); }
 
         /* 히어로 섹션 */
@@ -75,12 +76,14 @@
         }
         .apply-big:hover { background: var(--secondary); color: #fff; transform: scale(1.05); }
 
-        /* 모달 (신청서 팝업) */
-        .modal-overlay {
+        /* 공통 모달 (신청서 & 컨텐츠) */
+        .modal-overlay, .content-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6); z-index: 2000; justify-content: center; align-items: center;
             opacity: 0; transition: opacity 0.3s;
         }
+        
+        /* 신청서 모달 스타일 */
         .modal-box {
             background: #fff; width: 90%; max-width: 500px; padding: 40px; border-radius: 12px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative; transform: translateY(20px); transition: transform 0.3s;
@@ -105,31 +108,59 @@
         }
         .btn-submit:hover { background: var(--secondary); }
 
+        /* ▼▼▼ [연구소 소개] 모달 전용 스타일 ▼▼▼ */
+        .content-modal { background: rgba(255, 255, 255, 0.98); z-index: 3000; overflow-y: auto; display: none; }
+        .content-container {
+            max-width: 900px; margin: 80px auto; padding: 40px; 
+            animation: fadeUp 0.5s ease-out;
+        }
+        .content-close {
+            position: fixed; top: 30px; right: 40px; font-size: 40px; cursor: pointer; color: #333; transition: 0.3s; z-index: 3001;
+        }
+        .content-close:hover { color: var(--primary); transform: rotate(90deg); }
+
+        .director-section {
+            display: flex; gap: 50px; align-items: flex-start; margin-top: 50px;
+            border-bottom: 1px solid #ddd; padding-bottom: 50px;
+        }
+        .director-img-box {
+            width: 300px; height: 400px; background-color: #e0e0e0; flex-shrink: 0;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 4px; overflow: hidden; position: relative;
+        }
+        .director-img-box::after { content: 'Director Image'; color: #999; font-weight: bold; }
+        .director-photo { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1; opacity: 0.8; }
+
+        .director-text { flex: 1; }
+        .director-title { color: var(--secondary); font-weight: 700; font-size: 14px; letter-spacing: 2px; margin-bottom: 10px; display: block;}
+        .director-name { font-size: 40px; font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 20px; font-weight: 700;}
+        .director-bio { font-size: 15px; color: #555; line-height: 1.8; margin-bottom: 30px; word-break: keep-all; }
+        .sign { font-family: 'Cedarville Cursive', serif; font-size: 24px; color: #888; text-align: right; margin-top: 20px;}
+
+        .profile-table { width: 100%; border-top: 2px solid #333; margin-top: 20px; border-collapse: collapse; }
+        .profile-table th, .profile-table td { padding: 12px 0; border-bottom: 1px solid #ddd; text-align: left; font-size: 14px; }
+        .profile-table th { width: 100px; color: var(--primary); font-weight: 700; }
+
         /* 푸터 */
         footer { background: #111; color: #555; padding: 60px 20px; text-align: center; font-size: 12px; }
         
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* ▼▼▼ 모바일 최적화 (수정됨) ▼▼▼ */
+        /* 모바일 최적화 */
         @media (max-width: 768px) {
-            /* 헤더: 위아래로 배치해서 공간 확보 */
-            header { 
-                flex-direction: column; 
-                padding: 20px; 
-                gap: 20px; 
-            }
-            .nav-links { 
-                gap: 25px; 
-                justify-content: center; 
-                width: 100%; 
-            }
+            header { flex-direction: column; padding: 20px; gap: 20px; }
+            .nav-links { gap: 25px; justify-content: center; width: 100%; }
             .nav-item { font-size: 14px; }
-
             .hero h1 { font-size: 32px; word-break: keep-all; }
             .features { grid-template-columns: 1fr; padding: 50px 20px; }
-            
             .modal-box { padding: 25px; }
+            
+            /* 소장 소개 모바일 */
+            .director-section { flex-direction: column; gap: 30px; }
+            .director-img-box { width: 100%; height: 400px; }
+            .content-container { padding: 20px; margin-top: 60px; }
+            .content-close { top: 20px; right: 20px; font-size: 30px; }
         }
     </style>
 </head>
@@ -138,9 +169,9 @@
     <header>
         <div class="logo">EDEN <span>INSTITUTE</span></div>
         <nav class="nav-links">
-            <a href="#" class="nav-item">연구소 소개</a>
-            <a href="#" class="nav-item">핵심 기술</a>
-            <a href="#" class="nav-item">윤리 경영</a>
+            <a onclick="openContent('aboutModal')" class="nav-item">연구소 소개</a>
+            <a onclick="alert('준비 중입니다.')" class="nav-item">핵심 기술</a>
+            <a onclick="alert('준비 중입니다.')" class="nav-item">윤리 경영</a>
         </nav>
     </header>
 
@@ -185,46 +216,89 @@
             <div class="form-title">임상 실험 지원서</div>
             <div class="form-desc">안전하고 쾌적한 환경에서 진행됩니다. <br>작성해주신 정보는 엄격히 보호됩니다.</div>
             
-            <div class="form-group">
-                <label class="form-label">성명 (Name)</label>
-                <input type="text" id="app_name" class="form-input" placeholder="실명을 입력하세요">
-            </div>
-            <div class="form-group">
-                <label class="form-label">생년월일 (Birth Date)</label>
-                <input type="date" id="app_birth" class="form-input">
-            </div>
-            <div class="form-group">
-                <label class="form-label">연락처 (Contact)</label>
-                <input type="tel" id="app_phone" class="form-input" placeholder="010-0000-0000">
-            </div>
-            <div class="form-group">
-                <label class="form-label">특이사항 (Medical Note)</label>
-                <textarea id="app_note" class="form-textarea" placeholder="복용 중인 약물이나 질환이 있다면 기재해주세요."></textarea>
-            </div>
+            <div class="form-group"><label class="form-label">성명 (Name)</label><input type="text" id="app_name" class="form-input" placeholder="실명을 입력하세요"></div>
+            <div class="form-group"><label class="form-label">생년월일 (Birth Date)</label><input type="date" id="app_birth" class="form-input"></div>
+            <div class="form-group"><label class="form-label">연락처 (Contact)</label><input type="tel" id="app_phone" class="form-input" placeholder="010-0000-0000"></div>
+            <div class="form-group"><label class="form-label">특이사항 (Medical Note)</label><textarea id="app_note" class="form-textarea" placeholder="복용 중인 약물이나 질환이 있다면 기재해주세요."></textarea></div>
             
             <button class="btn-submit" onclick="submitForm()">지원서 제출하기</button>
         </div>
     </div>
 
+    <div class="content-modal" id="aboutModal">
+        <div class="content-close" onclick="closeContent('aboutModal')">&times;</div>
+        <div class="content-container">
+            <h1 style="font-family: 'Playfair Display'; font-size: 48px; color: var(--primary); margin-bottom: 20px;">About EDEN</h1>
+            <p style="font-size: 18px; color: #666; font-weight: 300;">
+                에덴 연구소는 생명의 한계를 규정하지 않습니다.<br>
+                우리는 오직 증명하고, 극복하며, 진화할 뿐입니다.
+            </p>
+
+            <div class="director-section">
+                <div class="director-img-box">
+                    <img src="https://via.placeholder.com/300x400/1a1a1a/ffffff?text=KAIRO" class="director-photo" alt="Director Kairo">
+                </div>
+                <div class="director-text">
+                    <span class="director-title">MESSAGE FROM THE DIRECTOR</span>
+                    <div class="director-name">KAIRO</div>
+                    
+                    <div class="director-bio">
+                        <p>"신은 인간을 빚어냈지만, 그 인간을 완성하는 것은 과학입니다."</p>
+                        <br>
+                        <p>
+                            반갑습니다. 에덴 연구소장 카이로입니다.<br>
+                            인류는 아주 오랜 시간 동안 '죽음'과 '노화'라는 질병에 시달려 왔습니다.
+                            우리는 이것을 자연의 섭리라 부르며 체념해왔지만, 에덴의 생각은 다릅니다.
+                            질병은 치료되어야 하며, 한계는 극복되어야 합니다.
+                        </p>
+                        <p>
+                            제가 설립한 에덴 연구소는 유전자 가위 기술과 신경 세포 재생 분야에서
+                            독보적인 데이터를 축적해왔습니다. 우리의 연구는 윤리적 논쟁을 넘어,
+                            실질적인 '인류 구원'을 향해 나아가고 있습니다.
+                        </p>
+                        <p>
+                            여러분의 숭고한 참여가 미래의 역사가 됩니다.<br>
+                            두려워하지 말고, 에덴의 문을 두드리십시오.
+                        </p>
+                    </div>
+
+                    <table class="profile-table">
+                        <tr><th>NAME</th><td>KAIRO (카이로)</td></tr>
+                        <tr><th>BIRTH</th><td>19XX. 08. 26 (Age Unknown)</td></tr>
+                        <tr><th>FIELD</th><td>Bio-Engineering / Neuro-Science</td></tr>
+                        <tr><th>CAREER</th><td>現 에덴 생명공학 연구소장<br>前 [REDACTED] 국가 수석 연구원</td></tr>
+                    </table>
+                    
+                    <div class="sign">Director. Kairo</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // 컨텐츠 모달 열기/닫기
+        function openContent(id) {
+            document.getElementById(id).style.display = 'block';
+            document.body.style.overflow = 'hidden'; 
+        }
+        function closeContent(id) {
+            document.getElementById(id).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 지원서 모달
         function openModal() {
             const modal = document.getElementById('applyModal');
             const box = modal.querySelector('.modal-box');
             modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.style.opacity = '1';
-                box.style.transform = 'translateY(0)';
-            }, 10);
+            setTimeout(() => { modal.style.opacity = '1'; box.style.transform = 'translateY(0)'; }, 10);
         }
-
         function closeModal() {
             const modal = document.getElementById('applyModal');
             const box = modal.querySelector('.modal-box');
             modal.style.opacity = '0';
             box.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
         }
 
         function submitForm() {
@@ -233,10 +307,7 @@
             const phone = document.getElementById('app_phone').value;
             const note = document.getElementById('app_note').value;
 
-            if(!name || !phone) {
-                alert('성명과 연락처는 필수 항목입니다.');
-                return;
-            }
+            if(!name || !phone) { alert('성명과 연락처는 필수 항목입니다.'); return; }
 
             const btn = document.querySelector('.btn-submit');
             btn.innerText = "처리 중...";
