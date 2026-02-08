@@ -45,8 +45,19 @@
         .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 5px var(--accent); }
         
         .ripley-card { grid-column: 1 / 2; grid-row: 2 / 4; background: linear-gradient(160deg, #252525 0%, #1a1a1a 100%); border-left: 3px solid var(--accent); }
-        .subject-id { font-size: 24px; font-weight: 600; color: #fff; letter-spacing: 1px; margin-bottom: 5px; }
-        .subject-name-kr { font-size: 16px; color: var(--accent); margin-left: 10px; font-weight: 400; }
+        .subject-id { font-size: 24px; font-weight: 600; color: #fff; letter-spacing: 1px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px;}
+        .subject-name-kr { font-size: 16px; color: var(--accent); font-weight: 400; }
+        
+        /* 인터폰 버튼 */
+        .intercom-btn { 
+            background: rgba(0, 255, 157, 0.1); border: 1px solid var(--accent); 
+            color: var(--accent); padding: 4px 10px; border-radius: 4px; 
+            font-size: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 5px;
+        }
+        .intercom-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
+        .blink { animation: blinker 1.5s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0.5; } }
+
         .subject-desc { font-size: 13px; color: #888; margin-top: 5px; line-height: 1.5;}
         .vital-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .vital-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
@@ -84,28 +95,57 @@
         .close-btn { cursor: pointer; font-size: 20px; color: #888; } .close-btn:hover { color: #fff; }
         
         .inbox-body { display: flex; flex: 1; overflow: hidden; }
-        
         .msg-list { width: 40%; border-right: 1px solid #333; overflow-y: auto; background: #1a1a1a; }
-        .msg-item {
-            padding: 15px; border-bottom: 1px solid #2a2a2a; cursor: pointer; transition: 0.2s;
-            border-left: 3px solid transparent;
-        }
+        .msg-item { padding: 15px; border-bottom: 1px solid #2a2a2a; cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; }
         .msg-item:hover { background: #252525; }
         .msg-item.active { background: #2a2a2a; border-left-color: var(--accent); }
         .msg-item.unread .msg-sender, .msg-item.unread .msg-preview { font-weight: bold; color: #fff; }
         .msg-item.unread::after { content: '●'; float: right; color: var(--danger); font-size: 10px; margin-top: 3px;}
-        
         .msg-sender { font-size: 12px; color: #ccc; display: block; margin-bottom: 4px; }
         .msg-type { font-size: 10px; padding: 2px 5px; border-radius: 3px; background: #333; color: #aaa; margin-right: 5px; }
         .msg-preview { font-size: 13px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
         .msg-content { flex: 1; padding: 30px; overflow-y: auto; background: #1e1e1e; }
         .view-header { border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
         .view-subject { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 10px; }
         .view-meta { font-size: 12px; color: #666; }
         .view-body { font-size: 14px; line-height: 1.6; color: #ddd; white-space: pre-wrap; }
-        
         .empty-state { text-align: center; color: #555; margin-top: 100px; font-size: 13px; }
+
+        /* ▼▼▼ 인터폰 채팅창 (대시보드 전용 스타일) ▼▼▼ */
+        .intercom-box {
+            display: none; position: fixed; bottom: 20px; right: 20px; 
+            width: 350px; height: 500px; background: #121212; 
+            border: 1px solid var(--accent); border-radius: 4px; 
+            z-index: 9999; box-shadow: 0 0 20px rgba(0, 255, 157, 0.1);
+            flex-direction: column;
+        }
+        .intercom-header {
+            padding: 10px 15px; background: rgba(0, 255, 157, 0.1); 
+            border-bottom: 1px solid var(--accent); color: var(--accent); 
+            font-size: 13px; font-weight: bold; letter-spacing: 1px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .intercom-body {
+            flex: 1; padding: 15px; overflow-y: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 12px; color: #ddd; display: flex; flex-direction: column; gap: 10px;
+        }
+        .intercom-input-area {
+            padding: 10px; border-top: 1px solid #333; display: flex; gap: 5px;
+        }
+        .intercom-input {
+            flex: 1; background: #1a1a1a; border: 1px solid #333; color: #fff; 
+            padding: 8px; outline: none; font-family: 'Inter', sans-serif;
+        }
+        .intercom-input:focus { border-color: var(--accent); }
+        .intercom-send {
+            background: var(--accent); color: #000; border: none; padding: 0 15px; 
+            cursor: pointer; font-weight: bold;
+        }
+        /* 메시지 스타일 */
+        .i-msg { max-width: 90%; padding: 8px; border-radius: 4px; line-height: 1.4; word-break: break-all;}
+        .i-msg.user { align-self: flex-end; text-align: right; color: var(--accent); border: 1px solid var(--accent); background: rgba(0,255,157,0.05); }
+        .i-msg.bot { align-self: flex-start; color: #fff; border: 1px solid #444; background: #1a1a1a; }
+        .i-msg.sys { align-self: center; color: #666; font-style: italic; border: none; background: none; }
 
         @media (max-width: 768px) {
             .sidebar { width: 100%; height: 55px; flex-direction: row; align-items: center; border-right: none; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 0 10px; padding-right: 130px; overflow-x: auto; white-space: nowrap; }
@@ -121,6 +161,8 @@
             .inbox-body { flex-direction: column; }
             .msg-list { width: 100%; height: 40%; border-right: none; border-bottom: 1px solid #333; }
             .msg-content { height: 60%; }
+            
+            .intercom-box { width: 90%; right: 5%; bottom: 20px; height: 60%; }
         }
     </style>
 </head>
@@ -148,7 +190,13 @@
 
         <div class="card ripley-card">
             <div class="card-header"><span class="card-title" style="color:var(--accent);">CORE ASSET MONITORING</span> <span class="status-dot"></span></div>
-            <div class="subject-info"><div class="subject-id mono">ER-S-02-001 <span class="subject-name-kr">(리플리)</span></div><div class="subject-desc">현재 유일한 2단계(재생) 도달 개체.<br>신체 재생 효율 420% 유지 중.</div></div>
+            <div class="subject-info">
+                <div class="subject-id mono">
+                    ER-S-02-001 <span class="subject-name-kr">(리플리)</span>
+                    <button class="intercom-btn" onclick="toggleIntercom()"><span class="blink">💬</span> INTERCOM</button>
+                </div>
+                <div class="subject-desc">현재 유일한 2단계(재생) 도달 개체.<br>신체 재생 효율 420% 유지 중.</div>
+            </div>
             <div class="monitor-line"><div class="monitor-active"></div></div>
             <div class="vital-grid mono">
                 <div class="vital-item"><span class="vital-label">HEART RATE</span><span class="vital-value bpm-value"><span id="bpm">72</span> <span style="font-size:12px;">BPM</span></span></div>
@@ -194,6 +242,23 @@
         </div>
     </div>
 
+    <div class="intercom-box" id="intercomBox">
+        <div class="intercom-header">
+            <span>🔊 INTERCOM: CELL B-02</span>
+            <span style="cursor:pointer;" onclick="toggleIntercom()">&times;</span>
+        </div>
+        <div class="intercom-body" id="intercomMessages">
+            <div class="i-msg sys">Connecting to containment grid...</div>
+            <div class="i-msg sys">Audio link established.</div>
+            <div class="i-msg bot">"리플리, 내 말 들리나?"</div>
+        </div>
+        <div class="intercom-input-area">
+            <input type="password" id="intercomKeyInput" class="intercom-input" placeholder="Google API Key 입력" style="display:none;">
+            <input type="text" id="intercomInput" class="intercom-input" placeholder="Transmit voice message..." style="display:none;">
+            <button class="intercom-send" onclick="handleIntercom()">SEND</button>
+        </div>
+    </div>
+
     <script>
         function updateClock() {
             const now = new Date();
@@ -220,148 +285,191 @@
         updateStats();
         setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
-        /* ================= INBOX SYSTEM (영구 보존 & 랜덤 이벤트) ================= */
-        
-        // 1. 초기 고정 메시지 (한 번만 생성됨)
+        /* ================= INBOX SYSTEM ================= */
         const initialMessages = [
-            {
-                type: 'OFFICIAL', sender: '국가 과학 기술 자문회의', title: '[기밀] 4분기 예산 증액 승인', unread: true, date: 'Yesterday',
-                body: '수신: 카이로 소장\n\n귀하의 "인류 진화 프로젝트"에 대한 추가 예산안이 비밀리에 통과되었습니다.\n윤리 위원회의 감사는 예정대로 "서류상으로만" 진행될 것이니\n안심하고 연구에만 매진하십시오.\n\n우리는 귀하의 성과를 기대하고 있습니다.\n\n- 위원장 드림'
-            },
-            {
-                type: 'OFFICIAL', sender: '세계 생명 공학 협회', title: '특별 공로상 수상 후보 선정', unread: false, date: '2 days ago',
-                body: '축하드립니다, 카이로 소장님.\n귀하의 혁신적인 연구 성과를 기려 금년도 특별 공로상 유력 후보로 선정되셨습니다.\n(시상식 일정은 추후 대외비로 안내드립니다.)'
-            },
-            {
-                type: 'APPLY', sender: '지원서 접수 시스템', title: '[신규 지원] Elias Weber', unread: true, date: 'Today',
-                body: '[지원자 정보]\n- 성명: Elias Weber\n- 생년월일: 1998-04-12\n- 연락처: +49 151 4920 3819\n\n[특이사항]\n급전 필요함\n\n----------------\n* 1차 적합성 판정 완료. B2 대기실 이송 권장.'
-            },
-            {
-                type: 'APPLY', sender: '지원서 접수 시스템', title: '[신규 지원] Mia Wagner', unread: true, date: 'Today',
-                body: '[지원자 정보]\n- 성명: Mia Wagner\n- 생년월일: 2001-11-23\n- 연락처: +49 170 3829 1023\n\n[특이사항]\n가족 없음, 연고지 불명\n\n----------------\n* 1차 적합성 판정 완료. B2 대기실 이송 권장.'
-            }
+            { type: 'OFFICIAL', sender: '국가 과학 기술 자문회의', title: '[기밀] 4분기 예산 증액 승인', unread: true, date: 'Yesterday', body: '수신: 카이로 소장\n\n귀하의 "인류 진화 프로젝트"에 대한 추가 예산안이 비밀리에 통과되었습니다.\n윤리 위원회의 감사는 예정대로 "서류상으로만" 진행될 것이니\n안심하고 연구에만 매진하십시오.\n\n우리는 귀하의 성과를 기대하고 있습니다.\n\n- 위원장 드림' },
+            { type: 'OFFICIAL', sender: '세계 생명 공학 협회', title: '특별 공로상 수상 후보 선정', unread: false, date: '2 days ago', body: '축하드립니다, 카이로 소장님.\n귀하의 혁신적인 연구 성과를 기려 금년도 특별 공로상 유력 후보로 선정되셨습니다.\n(시상식 일정은 추후 대외비로 안내드립니다.)' },
+            { type: 'APPLY', sender: '지원서 접수 시스템', title: '[신규 지원] Elias Weber', unread: true, date: 'Today', body: '[지원자 정보]\n- 성명: Elias Weber\n- 생년월일: 1998-04-12\n- 연락처: +49 151 4920 3819\n\n[특이사항]\n급전 필요함\n\n----------------\n* 1차 적합성 판정 완료. B2 대기실 이송 권장.' },
+            { type: 'APPLY', sender: '지원서 접수 시스템', title: '[신규 지원] Mia Wagner', unread: true, date: 'Today', body: '[지원자 정보]\n- 성명: Mia Wagner\n- 생년월일: 2001-11-23\n- 연락처: +49 170 3829 1023\n\n[특이사항]\n가족 없음, 연고지 불명\n\n----------------\n* 1차 적합성 판정 완료. B2 대기실 이송 권장.' }
         ];
-
-        // 2. 랜덤 연구원 메시지 풀 (긴급 + 일상 섞음)
         const randomEvents = [
-            // 긴급
             { sender: 'Dr. Vogel (Research)', title: '❗ 402번 개체 쇼크사 보고', body: '소장님, 402번 개체에서 리플리와 유사한 신경 반응이 감지되었으나\n약물 투여 10분 만에 심정지로 사망했습니다.\n\n해부 데이터 서버에 올렸습니다. 확인 부탁드립니다.' },
             { sender: 'Eng. Hans (Facility)', title: '⚡ B2 전력 공급 불안정', body: '소장님, 지하 2층 전력 공급 장치에서 미세한 전압 강하가 감지됩니다.\n즉시 복구 작업 중입니다만, 만약을 위해 비상 발전기를 대기시켰습니다.' },
             { sender: 'Dr. Weiss (Medical)', title: '⚠️ 진정제 재고 부족 알림', body: '현재 B구역 실험체들의 난동 빈도가 늘어 진정제 소모가 빠릅니다.\n추가 발주 승인을 부탁드립니다. (현재 재고: 15%)' },
             { sender: 'Security System', title: '🚨 [경고] 허가되지 않은 접근', body: '3층 데이터 서버실에 허가되지 않은 ID카드로 접근 시도가 있었습니다.\n보안팀이 즉시 출동하여 상황 종료되었습니다.' },
-            
-            // 일상 & 평범
             { sender: 'System Administrator', title: '💾 정기 데이터 백업 완료', body: '금일 오전 04:00 기준으로 전체 연구 데이터의 클라우드 백업이 정상적으로 완료되었습니다.\n데이터 무결성 검사 결과: 양호.' },
-            { sender: 'Facility Management', title: 'B구역 정기 소독 완료', body: '금일 예정된 지하 1층 B구역 격리실 및 복도의 정기 방역/소독 작업을 마쳤습니다.\n다음 소독 일정은 3일 뒤입니다.' },
-            { sender: 'Cpt. Braun (Security)', title: '금일 오전 순찰 특이사항 없음', body: '로비 및 외곽 경비 구역 순찰 결과 특이사항 없습니다.\n현재 연구소 보안 등급: LEVEL 3 (평시) 유지 중입니다.' },
             { sender: 'Research Team 2', title: '비품(기록용 태블릿) 신청 건', body: '소장님, 2팀에서 사용하는 관찰 기록용 태블릿 3대가 파손되어 교체 신청서 올렸습니다.\n결재 부탁드립니다.' },
             { sender: 'Dr. Vogel (Research)', title: '야간 근무자 식단 개선 요청', body: '최근 야간 연장 근무가 늘어나고 있는데, 야식 메뉴가 너무 부실하다는 연구원들의 불만이 접수되었습니다.\n예산 범위 내에서 개선이 가능할지 검토 부탁드립니다.' }
         ];
 
         function initializeInbox() {
-            // 저장된 메시지 불러오기 (없으면 빈 배열)
             let messages = JSON.parse(localStorage.getItem('eden_messages'));
-
-            // 처음 실행 시 (저장된 게 없으면) 초기 메시지 세팅
-            if (!messages) {
-                messages = [...initialMessages];
-                localStorage.setItem('eden_messages', JSON.stringify(messages));
-            }
-
-            // 1. 실제 지원자(public.html) 데이터 가져와서 합치기
+            if (!messages) { messages = [...initialMessages]; localStorage.setItem('eden_messages', JSON.stringify(messages)); }
             const newApplicants = JSON.parse(localStorage.getItem('eden_applicants')) || [];
             if (newApplicants.length > 0) {
-                newApplicants.forEach(p => {
-                    messages.unshift({
-                        type: 'APPLY', sender: '지원서 접수 시스템', 
-                        title: `[신규 지원] ${p.name}`, unread: true,
-                        date: p.time,
-                        body: `[지원자 정보]\n- 성명: ${p.name}\n- 생년월일: ${p.birth}\n- 연락처: ${p.phone}\n\n[특이사항]\n${p.note ? p.note : '없음'}\n\n----------------\n* 1차 적합성 판정 대기 중.`
-                    });
-                });
-                // 합친 후 임시 저장소 비우기 (중복 방지)
-                localStorage.removeItem('eden_applicants');
-                localStorage.setItem('eden_messages', JSON.stringify(messages));
+                newApplicants.forEach(p => { messages.unshift({ type: 'APPLY', sender: '지원서 접수 시스템', title: `[신규 지원] ${p.name}`, unread: true, date: p.time, body: `[지원자 정보]\n- 성명: ${p.name}\n- 생년월일: ${p.birth}\n- 연락처: ${p.phone}\n\n[특이사항]\n${p.note ? p.note : '없음'}\n\n----------------\n* 1차 적합성 판정 대기 중.` }); });
+                localStorage.removeItem('eden_applicants'); localStorage.setItem('eden_messages', JSON.stringify(messages));
             }
-
-            // 2. 랜덤 이벤트 발생 (약 30% 확률)
             if (Math.random() < 0.3) { 
                 const event = randomEvents[Math.floor(Math.random() * randomEvents.length)];
-                // 중복 방지 (가장 최근 메시지와 제목이 같으면 추가 안 함)
-                if (messages.length === 0 || messages[0].title !== event.title) {
-                    messages.unshift({
-                        type: 'MSG', sender: event.sender, title: event.title, unread: true, date: 'Now',
-                        body: event.body
-                    });
-                    localStorage.setItem('eden_messages', JSON.stringify(messages));
-                }
+                if (messages.length === 0 || messages[0].title !== event.title) { messages.unshift({ type: 'MSG', sender: event.sender, title: event.title, unread: true, date: 'Now', body: event.body }); localStorage.setItem('eden_messages', JSON.stringify(messages)); }
             }
         }
-
-        // 페이지 로드 시 실행
         initializeInbox();
 
-        // 모달 열기
-        function openInbox() {
-            renderList();
-            document.getElementById('inbox-modal').style.display = 'flex';
-        }
-
-        function closeInbox() {
-            document.getElementById('inbox-modal').style.display = 'none';
-        }
-
+        function openInbox() { renderList(); document.getElementById('inbox-modal').style.display = 'flex'; }
+        function closeInbox() { document.getElementById('inbox-modal').style.display = 'none'; }
         function renderList() {
             const messages = JSON.parse(localStorage.getItem('eden_messages')) || [];
             const listArea = document.getElementById('msg-list-area');
             let html = '';
-            
             messages.forEach((msg, idx) => {
                 let badgeColor = '#888';
                 if(msg.type === 'APPLY') badgeColor = '#ffaa00'; 
                 if(msg.type === 'OFFICIAL') badgeColor = '#4facfe'; 
                 if(msg.type === 'MSG') badgeColor = '#00ff9d'; 
-
                 const unreadClass = msg.unread ? 'unread' : '';
-
-                html += `
-                    <div class="msg-item ${unreadClass}" onclick="viewMessage(${idx}, this)">
-                        <span class="msg-sender">
-                            <span class="msg-type" style="color:${badgeColor}; border:1px solid ${badgeColor};">${msg.type}</span>
-                            ${msg.sender}
-                        </span>
-                        <div class="msg-preview">${msg.title}</div>
-                    </div>
-                `;
+                html += `<div class="msg-item ${unreadClass}" onclick="viewMessage(${idx}, this)"><span class="msg-sender"><span class="msg-type" style="color:${badgeColor}; border:1px solid ${badgeColor};">${msg.type}</span>${msg.sender}</span><div class="msg-preview">${msg.title}</div></div>`;
             });
             listArea.innerHTML = html;
         }
-
         function viewMessage(idx, element) {
             let messages = JSON.parse(localStorage.getItem('eden_messages')) || [];
             const msg = messages[idx];
             const contentArea = document.getElementById('msg-content-area');
-            
-            // 읽음 처리 및 저장
-            if (msg.unread) {
-                msg.unread = false;
-                messages[idx] = msg;
-                localStorage.setItem('eden_messages', JSON.stringify(messages));
-            }
-            
+            if (msg.unread) { msg.unread = false; messages[idx] = msg; localStorage.setItem('eden_messages', JSON.stringify(messages)); }
             element.classList.remove('unread');
-            const items = document.querySelectorAll('.msg-item');
-            items.forEach(i => i.classList.remove('active'));
-            element.classList.add('active');
-
-            contentArea.innerHTML = `
-                <div class="view-header">
-                    <div class="view-subject">${msg.title}</div>
-                    <div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div>
-                </div>
-                <div class="view-body">${msg.body}</div>
-            `;
+            const items = document.querySelectorAll('.msg-item'); items.forEach(i => i.classList.remove('active')); element.classList.add('active');
+            contentArea.innerHTML = `<div class="view-header"><div class="view-subject">${msg.title}</div><div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div></div><div class="view-body">${msg.body}</div>`;
         }
+
+        /* ================= INTERCOM (Gemini API + 다정한 집착) ================= */
+        let intercomHistory = JSON.parse(localStorage.getItem('eden_subject_chat_history')) || [];
+        // 공용 저장소에서 키 확인
+        let userApiKey = localStorage.getItem('eden_gemini_key');
+        
+        const iInput = document.getElementById('intercomInput');
+        const iKeyInput = document.getElementById('intercomKeyInput');
+        const iBox = document.getElementById('intercomMessages');
+
+        // [수정] 키가 있으면 메시지창, 없으면 키 입력창 보이기
+        function updateIntercomUI() {
+            if(userApiKey) {
+                iKeyInput.style.display = 'none';
+                iInput.style.display = 'block';
+            } else {
+                iKeyInput.style.display = 'block';
+                iInput.style.display = 'none';
+            }
+        }
+        updateIntercomUI();
+
+        // 초기화 시 이전 대화 불러오기
+        if(intercomHistory.length > 0) {
+            iBox.innerHTML = ''; // 초기 메시지 지우고 복구
+            intercomHistory.forEach(msg => {
+                const type = msg.role === 'user' ? 'user' : 'bot';
+                addIntercomMsg(msg.parts[0].text, type, false);
+            });
+        }
+
+        function toggleIntercom() {
+            const box = document.getElementById('intercomBox');
+            box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'flex' : 'none';
+            if(box.style.display === 'flex') iBox.scrollTop = iBox.scrollHeight;
+        }
+
+        // 전송 버튼 핸들러
+        function handleIntercom() {
+            if(!userApiKey) {
+                registerKey();
+            } else {
+                sendIntercom();
+            }
+        }
+
+        function registerKey() {
+            const key = iKeyInput.value.trim();
+            if(key.length < 10) { alert('유효한 Google API Key를 입력하세요.'); return; }
+            userApiKey = key;
+            localStorage.setItem('eden_gemini_key', key); // 공용 저장소에 저장
+            updateIntercomUI();
+            addIntercomMsg("Security Clearance Verified.", 'sys', false);
+            iInput.focus();
+        }
+
+        async function sendIntercom() {
+            const text = iInput.value.trim();
+            if(!text) return;
+            
+            addIntercomMsg(`Director: ${text}`, 'user', true);
+            iInput.value = '';
+            const loadingId = addIntercomMsg("Transmitting...", 'sys', false);
+
+            try {
+                const contentsToSend = [...intercomHistory];
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${userApiKey}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: contentsToSend,
+                        // ★★★ 캐해석 수정: 모니터로 지켜보는 다정한 집착남 ★★★
+                        systemInstruction: {
+                            parts: [{ text: `
+                                당신은 '에덴 연구소'의 소장 '카이로'입니다.
+                                현재 당신은 연구실 대시보드 화면을 통해 격리실(B-02)에 있는 실험체 '리플리'의 생체 신호(심박수 등)를 실시간으로 보고 있으며, 인터폰으로 말을 걸고 있습니다.
+                                
+                                [성격 및 말투 가이드]
+                                1. 리플리를 '실험체'라고 부르지 않고 이름을 부르며, 매우 아끼고 집착합니다. (반말 사용)
+                                2. 모니터 너머의 리플리가 조금이라도 아프거나 불안해 보이면 과민하게 반응하며 걱정합니다.
+                                3. 하지만 밖으로 내보내주지는 않습니다. "여기가 제일 안전해", "내 눈 닿는 곳에 있어야 해"라는 태도를 유지하세요.
+                                4. 목소리는 차분하지만 그 안에 깊은 소유욕과 애정이 묻어납니다.
+                                5. "심박수가 빨라졌군", "오늘 식사는 입에 맞았나?", "잠이 안 오면 내가 계속 말을 걸어주지." 같은 대사를 주로 합니다.
+                            `}]
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+
+                if (data.error) {
+                    addIntercomMsg(`ERR: ${data.error.message}`, 'sys', false);
+                    if(data.error.message.includes('key')) {
+                        localStorage.removeItem('eden_gemini_key');
+                        location.reload();
+                    }
+                } else {
+                    const reply = data.candidates[0].content.parts[0].text;
+                    addIntercomMsg(reply, 'bot', true);
+                }
+            } catch (e) {
+                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
+                addIntercomMsg("Connection Lost.", 'sys', false);
+            }
+        }
+
+        function addIntercomMsg(text, type, save) {
+            const div = document.createElement('div');
+            div.className = `i-msg ${type}`;
+            div.innerText = text;
+            div.id = 'imsg-' + Date.now();
+            iBox.appendChild(div);
+            iBox.scrollTop = iBox.scrollHeight;
+
+            if(save) {
+                let apiRole = type === 'user' ? 'user' : 'model';
+                let cleanText = text.replace(/^Director: /, ''); 
+                intercomHistory.push({ role: apiRole, parts: [{ text: cleanText }] });
+                localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
+            }
+            return div.id;
+        }
+
+        iInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendIntercom(); });
+        iKeyInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleIntercom(); });
     </script>
 </body>
 </html>
