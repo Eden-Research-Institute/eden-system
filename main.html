@@ -6,170 +6,60 @@
     <title>EDEN INSTITUTE - DASHBOARD</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap');
-
-        :root {
-            --bg-color: #121212;
-            --sidebar-bg: #1e1e1e;
-            --card-bg: #252525;
-            --border: #333;
-            --accent: #00ff9d;
-            --danger: #ff4b4b;
-            --text-main: #ffffff;
-            --text-sub: #888;
-        }
-
+        :root { --bg-color: #121212; --sidebar-bg: #1e1e1e; --card-bg: #252525; --border: #333; --accent: #00ff9d; --danger: #ff4b4b; --text-main: #ffffff; --text-sub: #888; }
         * { box-sizing: border-box; }
-
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            /* 중요: 높이 제한 해제하여 잘림 방지 */
-            min-height: 100vh;
-            overflow-x: hidden; 
-        }
-
+        body { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-
-        /* === 사이드바 (PC: 왼쪽에 고정) === */
-        .sidebar {
-            width: 240px; 
-            height: 100vh; 
-            background-color: var(--sidebar-bg); 
-            border-right: 1px solid var(--border);
-            position: fixed; /* 화면에 고정 */
-            top: 0; left: 0;
-            display: flex; flex-direction: column; 
-            padding: 20px; 
-            z-index: 100;
-            overflow-y: auto;
-        }
-        .logo {
-            font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px;
-            margin-bottom: 40px; display: flex; align-items: center; gap: 10px;
-        }
+        .sidebar { width: 240px; height: 100vh; background-color: var(--sidebar-bg); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; display: flex; flex-direction: column; padding: 20px; z-index: 100; overflow-y: auto; }
+        .logo { font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
         .logo::before { content: '❖'; font-size: 20px; }
-
-        /* 메뉴 아이템 */
-        .menu-item {
-            padding: 12px 15px; color: var(--text-sub); border-radius: 6px;
-            margin-bottom: 4px; transition: 0.2s; font-size: 14px;
-            display: flex; align-items: center; gap: 12px; font-weight: 500;
-            text-decoration: none; 
-        }
+        .menu-item { padding: 12px 15px; color: var(--text-sub); border-radius: 6px; margin-bottom: 4px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 12px; font-weight: 500; text-decoration: none; }
         .menu-item:hover, .menu-item.active { background-color: rgba(0, 255, 157, 0.05); color: var(--accent); }
-
-        .profile-box {
-            margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border);
-            display: flex; align-items: center; gap: 12px;
-        }
-        .avatar {
-            width: 32px; height: 32px; background: #333; border-radius: 4px;
-            display: flex; justify-content: center; align-items: center; font-weight: bold; color: #fff; font-size: 14px;
-        }
+        .profile-box { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 32px; height: 32px; background: #333; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #fff; font-size: 14px; }
         .user-info { cursor: pointer; }
         .user-info:hover h4 { color: var(--accent); text-decoration: underline; }
         .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
         .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
-
-        /* === 메인 콘텐츠 (PC: 사이드바 옆으로 밀기) === */
-        .main-content {
-            margin-left: 240px; /* 사이드바만큼 공간 확보 */
-            padding: 30px; 
-            display: grid; 
-            grid-template-columns: 2fr 1fr; /* 2:1 비율 */
-            grid-template-rows: auto auto; 
-            gap: 20px;
-            min-height: 100vh;
-        }
-
-        .header-area {
-            grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: flex-end;
-            margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px;
-        }
+        .main-content { margin-left: 240px; padding: 30px; display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 20px; min-height: 100vh; }
+        .header-area { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
         .page-title p { margin: 5px 0 0; color: var(--text-sub); font-size: 12px; }
-        
         .clock-area { text-align: right; display: block !important; }
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
-
-        /* 카드 스타일 (절대 안 잘리게 설정) */
-        .card {
-            background-color: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 8px; 
-            padding: 25px; 
-            position: relative; 
-            /* overflow: hidden 삭제함 */
-        }
+        .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 25px; position: relative; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .card-title { font-size: 12px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
         .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 5px var(--accent); }
-
-        /* 리플리 카드 */
-        .ripley-card {
-            grid-column: 1 / 2; grid-row: 2 / 4;
-            background: linear-gradient(160deg, #252525 0%, #1a1a1a 100%); border-left: 3px solid var(--accent);
-        }
+        .ripley-card { grid-column: 1 / 2; grid-row: 2 / 4; background: linear-gradient(160deg, #252525 0%, #1a1a1a 100%); border-left: 3px solid var(--accent); }
         .subject-id { font-size: 24px; font-weight: 600; color: #fff; letter-spacing: 1px; margin-bottom: 5px; }
         .subject-name-kr { font-size: 16px; color: var(--accent); margin-left: 10px; font-weight: 400; }
         .subject-desc { font-size: 13px; color: #888; margin-top: 5px; line-height: 1.5;}
-
         .vital-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .vital-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
         .vital-label { font-size: 11px; color: #666; display: block; margin-bottom: 8px; letter-spacing: 0.5px; }
         .vital-value { font-size: 18px; font-weight: 600; color: #e0e0e0; }
         .bpm-value { color: var(--accent); font-size: 24px; }
-
         .monitor-line { width: 100%; height: 2px; background: #333; margin: 30px 0; position: relative; overflow: hidden; }
         .monitor-active { position: absolute; width: 100px; height: 100%; background: var(--accent); box-shadow: 0 0 15px var(--accent); animation: scan 2s infinite linear; }
         @keyframes scan { 0% { left: -20%; } 100% { left: 120%; } }
-
-        /* 통계 카드 */
         .stats-card { grid-column: 2 / 3; }
         .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .stat-row:last-child { border-bottom: none; }
         .stat-label { font-size: 13px; color: #aaa; }
         .stat-num { font-size: 14px; font-weight: 600; color: #fff; }
-
-        /* 시스템 카드 */
         .info-card { grid-column: 2 / 3; }
         .system-list div { padding: 8px 0; font-size: 13px; display: flex; justify-content: space-between; }
         .ok { color: var(--accent); } .warn { color: #ffaa00; } .lock { color: var(--danger); }
-
-        /* ▼▼▼ 모바일 최적화 (안전 모드) ▼▼▼ */
+        
         @media (max-width: 768px) {
-            /* 사이드바 상단 고정 */
-            .sidebar { 
-                width: 100%; height: 55px; 
-                flex-direction: row; align-items: center;
-                border-right: none; border-bottom: 1px solid var(--border); 
-                position: sticky; top: 0; z-index: 100;
-                padding: 0 10px; padding-right: 130px; 
-                overflow-x: auto; white-space: nowrap; 
-            }
+            .sidebar { width: 100%; height: 55px; flex-direction: row; align-items: center; border-right: none; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 0 10px; padding-right: 130px; overflow-x: auto; white-space: nowrap; }
             .sidebar::-webkit-scrollbar { display: none; }
             .logo { display: none; }
-            
             .menu-item { margin-bottom: 0; margin-right: 5px; background: #222; padding: 6px 10px; height: 36px; }
-            
-            /* 프로필 박스 고정 */
-            .profile-box { 
-                position: fixed; top: 0; right: 0; width: 120px; height: 55px;
-                background: #1a1a1a; border-left: 2px solid var(--border); border-top: none;
-                display: flex !important; justify-content: center; z-index: 1000;
-                padding: 0; margin: 0;
-                box-shadow: -5px 0 10px rgba(0,0,0,0.5);
-            }
-            
-            /* 메인 콘텐츠 (여백 초기화) */
-            .main-content { 
-                margin-left: 0; /* PC용 여백 제거 */
-                padding: 15px; 
-                display: flex; flex-direction: column; /* 카드를 세로로 쌓기 */
-            }
-            
+            .profile-box { position: fixed; top: 0; right: 0; width: 120px; height: 55px; background: #1a1a1a; border-left: 2px solid var(--border); border-top: none; display: flex !important; justify-content: center; z-index: 1000; padding: 0; margin: 0; box-shadow: -5px 0 10px rgba(0,0,0,0.5); }
+            .main-content { margin-left: 0; padding: 15px; display: flex; flex-direction: column; }
             .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
             .clock-area { text-align: left; margin-top: 5px; }
         }
@@ -178,16 +68,14 @@
 <body>
     <nav class="sidebar">
         <div class="logo">EDEN LAB.</div>
-        
         <a href="main.html" class="menu-item active"><span>📊</span> <span>대시보드</span></a>
         <a href="subjects.html" class="menu-item"><span>🧬</span> <span>실험체 관리</span></a>
         <a href="facility.html" class="menu-item"><span>🏢</span> <span>시설 관리</span></a>
         <a href="staff.html" class="menu-item"><span>👥</span> <span>조직/인사</span></a>
-        <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>🌐</span> <span>대외 홈페이지</span></a>
-        
+        <a href="public.html" target="_blank" class="menu-item"><span>🌐</span> <span>대외 홈페이지</span></a>
         <div class="profile-box">
             <div class="avatar">K</div>
-            <div class="user-info" onclick="alert('수신된 메시지가 없습니다.')">
+            <div class="user-info" onclick="checkMessages()">
                 <h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p>
             </div>
         </div>
@@ -195,23 +83,12 @@
 
     <main class="main-content">
         <div class="header-area">
-            <div class="page-title">
-                <h1>Main Console</h1> <p>INTEGRATED CONTROL SYSTEM</p>
-            </div>
-            <div class="clock-area mono">
-                <div class="clock-time" id="clock">00:00:00</div>
-                <div class="clock-date" id="date">YYYY-MM-DD</div>
-            </div>
+            <div class="page-title"><h1>Main Console</h1> <p>INTEGRATED CONTROL SYSTEM</p></div>
+            <div class="clock-area mono"><div class="clock-time" id="clock">00:00:00</div><div class="clock-date" id="date">YYYY-MM-DD</div></div>
         </div>
-
         <div class="card ripley-card">
-            <div class="card-header">
-                <span class="card-title" style="color:var(--accent);">CORE ASSET MONITORING</span> <span class="status-dot"></span>
-            </div>
-            <div class="subject-info">
-                <div class="subject-id mono">ER-S-02-001 <span class="subject-name-kr">(리플리)</span></div>
-                <div class="subject-desc">현재 유일한 2단계(재생) 도달 개체.<br>신체 재생 효율 420% 유지 중.</div>
-            </div>
+            <div class="card-header"><span class="card-title" style="color:var(--accent);">CORE ASSET MONITORING</span> <span class="status-dot"></span></div>
+            <div class="subject-info"><div class="subject-id mono">ER-S-02-001 <span class="subject-name-kr">(리플리)</span></div><div class="subject-desc">현재 유일한 2단계(재생) 도달 개체.<br>신체 재생 효율 420% 유지 중.</div></div>
             <div class="monitor-line"><div class="monitor-active"></div></div>
             <div class="vital-grid mono">
                 <div class="vital-item"><span class="vital-label">HEART RATE</span><span class="vital-value bpm-value"><span id="bpm">72</span> <span style="font-size:12px;">BPM</span></span></div>
@@ -220,7 +97,6 @@
                 <div class="vital-item"><span class="vital-label">CONDITION</span><span class="vital-value" style="color:var(--accent);">STABLE</span></div>
             </div>
         </div>
-
         <div class="card stats-card">
             <div class="card-header"><span class="card-title">SUBJECT STATUS</span></div>
             <div class="mono">
@@ -230,7 +106,6 @@
                 <div class="stat-row"><span class="stat-label">금일 신규 입소 (New)</span><span class="stat-num" id="stat-new" style="color:#fff;">Loading...</span></div>
             </div>
         </div>
-
         <div class="card info-card">
             <div class="card-header"><span class="card-title">SYSTEM CHECK</span></div>
             <div class="system-list mono">
@@ -247,11 +122,8 @@
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
             const kstDate = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-            
-            const clockEl = document.getElementById('clock');
-            const dateEl = document.getElementById('date');
-            if (clockEl) clockEl.innerText = kstTime;
-            if (dateEl) dateEl.innerText = kstDate;
+            document.getElementById('clock').innerText = kstTime;
+            document.getElementById('date').innerText = kstDate;
         }
         setInterval(updateClock, 1000); updateClock();
 
@@ -259,23 +131,32 @@
             const startDate = new Date("2026-01-01T00:00:00+09:00").getTime();
             const today = new Date().getTime();
             const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-
             const total = 1000 + (daysPassed * 3); 
             const dead = Math.floor(total * 0.58);
             const active = total - dead;
             const newIn = (daysPassed % 10) + 5; 
-
             document.getElementById('stat-total').innerText = total.toLocaleString();
             document.getElementById('stat-active').innerText = active.toLocaleString();
             document.getElementById('stat-dead').innerText = dead.toLocaleString();
             document.getElementById('stat-new').innerText = "+" + newIn;
         }
         updateStats();
+        setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
-        setInterval(() => {
-            const bpmElement = document.getElementById('bpm');
-            bpmElement.innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70;
-        }, 2000);
+        // 지원서 확인 기능
+        function checkMessages() {
+            const list = JSON.parse(localStorage.getItem('eden_applicants')) || [];
+            if (list.length === 0) {
+                alert('수신된 메시지가 없습니다.');
+            } else {
+                let msg = `[📩 신규 지원자 명단: 총 ${list.length}명]\n\n`;
+                list.forEach((p, i) => {
+                    msg += `${i+1}. 이름: ${p.name}\n   연락처: ${p.phone}\n   생년월일: ${p.birth}\n   특이사항: ${p.note ? p.note : '없음'}\n\n`;
+                });
+                msg += '----------------------------------\n확인 후 인사팀으로 전달 바랍니다.';
+                alert(msg);
+            }
+        }
     </script>
 </body>
 </html>
