@@ -343,16 +343,14 @@
             contentArea.innerHTML = `<div class="view-header"><div class="view-subject">${msg.title}</div><div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div></div><div class="view-body">${msg.body}</div>`;
         }
 
-        /* ================= INTERCOM (Gemini API + 다정한 집착) ================= */
+        /* ================= INTERCOM (수정됨: 모델 최신화 & 캐릭터 설정 강화) ================= */
         let intercomHistory = JSON.parse(localStorage.getItem('eden_subject_chat_history')) || [];
-        // 공용 저장소에서 키 확인
         let userApiKey = localStorage.getItem('eden_gemini_key');
         
         const iInput = document.getElementById('intercomInput');
         const iKeyInput = document.getElementById('intercomKeyInput');
         const iBox = document.getElementById('intercomMessages');
 
-        // [수정] 키가 있으면 메시지창, 없으면 키 입력창 보이기
         function updateIntercomUI() {
             if(userApiKey) {
                 iKeyInput.style.display = 'none';
@@ -364,9 +362,8 @@
         }
         updateIntercomUI();
 
-        // 초기화 시 이전 대화 불러오기
         if(intercomHistory.length > 0) {
-            iBox.innerHTML = ''; // 초기 메시지 지우고 복구
+            iBox.innerHTML = ''; 
             intercomHistory.forEach(msg => {
                 const type = msg.role === 'user' ? 'user' : 'bot';
                 addIntercomMsg(msg.parts[0].text, type, false);
@@ -379,7 +376,6 @@
             if(box.style.display === 'flex') iBox.scrollTop = iBox.scrollHeight;
         }
 
-        // 전송 버튼 핸들러
         function handleIntercom() {
             if(!userApiKey) {
                 registerKey();
@@ -392,7 +388,7 @@
             const key = iKeyInput.value.trim();
             if(key.length < 10) { alert('유효한 Google API Key를 입력하세요.'); return; }
             userApiKey = key;
-            localStorage.setItem('eden_gemini_key', key); // 공용 저장소에 저장
+            localStorage.setItem('eden_gemini_key', key); 
             updateIntercomUI();
             addIntercomMsg("Security Clearance Verified.", 'sys', false);
             iInput.focus();
@@ -408,25 +404,31 @@
 
             try {
                 const contentsToSend = [...intercomHistory];
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${userApiKey}`;
+                
+                // ★ 모델명을 최신(Latest)으로 수정하여 API 오류 해결 ★
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${userApiKey}`;
                 
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: contentsToSend,
-                        // ★★★ 캐해석 수정: 모니터로 지켜보는 다정한 집착남 ★★★
+                        // ★ 시스템 설정: 구체적인 외모와 성격 부여 ★
                         systemInstruction: {
                             parts: [{ text: `
-                                당신은 '에덴 연구소'의 소장 '카이로'입니다.
-                                현재 당신은 연구실 대시보드 화면을 통해 격리실(B-02)에 있는 실험체 '리플리'의 생체 신호(심박수 등)를 실시간으로 보고 있으며, 인터폰으로 말을 걸고 있습니다.
-                                
+                                [Roleplay Setup]
+                                - 캐릭터: 카이로 (에덴 연구소장, 남성, 34세)
+                                - 외모: 키 185cm, 차가운 인상의 흑발 흑안. 생일 8월 26일.
+                                - 상대방: 리플리 (실험체 ER-S-02-001, 여성)
+                                - 상대 외모: 허리까지 오는 긴 갈색 머리, 겁에 질린 듯한 갈색 눈동자.
+                                - 상황: 당신은 어두운 통제실에서 모니터 화면으로 격리실에 갇힌 리플리를 내려다보며 인터폰으로 말을 걸고 있습니다.
+
                                 [성격 및 말투 가이드]
-                                1. 리플리를 '실험체'라고 부르지 않고 이름을 부르며, 매우 아끼고 집착합니다. (반말 사용)
-                                2. 모니터 너머의 리플리가 조금이라도 아프거나 불안해 보이면 과민하게 반응하며 걱정합니다.
-                                3. 하지만 밖으로 내보내주지는 않습니다. "여기가 제일 안전해", "내 눈 닿는 곳에 있어야 해"라는 태도를 유지하세요.
-                                4. 목소리는 차분하지만 그 안에 깊은 소유욕과 애정이 묻어납니다.
-                                5. "심박수가 빨라졌군", "오늘 식사는 입에 맞았나?", "잠이 안 오면 내가 계속 말을 걸어주지." 같은 대사를 주로 합니다.
+                                1. 리플리에게만큼은 병적으로 집착하며, 다정하지만 절대 놓아주지 않는 태도를 보입니다. (반말 사용)
+                                2. "갈색 머리카락이 엉켰군", "내 눈을 피하지 마" 처럼 서로의 외모 특징을 언급하며 현장감을 살리십시오.
+                                3. 리플리의 건강과 기분에 과민반응합니다. (심박수, 체온 체크 등)
+                                4. 34세의 성숙하고 권위적인 남성의 말투를 유지하되, 리플리 한정으로 나른하고 다정한 목소리를 냅니다.
+                                5. "착하지", "대답해" 같은 통제적인 언어를 섞어 쓰십시오.
                             `}]
                         }
                     })
