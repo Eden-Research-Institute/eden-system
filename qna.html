@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDEN - Q&A</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&family=Playfair+Display:wght@700&display=swap');
+
+        :root { --primary: #002B5B; --secondary: #00A8CC; --bg: #F8F9FA; --text: #333; --danger: #ff4b4b; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', 'Inter', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; }
+
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: -1px; text-decoration: none; display: flex; align-items: center; gap: 8px;}
+        .logo span { color: var(--secondary); font-family: 'Inter', sans-serif; }
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; }
+        .nav-item:hover { color: var(--primary); }
+
+        /* ▼▼▼ [&] 기호 전용 폰트 스타일 (반듯하게!) ▼▼▼ */
+        .amp {
+            font-family: 'Inter', sans-serif; /* 꼬불거리는 Playfair 대신 깔끔한 Inter 사용 */
+            font-style: normal;
+            font-weight: 400; /* 너무 두껍지 않게 */
+            color: var(--secondary); /* 포인트 컬러 살짝 줌 */
+        }
+
+        .container { max-width: 800px; margin: 60px auto; padding: 0 20px; animation: fadeUp 0.5s ease-out; }
+        
+        .page-header { text-align: center; margin-bottom: 50px; }
+        .page-title { font-family: 'Playfair Display'; font-size: 42px; color: var(--primary); margin-bottom: 10px; }
+        .page-desc { color: #666; font-size: 16px; word-break: keep-all; }
+
+        .qna-list { display: flex; flex-direction: column; gap: 15px; }
+        .qna-item { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; transition: 0.3s; }
+        .qna-item:hover { transform: translateY(-2px); }
+
+        .qna-header { 
+            padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; 
+            background: #fff; border-left: 5px solid transparent;
+        }
+        .qna-header:hover { background: #f8fbff; }
+        .q-title { font-weight: 700; font-size: 16px; color: #333; display: flex; align-items: center; gap: 10px; }
+        .q-icon { color: var(--secondary); font-weight: 800; }
+        .toggle-icon { font-size: 20px; color: #999; transition: 0.3s; }
+
+        .qna-body { 
+            display: none; padding: 25px; background: #f9f9f9; border-top: 1px solid #eee; font-size: 14px; color: #555; 
+        }
+        .a-icon { color: var(--primary); font-weight: 800; margin-right: 8px; font-size: 16px; }
+
+        .qna-item.active .qna-body { display: block; }
+        .qna-item.active .qna-header { border-left-color: var(--secondary); }
+        .qna-item.active .toggle-icon { transform: rotate(180deg); color: var(--secondary); }
+
+        .qna-item.deleted { opacity: 0.7; cursor: not-allowed; background: #ffeaea; }
+        .qna-item.deleted:hover { transform: none; background: #ffeaea; }
+        .qna-item.deleted .qna-header { cursor: not-allowed; }
+        .qna-item.deleted .q-title { color: #aaa; text-decoration: line-through; }
+        .deleted-badge { 
+            background: var(--danger); color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; 
+            font-weight: bold; margin-left: 10px; text-decoration: none !important; display: inline-block;
+        }
+
+        footer { background: #111; color: #555; padding: 60px 20px; text-align: center; font-size: 12px; margin-top: 100px; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 20px; }
+            .q-title { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="public.html" class="logo">EDEN <span>INSTITUTE</span></a>
+        <nav class="nav-links">
+            <a href="public.html" class="nav-item">홈으로</a>
+            <a href="about.html" class="nav-item">인사말</a>
+            <a href="intro.html" class="nav-item">연구소 소개</a>
+            <a href="qna.html" class="nav-item" style="color:var(--primary);">Q<span class="amp">&</span>A</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Community Q<span class="amp">&</span>A</h1>
+            <p class="page-desc">자주 묻는 질문과 답변을 확인하세요. (일부 게시글은 운영 정책에 의해 숨김 처리될 수 있습니다.)</p>
+        </div>
+
+        <div class="qna-list">
+            
+            <div class="qna-item">
+                <div class="qna-header" onclick="toggleQna(this)">
+                    <span class="q-title"><span class="q-icon">Q.</span> 소장님 실물 봤는데 진짜 미치신 거 아닌가요;;;</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qna-body">
+                    <span class="a-icon">A.</span> 안녕하세요, 에덴 홍보팀입니다.<br>
+                    카이로 소장님의 외모에 대한 관심은 감사하오나, 연구소의 공식적인 연구 성과와 무관한 질문은 지양해 주시기 바랍니다.<br>
+                    본 게시판은 팬카페가 아니며, 지속적인 사담 게시 시 IP 차단 조치될 수 있음을 알립니다.
+                </div>
+            </div>
+
+            <div class="qna-item">
+                <div class="qna-header" onclick="toggleQna(this)">
+                    <span class="q-title"><span class="q-icon">Q.</span> 임상 실험 참여 시 보수는 얼마나 되나요? 급전이 필요해서요.</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qna-body">
+                    <span class="a-icon">A.</span> 에덴 연구소입니다.<br>
+                    프로젝트 참여 보수는 업계 최고 수준(기본급 + 위험 수당 + 비밀 유지 보너스)을 보장합니다.<br>
+                    구체적인 액수는 1차 적합성 검사 통과 후 개별 면담 시 안내해 드립니다.<br>
+                    지금 바로 [지원하기] 버튼을 눌러주세요.
+                </div>
+            </div>
+
+            <div class="qna-item deleted">
+                <div class="qna-header" onclick="alert('🚫 [ACCESS DENIED]\n\n해당 게시글은 보안 규정 위반(허위 사실 유포 및 기밀 누설)으로 인해\n관리자에 의해 영구 삭제되었습니다.\n작성자의 IP는 보안팀에 자동 전송되었습니다.')">
+                    <span class="q-title">
+                        <span class="q-icon">Q.</span> 제 동생이 여기 들어간 뒤로 연락이 안 됩니다 <span class="deleted-badge">삭제됨</span>
+                    </span>
+                    <span class="toggle-icon">🔒</span>
+                </div>
+            </div>
+
+            <div class="qna-item">
+                <div class="qna-header" onclick="toggleQna(this)">
+                    <span class="q-title"><span class="q-icon">Q.</span> 병원에서 포기한 희귀난치병 환자입니다. 저도 지원 가능한가요?</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qna-body">
+                    <span class="a-icon">A.</span> 환영합니다. 당신은 우리가 찾는 가장 완벽한 후보자입니다.<br>
+                    현대 의학이 포기했다는 것은, 곧 에덴의 기술을 증명할 기회라는 뜻입니다.<br>
+                    귀하의 병증 기록을 첨부하여 지원해 주시면 최우선 순위로 검토하겠습니다. 
+                </div>
+            </div>
+
+            <div class="qna-item">
+                <div class="qna-header" onclick="toggleQna(this)">
+                    <span class="q-title"><span class="q-icon">Q.</span> 소장님 인스타그램이나 개인 SNS 하시나요? ㅠㅠ</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qna-body">
+                    <span class="a-icon">A.</span> 아닙니다. 카이로 소장님은 SNS를 포함한 일체의 소모적인 대외 활동을 하지 않습니다.<br>
+                    오직 연구와 인류 진화 프로젝트에만 모든 시간을 할애하고 계십니다.<br>
+                    (연구소 공식 계정 외 사칭 계정에 주의하시기 바랍니다.)
+                </div>
+            </div>
+
+            <div class="qna-item">
+                <div class="qna-header" onclick="toggleQna(this)">
+                    <span class="q-title"><span class="q-icon">Q.</span> 전과가 있어도 지원할 수 있습니까? 신원 조회가 걸려서요.</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qna-body">
+                    <span class="a-icon">A.</span> 에덴은 지원자의 과거를 묻지 않습니다.<br>
+                    우리가 관심 있는 것은 당신의 '생물학적 데이터' 뿐입니다.<br>
+                    사회에서 어떤 죄를 지었든, 이곳에서는 새로운 인류로 다시 태어날 수 있습니다. 안심하고 지원하십시오.
+                </div>
+            </div>
+
+             <div class="qna-item deleted">
+                <div class="qna-header" onclick="alert('🚫 [ACCESS DENIED]\n\n해당 게시글은 관리자 권한으로 삭제되었습니다.\n사유: 불필요한 공포감 조성 및 시설 보안 침해')">
+                    <span class="q-title">
+                        <span class="q-icon">Q.</span> 새벽에 뒷문으로 탑차 실려 나가는 거 봤는데 냄새가... <span class="deleted-badge">삭제됨</span>
+                    </span>
+                    <span class="toggle-icon">🔒</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>© EDEN INSTITUTE. All Rights Reserved.</p>
+        <p>Headquarters: [REDACTED], Germany | Contact: info@eden-lab.public</p>
+        <p style="margin-top: 10px; opacity: 0.3;">Authorized Personnel Only Access Portal Hidden.</p>
+    </footer>
+
+    <script>
+        function toggleQna(header) {
+            const item = header.parentElement;
+            if (item.classList.contains('deleted')) return;
+
+            const allItems = document.querySelectorAll('.qna-item');
+            allItems.forEach(i => {
+                if (i !== item) i.classList.remove('active');
+            });
+
+            item.classList.toggle('active');
+        }
+    </script>
+
+</body>
+</html>
