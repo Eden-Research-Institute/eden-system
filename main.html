@@ -260,6 +260,7 @@
     </div>
 
     <script>
+        // 1. 시계 및 통계 기능
         function updateClock() {
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
@@ -285,7 +286,7 @@
         updateStats();
         setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
-        /* ================= INBOX SYSTEM ================= */
+        // 2. 수신함 (INBOX) 시스템
         const initialMessages = [
             { type: 'OFFICIAL', sender: '국가 과학 기술 자문회의', title: '[기밀] 4분기 예산 증액 승인', unread: true, date: 'Yesterday', body: '수신: 카이로 소장\n\n귀하의 "인류 진화 프로젝트"에 대한 추가 예산안이 비밀리에 통과되었습니다.\n윤리 위원회의 감사는 예정대로 "서류상으로만" 진행될 것이니\n안심하고 연구에만 매진하십시오.\n\n우리는 귀하의 성과를 기대하고 있습니다.\n\n- 위원장 드림' },
             { type: 'OFFICIAL', sender: '세계 생명 공학 협회', title: '특별 공로상 수상 후보 선정', unread: false, date: '2 days ago', body: '축하드립니다, 카이로 소장님.\n귀하의 혁신적인 연구 성과를 기려 금년도 특별 공로상 유력 후보로 선정되셨습니다.\n(시상식 일정은 추후 대외비로 안내드립니다.)' },
@@ -302,10 +303,22 @@
             { sender: 'Dr. Vogel (Research)', title: '야간 근무자 식단 개선 요청', body: '최근 야간 연장 근무가 늘어나고 있는데, 야식 메뉴가 너무 부실하다는 연구원들의 불만이 접수되었습니다.\n예산 범위 내에서 개선이 가능할지 검토 부탁드립니다.' }
         ];
 
+        // 안전한 데이터 로딩 (여기서 충돌 방지)
+        function safeLoad(key) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            } catch (e) {
+                console.error("Data Load Error:", e);
+                return null;
+            }
+        }
+
         function initializeInbox() {
-            let messages = JSON.parse(localStorage.getItem('eden_messages'));
+            let messages = safeLoad('eden_messages');
             if (!messages) { messages = [...initialMessages]; localStorage.setItem('eden_messages', JSON.stringify(messages)); }
-            const newApplicants = JSON.parse(localStorage.getItem('eden_applicants')) || [];
+            
+            const newApplicants = safeLoad('eden_applicants') || [];
             if (newApplicants.length > 0) {
                 newApplicants.forEach(p => { messages.unshift({ type: 'APPLY', sender: '지원서 접수 시스템', title: `[신규 지원] ${p.name}`, unread: true, date: p.time, body: `[지원자 정보]\n- 성명: ${p.name}\n- 생년월일: ${p.birth}\n- 연락처: ${p.phone}\n\n[특이사항]\n${p.note ? p.note : '없음'}\n\n----------------\n* 1차 적합성 판정 대기 중.` }); });
                 localStorage.removeItem('eden_applicants'); localStorage.setItem('eden_messages', JSON.stringify(messages));
@@ -320,7 +333,7 @@
         function openInbox() { renderList(); document.getElementById('inbox-modal').style.display = 'flex'; }
         function closeInbox() { document.getElementById('inbox-modal').style.display = 'none'; }
         function renderList() {
-            const messages = JSON.parse(localStorage.getItem('eden_messages')) || [];
+            const messages = safeLoad('eden_messages') || [];
             const listArea = document.getElementById('msg-list-area');
             let html = '';
             messages.forEach((msg, idx) => {
@@ -334,7 +347,7 @@
             listArea.innerHTML = html;
         }
         function viewMessage(idx, element) {
-            let messages = JSON.parse(localStorage.getItem('eden_messages')) || [];
+            let messages = safeLoad('eden_messages') || [];
             const msg = messages[idx];
             const contentArea = document.getElementById('msg-content-area');
             if (msg.unread) { msg.unread = false; messages[idx] = msg; localStorage.setItem('eden_messages', JSON.stringify(messages)); }
@@ -343,23 +356,26 @@
             contentArea.innerHTML = `<div class="view-header"><div class="view-subject">${msg.title}</div><div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div></div><div class="view-body">${msg.body}</div>`;
         }
 
-        /* ================= INTERCOM (Gemini 3 Pro) ================= */
-        let intercomHistory = JSON.parse(localStorage.getItem('eden_subject_chat_history')) || [];
+        /* ================= INTERCOM (Gemini 1.5 Pro - API 호환성 준수) ================= */
+        // 안전하게 데이터 불러오기 (여기가 문제였음)
+        let intercomHistory = safeLoad('eden_subject_chat_history') || [];
         let userApiKey = localStorage.getItem('eden_gemini_key');
         
         const iInput = document.getElementById('intercomInput');
         const iKeyInput = document.getElementById('intercomKeyInput');
         const iBox = document.getElementById('intercomMessages');
 
-        // [첫인사 고정]
+        // [첫인사 고정] - 대화가 아예 없을 때만 실행
         function ensureGreeting() {
             if (intercomHistory.length === 0) {
+                // 이 메시지가 '대화 기록'의 가장 첫 번째로 저장됩니다.
                 intercomHistory.push({ role: 'model', parts: [{ text: '"리플리, 내 말 들리나?"' }] });
                 localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
             }
         }
         ensureGreeting(); 
 
+        // [UI 업데이트] - 키 유무 확인
         function updateIntercomUI() {
             if(userApiKey) {
                 iKeyInput.style.display = 'none';
@@ -371,10 +387,10 @@
         }
         updateIntercomUI();
 
-        // [렌더링]
+        // [렌더링] - 저장된 대화 불러오기
         function renderMessages() {
             iBox.innerHTML = '';
-            // 장식용 메시지
+            // 장식용 시스템 메시지 (저장 안 함)
             iBox.innerHTML += `<div class="i-msg sys">Connecting to containment grid...</div>`;
             iBox.innerHTML += `<div class="i-msg sys">Audio link established.</div>`;
             
@@ -387,24 +403,26 @@
             });
             iBox.scrollTop = iBox.scrollHeight;
         }
-        renderMessages();
+        renderMessages(); // 페이지 열자마자 실행
 
-        // [리셋 기능]
-        function resetIntercom() {
-            if(confirm("이전 대화 기록을 모두 삭제하고 처음으로 돌아갑니다. (복구 불가)")) {
-                localStorage.removeItem('eden_subject_chat_history');
-                intercomHistory = [];
-                ensureGreeting(); 
-                renderMessages(); 
-            }
-        }
-
+        // [UI] 인터폰 창 열고 닫기
         function toggleIntercom() {
             const box = document.getElementById('intercomBox');
             box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'flex' : 'none';
             if(box.style.display === 'flex') iBox.scrollTop = iBox.scrollHeight;
         }
 
+        // [기능] 기억 초기화 (휴지통 버튼)
+        function resetIntercom() {
+            if(confirm("이전 대화 기록을 모두 삭제하고 처음으로 돌아갑니다. (복구 불가)")) {
+                localStorage.removeItem('eden_subject_chat_history');
+                intercomHistory = [];
+                ensureGreeting(); // 첫인사 다시 생성
+                renderMessages(); // 화면 갱신
+            }
+        }
+
+        // [기능] 전송 핸들러
         function handleIntercom() {
             if(!userApiKey) {
                 registerKey();
@@ -413,6 +431,7 @@
             }
         }
 
+        // [기능] 키 등록
         function registerKey() {
             const key = iKeyInput.value.trim();
             if(key.length < 10) { alert('유효한 Google API Key를 입력하세요.'); return; }
@@ -423,19 +442,22 @@
             iInput.focus();
         }
 
+        // [기능] 메시지 전송 (Gemini API 호출)
         async function sendIntercom() {
             const text = iInput.value.trim();
             if(!text) return;
             
+            // 내 메시지 화면 표시 & 저장
             addIntercomMsg(`Director: ${text}`, 'user', true);
             iInput.value = '';
+            // 로딩 표시 (저장 안 함)
             const loadingId = addIntercomMsg("Transmitting...", 'sys', false);
 
             try {
                 const contentsToSend = [...intercomHistory];
                 
-                // ★★★ Gemini 3 Pro (API string: gemini-3-pro) ★★★
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro:generateContent?key=${userApiKey}`;
+                // ★★★ Gemini 1.5 Pro (현재 API 호환성 100% 보장) ★★★
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${userApiKey}`;
                 
                 const response = await fetch(url, {
                     method: 'POST',
@@ -468,7 +490,7 @@
 
                 if (data.error) {
                     addIntercomMsg(`ERR: ${data.error.message}`, 'sys', false);
-                    // 키 오류일 경우만 키 삭제 (모델 오류면 유지)
+                    // 키 오류일 경우만 키 삭제
                     if(data.error.message.includes('key') || data.error.code === 403) {
                         localStorage.removeItem('eden_gemini_key');
                         setTimeout(() => location.reload(), 2000);
