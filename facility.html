@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDEN INSTITUTE - FACILITY</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #121212;
+            --sidebar-bg: #1e1e1e;
+            --card-bg: #252525;
+            --border: #333;
+            --accent: #00ff9d;
+            --danger: #ff4b4b;
+            --warning: #ffaa00;
+            --text-main: #ffffff;
+            --text-sub: #888;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* === 사이드바 === */
+        .sidebar {
+            width: 240px; height: 100vh; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
+            position: fixed; top: 0; left: 0; display: flex; flex-direction: column; padding: 20px; z-index: 100; overflow-y: auto;
+        }
+        .logo { font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        .logo::before { content: '❖'; font-size: 20px; }
+        .menu-item { padding: 12px 15px; color: var(--text-sub); border-radius: 6px; margin-bottom: 4px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 12px; font-weight: 500; text-decoration: none; flex-shrink: 0; }
+        .menu-item:hover, .menu-item.active { background-color: rgba(0, 255, 157, 0.05); color: var(--accent); }
+        
+        .profile-box { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 32px; height: 32px; background: #333; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #fff; font-size: 14px; }
+        .user-info { cursor: pointer; } 
+        .user-info:hover h4 { color: var(--accent); text-decoration: underline; }
+        .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
+        .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
+
+        /* === 메인 콘텐츠 === */
+        .main-content { margin-left: 240px; padding: 30px; display: flex; flex-direction: column; gap: 20px; min-height: 100vh; }
+        .header-area { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+        .page-title p { margin: 5px 0 0; color: var(--text-sub); font-size: 12px; }
+        .clock-area { text-align: right; display: block !important; }
+        .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
+        .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
+
+        /* === 시설 층별 카드 스타일 === */
+        .floor-card {
+            background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 25px; position: relative; margin-bottom: 20px;
+        }
+        .floor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .floor-title { font-size: 16px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .floor-tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: #333; color: #aaa; font-weight: normal; }
+        
+        /* 구역 그리드 */
+        .zone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .zone-box { 
+            background: rgba(0,0,0,0.2); border: 1px solid #444; border-radius: 6px; padding: 15px; 
+            display: flex; flex-direction: column; gap: 8px; transition: 0.2s; min-height: 80px;
+        }
+        .zone-box:hover { border-color: var(--accent); background: rgba(0, 255, 157, 0.05); }
+        .zone-name { font-size: 13px; color: #ccc; font-weight: 600; margin-bottom: 5px;}
+        
+        /* 인원 표시 아이콘 */
+        .occupancy { display: flex; flex-direction: column; gap: 4px; font-size: 12px; margin-top: auto; }
+        .occ-item { display: flex; align-items: center; gap: 6px; }
+        .icon-staff { color: #4facfe; } /* 연구원: 파랑 */
+        .icon-sub { color: #ffaa00; } /* 실험체: 주황 */
+        
+        /* 카이로 & 리플리 전용 스타일 */
+        .special-badge { 
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; width: fit-content; margin-bottom: 2px;
+        }
+        .badge-kairo { background: rgba(255, 75, 75, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+        .badge-ripley { background: rgba(0, 255, 157, 0.15); color: var(--accent); border: 1px solid var(--accent); animation: pulse 2s infinite; }
+        
+        @keyframes pulse { 0% { opacity: 1; box-shadow: 0 0 5px var(--accent); } 50% { opacity: 0.7; box-shadow: none; } 100% { opacity: 1; box-shadow: 0 0 5px var(--accent); } }
+
+        /* 보안 등급 뱃지 */
+        .sec-level { font-size: 10px; padding: 2px 5px; border-radius: 3px; margin-left: auto; }
+        .sec-1 { border: 1px solid #4facfe; color: #4facfe; } 
+        .sec-2 { border: 1px solid #ffaa00; color: #ffaa00; } 
+        .sec-3 { border: 1px solid var(--danger); color: var(--danger); } 
+        
+        /* 현재 상태 표시줄 */
+        .status-banner {
+            grid-column: 1 / -1; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; 
+            margin-bottom: 10px; display: flex; gap: 15px; align-items: center; font-size: 13px; border-left: 3px solid var(--accent);
+        }
+        .kairo-status { color: #fff; font-weight: bold; }
+
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            .sidebar { 
+                width: 100%; height: 55px; flex-direction: row; align-items: center;
+                border-right: none; border-bottom: 1px solid var(--border); 
+                position: sticky; top: 0; padding: 0 10px; padding-right: 130px; 
+                overflow-x: auto; white-space: nowrap; 
+            }
+            .sidebar::-webkit-scrollbar { display: none; }
+            .logo { display: none; }
+            .menu-item { margin-bottom: 0; margin-right: 5px; background: #222; padding: 6px 10px; height: 36px; }
+            .profile-box { 
+                position: fixed; top: 0; right: 0; width: 120px; height: 55px;
+                background: #1a1a1a; border-left: 2px solid var(--border); border-top: none;
+                display: flex !important; justify-content: center; z-index: 1000;
+                padding: 0; margin: 0; box-shadow: -5px 0 10px rgba(0,0,0,0.5);
+            }
+            .main-content { margin-left: 0; padding: 15px; }
+            .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .clock-area { text-align: left; margin-top: 5px; }
+            .zone-grid { grid-template-columns: 1fr; } 
+            .status-banner { flex-direction: column; align-items: flex-start; gap: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">EDEN LAB.</div>
+        <a href="main.html" class="menu-item"><span>📊</span> <span>대시보드</span></a>
+        <a href="subjects.html" class="menu-item"><span>🧬</span> <span>실험체 관리</span></a>
+        <a href="facility.html" class="menu-item active"><span>🏢</span> <span>시설 관리</span></a>
+        <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>👥</span> <span>조직/인사</span></a>
+        <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>🌐</span> <span>대외 홈페이지</span></a>
+        <div class="profile-box">
+            <div class="avatar">K</div>
+            <div class="user-info"><h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p></div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="header-area">
+            <div class="page-title">
+                <h1>Facility</h1> <p>INTERNAL STRUCTURE MAP & SENSORS</p>
+            </div>
+            <div class="clock-area mono">
+                <div class="clock-time" id="clock">00:00:00</div>
+                <div class="clock-date" id="date">YYYY-MM-DD</div>
+            </div>
+        </div>
+        
+        <div class="status-banner mono" id="status-banner">
+            </div>
+
+        <div class="floor-card">
+            <div class="floor-header">
+                <div class="floor-title">3F <span class="floor-tag">Director's Floor</span></div>
+                <div class="floor-tag sec-3">RESTRICTED AREA (LV.5)</div>
+            </div>
+            <div class="zone-grid mono" id="floor-3"></div>
+        </div>
+
+        <div class="floor-card">
+            <div class="floor-header">
+                <div class="floor-title">2F <span class="floor-tag">Research & Staff</span></div>
+                <div class="floor-tag sec-2">AUTHORIZED ONLY</div>
+            </div>
+            <div class="zone-grid mono" id="floor-2"></div>
+        </div>
+
+        <div class="floor-card">
+            <div class="floor-header">
+                <div class="floor-title">1F <span class="floor-tag">Lobby & Medical</span></div>
+                <div class="floor-tag sec-1">COMMON AREA</div>
+            </div>
+            <div class="zone-grid mono" id="floor-1"></div>
+        </div>
+
+        <div class="floor-card" style="border-left: 3px solid var(--accent);">
+            <div class="floor-header">
+                <div class="floor-title" style="color:var(--accent);">B1 <span class="floor-tag">Subject & Experiment</span></div>
+                <div class="floor-tag sec-3">BIOHAZARD / CONTROLLED</div>
+            </div>
+            <div class="zone-grid mono" id="floor-b1"></div>
+        </div>
+
+        <div class="floor-card" style="border-left: 3px solid var(--danger);">
+            <div class="floor-header">
+                <div class="floor-title" style="color:#888;">B2 <span class="floor-tag">Disposal & Infra</span></div>
+                <div class="floor-tag sec-2">MAINTENANCE</div>
+            </div>
+            <div class="zone-grid mono" id="floor-b2"></div>
+        </div>
+
+    </main>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
+            const kstDate = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+            document.getElementById('clock').innerText = kstTime;
+            document.getElementById('date').innerText = kstDate;
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function updateLocations() {
+            // 현재 시간에 따라 카이로 위치 결정
+            // 짝수 시간: 집무실 / 홀수 시간: 리플리 격리실 방문 (단순화된 예시)
+            // 소장님 요청: "실험 스케줄에 따라" -> subjects.html 스케줄과 비슷하게 오후 시간대에 방문한다고 가정
+            
+            const hour = new Date().getHours();
+            
+            // 14시~16시는 리플리 관리 시간 (B1 이동)
+            const isVisitTime = (hour >= 14 && hour < 16); 
+            
+            // 카이로 위치 설정
+            let kairoLocationName = "";
+            let kairoInOffice = false;
+            let kairoInIso = false;
+
+            if (isVisitTime) {
+                kairoInIso = true; // B1 격리실
+                kairoLocationName = "B1 특수 격리실 (R-001)";
+            } else {
+                kairoInOffice = true; // 3F 집무실
+                kairoLocationName = "3F 소장 집무실";
+            }
+
+            // 상태 배너 업데이트
+            const banner = document.getElementById('status-banner');
+            banner.innerHTML = `
+                <div><span style="color:#888;">CURRENT TIME:</span> <span style="color:#fff;">${hour}:00 Cycle</span></div>
+                <div class="kairo-status">
+                    <span style="color:var(--danger);">★ DIRECTOR KAIRO LOC:</span> 
+                    <span style="border-bottom:1px solid var(--danger);">${kairoLocationName}</span>
+                </div>
+            `;
+
+            // 3F 데이터
+            const f3_zones = [
+                { name: "소장 집무실", staff: 0, kairo: kairoInOffice }, 
+                { name: "소장 침실/서재", staff: 0 },
+                { name: "보안 관제실", staff: rnd(3, 5) },
+                { name: "접견실", staff: 0 }
+            ];
+
+            // 2F 데이터 (직원들 바글바글)
+            const f2_zones = [
+                { name: "세포 분석실", staff: rnd(15, 25) },
+                { name: "유전자 변이 연구실", staff: rnd(20, 30) },
+                { name: "데이터 분석실", staff: rnd(10, 15) },
+                { name: "연구원 사무실", staff: rnd(30, 50) },
+                { name: "회의실", staff: rnd(0, 10) }
+            ];
+
+            // 1F 데이터
+            const f1_zones = [
+                { name: "중앙 로비", staff: rnd(4, 8), sub: rnd(0, 2) },
+                { name: "보안 검색대", staff: rnd(4, 6) },
+                { name: "주 의료동", staff: rnd(10, 15), sub: rnd(5, 10) },
+                { name: "응급 처치실", staff: rnd(2, 4), sub: rnd(0, 2) },
+                { name: "외부인 통제실", staff: rnd(2, 3) }
+            ];
+
+            // B1 데이터
+            const fb1_zones = [
+                { name: "제1 중앙 실험실", staff: rnd(10, 15), sub: rnd(5, 10) }, 
+                { name: "제2 중앙 실험실", staff: rnd(8, 12), sub: rnd(4, 8) },
+                
+                // ★ 리플리 전용 구역 (연구원 출입 금지) ★
+                { name: "특수 격리실 (R-001)", staff: 0, ripley: true, kairo: kairoInIso },
+                
+                // 일반 실험체 수용소 (대규모 인원)
+                { name: "개별 격리실 (A구역)", staff: rnd(2, 4), sub: rnd(120, 140) },
+                { name: "개별 격리실 (B구역)", staff: rnd(2, 4), sub: rnd(120, 140) },
+                { name: "개별 격리실 (C구역)", staff: rnd(2, 4), sub: rnd(100, 120) },
+                
+                { name: "세척 및 소독실", staff: rnd(1, 3) }
+            ];
+
+            // B2 데이터
+            const fb2_zones = [
+                { name: "중앙 폐기물 처리장", staff: rnd(2, 5), sub: rnd(2, 5) },
+                { name: "전력 공급실", staff: rnd(1, 2) },
+                { name: "중앙 서버실", staff: rnd(1, 2) },
+                { name: "물자 보관 창고", staff: 0 }
+            ];
+
+            const draw = (id, zones) => {
+                const container = document.getElementById(id);
+                let html = '';
+                zones.forEach(z => {
+                    let icons = '';
+                    
+                    // 카이로 아이콘
+                    if (z.kairo) icons += `<div class="special-badge badge-kairo">★ KAIRO</div>`;
+                    
+                    // 리플리 아이콘
+                    if (z.ripley) icons += `<div class="special-badge badge-ripley">☣ ER-S-02-001</div>`;
+                    
+                    // 연구원 (Staff)
+                    if (z.staff > 0) icons += `<span class="occ-item icon-staff">👤 연구원 ${z.staff}명</span>`;
+                    
+                    // 실험체 (Subject)
+                    if (z.sub > 0) icons += `<span class="occ-item icon-sub">🧬 실험체 ${z.sub}체</span>`;
+                    
+                    if (icons === '') icons = `<span style="color:#444; font-size:11px;">- Empty -</span>`;
+
+                    html += `
+                        <div class="zone-box">
+                            <div class="zone-name">${z.name}</div>
+                            <div class="occupancy">${icons}</div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            };
+
+            draw('floor-3', f3_zones);
+            draw('floor-2', f2_zones);
+            draw('floor-1', f1_zones);
+            draw('floor-b1', fb1_zones);
+            draw('floor-b2', fb2_zones);
+        }
+
+        updateLocations(); 
+    </script>
+</body>
+</html>
