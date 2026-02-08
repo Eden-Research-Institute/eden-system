@@ -6,97 +6,47 @@
     <title>EDEN INSTITUTE - SUBJECTS</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap');
-
-        :root {
-            --bg-color: #121212;
-            --sidebar-bg: #1e1e1e;
-            --card-bg: #252525;
-            --border: #333;
-            --accent: #00ff9d;
-            --danger: #ff4b4b;
-            --warning: #ffaa00;
-            --text-main: #ffffff;
-            --text-sub: #888;
-        }
-
+        :root { --bg-color: #121212; --sidebar-bg: #1e1e1e; --card-bg: #252525; --border: #333; --accent: #00ff9d; --danger: #ff4b4b; --warning: #ffaa00; --text-main: #ffffff; --text-sub: #888; }
         * { box-sizing: border-box; }
-
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
+        body { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-
-        /* === 사이드바 === */
-        .sidebar {
-            width: 240px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
-            display: flex; flex-direction: column; padding: 20px; flex-shrink: 0;
-            position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; overflow-y: auto;
-        }
+        .sidebar { width: 240px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; overflow-y: auto; }
         .logo { font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
         .logo::before { content: '❖'; font-size: 20px; }
-
-        .menu-item {
-            padding: 12px 15px; color: var(--text-sub); border-radius: 6px; margin-bottom: 4px; transition: 0.2s; font-size: 14px;
-            display: flex; align-items: center; gap: 12px; font-weight: 500; text-decoration: none;
-        }
+        .menu-item { padding: 12px 15px; color: var(--text-sub); border-radius: 6px; margin-bottom: 4px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 12px; font-weight: 500; text-decoration: none; }
         .menu-item:hover, .menu-item.active { background-color: rgba(0, 255, 157, 0.05); color: var(--accent); }
-
         .profile-box { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
         .avatar { width: 32px; height: 32px; background: #333; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #fff; font-size: 14px; }
         .user-info { cursor: pointer; }
         .user-info:hover h4 { color: var(--accent); text-decoration: underline; }
         .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
         .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
-
-        /* === 메인 콘텐츠 === */
         .main-content { margin-left: 240px; padding: 30px; display: flex; flex-direction: column; gap: 20px; min-height: 100vh; }
         .header-area { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
         .page-title p { margin: 5px 0 0; color: var(--text-sub); font-size: 12px; }
-        
         .clock-area { text-align: right; display: block !important; }
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
-
-        /* 카드 공통 */
         .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 30px; position: relative; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 5px; }
         .card-title { font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; line-height: 2; display: inline-block; }
-
-        /* 1. 상단 요약 */
         .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .summary-item { text-align: center; border-right: 1px solid #444; padding: 10px 0; }
         .summary-item:last-child { border-right: none; }
         .phase-label { font-size: 13px; color: #aaa; display: block; margin-bottom: 12px; letter-spacing: 0.5px; }
         .phase-count { font-size: 36px; font-weight: bold; color: #fff; display: block; margin-bottom: 8px; }
         .phase-desc { font-size: 12px; color: #666; }
-
-        /* 2. 리플리 스케줄 */
         .schedule-card { border-left: 3px solid var(--accent); }
         .schedule-list { list-style: none; padding: 0; margin: 0; }
         .schedule-item { display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
         .schedule-time { width: 80px; color: var(--accent); font-weight: bold; }
         .schedule-task { flex: 1; color: #ddd; line-height: 1.5; }
-        
-        /* 상태 뱃지 스타일 */
         .schedule-status { font-size: 11px; padding: 3px 8px; border-radius: 4px; white-space: nowrap; font-weight: bold; }
-        
-        /* 완료 (이미 지난 시간) */
         .status-done { background: rgba(0, 255, 157, 0.1); color: var(--accent); border: 1px solid rgba(0, 255, 157, 0.2); }
-        /* 진행 중 (지금 시간) */
         .status-prog { background: rgba(255, 170, 0, 0.15); color: var(--warning); border: 1px solid rgba(255, 170, 0, 0.3); animation: pulse 2s infinite; }
-        /* 예정 (미래) */
         .status-wait { background: #333; color: #888; border: 1px solid #444; }
-
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-        
-        /* 3. 일반 실험체 리스트 */
         .table-container { width: 100%; overflow-x: auto; padding-bottom: 10px; }
         .mob-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; min-width: 500px; }
         .mob-table th { color: #666; font-weight: normal; padding: 12px 10px; border-bottom: 1px solid #444; }
@@ -105,24 +55,13 @@
         .s-adapt { background: rgba(255,255,255,0.1); color: #fff; }
         .s-fail { background: rgba(255, 75, 75, 0.2); color: var(--danger); }
         .s-wait { background: rgba(255, 170, 0, 0.2); color: var(--warning); }
-
-        /* 모바일 최적화 */
+        
         @media (max-width: 768px) {
-            .sidebar { 
-                width: 100%; height: 55px; flex-direction: row; align-items: center;
-                border-right: none; border-bottom: 1px solid var(--border); 
-                position: sticky; top: 0; padding: 0 10px; padding-right: 130px; 
-                overflow-x: auto; white-space: nowrap; 
-            }
+            .sidebar { width: 100%; height: 55px; flex-direction: row; align-items: center; border-right: none; border-bottom: 1px solid var(--border); position: sticky; top: 0; padding: 0 10px; padding-right: 130px; overflow-x: auto; white-space: nowrap; }
             .sidebar::-webkit-scrollbar { display: none; }
             .logo { display: none; }
             .menu-item { margin-bottom: 0; margin-right: 5px; background: #222; padding: 6px 10px; height: 36px; }
-            .profile-box { 
-                position: fixed; top: 0; right: 0; width: 120px; height: 55px;
-                background: #1a1a1a; border-left: 2px solid var(--border); border-top: none;
-                display: flex !important; justify-content: center; z-index: 1000;
-                padding: 0; margin: 0; box-shadow: -5px 0 10px rgba(0,0,0,0.5);
-            }
+            .profile-box { position: fixed; top: 0; right: 0; width: 120px; height: 55px; background: #1a1a1a; border-left: 2px solid var(--border); border-top: none; display: flex !important; justify-content: center; z-index: 1000; padding: 0; margin: 0; box-shadow: -5px 0 10px rgba(0,0,0,0.5); }
             .main-content { margin-left: 0; padding: 15px; }
             .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
             .clock-area { text-align: left; margin-top: 5px;}
@@ -138,200 +77,99 @@
         <a href="subjects.html" class="menu-item active"><span>🧬</span> <span>실험체 관리</span></a>
         <a href="facility.html" class="menu-item"><span>🏢</span> <span>시설 관리</span></a>
         <a href="staff.html" class="menu-item"><span>👥</span> <span>조직/인사</span></a>
-        <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>🌐</span> <span>대외 홈페이지</span></a>
-        
+        <a href="public.html" target="_blank" class="menu-item"><span>🌐</span> <span>대외 홈페이지</span></a>
         <div class="profile-box">
             <div class="avatar">K</div>
-            <div class="user-info" onclick="alert('수신된 메시지가 없습니다.')">
-                <h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p>
-            </div>
+            <div class="user-info" onclick="checkMessages()"><h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p></div>
         </div>
     </nav>
-
     <main class="main-content">
         <div class="header-area">
-            <div class="page-title">
-                <h1>Subjects</h1> <p>EXPERIMENTAL GROUP CONTROL</p>
-            </div>
-            <div class="clock-area mono">
-                <div class="clock-time" id="clock">00:00:00</div>
-                <div class="clock-date" id="date">YYYY-MM-DD</div>
-            </div>
+            <div class="page-title"><h1>Subjects</h1> <p>EXPERIMENTAL GROUP CONTROL</p></div>
+            <div class="clock-area mono"><div class="clock-time" id="clock">00:00:00</div><div class="clock-date" id="date">YYYY-MM-DD</div></div>
         </div>
-
         <div class="card">
             <div class="card-header"><span class="card-title">PHASE SUMMARY</span></div>
             <div class="summary-grid mono">
-                <div class="summary-item">
-                    <span class="phase-label">PHASE 1 (Adaptation)</span>
-                    <span class="phase-count" id="count-p1">Calculating...</span>
-                    <span class="phase-desc">생존 및 적응 개체</span>
-                </div>
-                <div class="summary-item">
-                    <span class="phase-label" style="color:var(--accent);">PHASE 2 (Regeneration)</span>
-                    <span class="phase-count" style="color:var(--accent);">1</span>
-                    <span class="phase-desc">유일 개체 (ER-S-02-001)</span>
-                </div>
-                <div class="summary-item">
-                    <span class="phase-label" style="color:var(--text-sub);">PHASE 3 (Immortality)</span>
-                    <span class="phase-count" style="color:var(--text-sub);">0</span>
-                    <span class="phase-desc">도달 개체 없음</span>
-                </div>
+                <div class="summary-item"><span class="phase-label">PHASE 1 (Adaptation)</span><span class="phase-count" id="count-p1">Calculating...</span><span class="phase-desc">생존 및 적응 개체</span></div>
+                <div class="summary-item"><span class="phase-label" style="color:var(--accent);">PHASE 2 (Regeneration)</span><span class="phase-count" style="color:var(--accent);">1</span><span class="phase-desc">유일 개체 (ER-S-02-001)</span></div>
+                <div class="summary-item"><span class="phase-label" style="color:var(--text-sub);">PHASE 3 (Immortality)</span><span class="phase-count" style="color:var(--text-sub);">0</span><span class="phase-desc">도달 개체 없음</span></div>
             </div>
         </div>
-
         <div class="card schedule-card">
-            <div class="card-header">
-                <span class="card-title" style="color:var(--accent);">CORE ASSET SCHEDULE (ER-S-02-001)</span>
-                <span style="font-size:11px; color:#888;">담당: 소장 카이로</span>
-            </div>
+            <div class="card-header"><span class="card-title" style="color:var(--accent);">CORE ASSET SCHEDULE (ER-S-02-001)</span><span style="font-size:11px; color:#888;">담당: 소장 카이로</span></div>
             <ul class="schedule-list mono" id="ripley-schedule"></ul>
         </div>
-
         <div class="card">
-            <div class="card-header">
-                <span class="card-title">PHASE 1 : BATCH LOGS</span>
-                <span style="font-size:10px; color:#666;">*실시간 변동 사항 (Real-time)</span>
-            </div>
-            
+            <div class="card-header"><span class="card-title">PHASE 1 : BATCH LOGS</span><span style="font-size:10px; color:#666;">*실시간 변동 사항 (Real-time)</span></div>
             <div class="table-container">
                 <table class="mob-table mono">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Status</th>
-                            <th>Details</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>ID</th><th>Status</th><th>Details</th><th>Time</th></tr></thead>
                     <tbody id="mob-logs"></tbody>
                 </table>
             </div>
         </div>
-
     </main>
-
     <script>
-        // 시계
         function updateClock() {
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
             const kstDate = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-            
-            const clockEl = document.getElementById('clock');
-            const dateEl = document.getElementById('date');
-            if (clockEl) clockEl.innerText = kstTime;
-            if (dateEl) dateEl.innerText = kstDate;
+            document.getElementById('clock').innerText = kstTime;
+            document.getElementById('date').innerText = kstDate;
         }
         setInterval(updateClock, 1000); updateClock();
 
-        // ★★★ [업그레이드됨] 시간에 따라 상태 자동 변경 ★★★
         function updateSchedule() {
             const now = new Date();
             const day = now.getDate(); 
-            const hour = now.getHours(); // 현재 시간 (0~23)
+            const hour = now.getHours();
             const scheduleList = document.getElementById('ripley-schedule');
-            
-            // 데이터: 시간(시)과 내용
-            const tasksA = [
-                { time: 7, text: "기상 및 혈액 채취 (200ml)" },
-                { time: 10, text: "세포 분열 촉진제 (Type-C) 투여" },
-                { time: 14, text: "근육 조직 절개 및 재생 속도 측정" },
-                { time: 19, text: "영양 공급 제한 (Water Only)" }
-            ];
-
-            const tasksB = [
-                { time: 8, text: "기상 및 뇌파 동기화 준비" },
-                { time: 11, text: "환각 유도 가스 테스트 (Lv.4)" },
-                { time: 15, text: "인지 능력 과부하 실험" },
-                { time: 22, text: "수면 박탈 및 심리 관찰" }
-            ];
-
-            // 홀수날 A, 짝수날 B
+            const tasksA = [ { time: 7, text: "기상 및 혈액 채취 (200ml)" }, { time: 10, text: "세포 분열 촉진제 (Type-C) 투여" }, { time: 14, text: "근육 조직 절개 및 재생 속도 측정" }, { time: 19, text: "영양 공급 제한 (Water Only)" } ];
+            const tasksB = [ { time: 8, text: "기상 및 뇌파 동기화 준비" }, { time: 11, text: "환각 유도 가스 테스트 (Lv.4)" }, { time: 15, text: "인지 능력 과부하 실험" }, { time: 22, text: "수면 박탈 및 심리 관찰" } ];
             const currentTasks = (day % 2 !== 0) ? tasksA : tasksB;
-            
             let html = '';
-            
             currentTasks.forEach(task => {
-                let badgeClass = 'status-wait'; // 기본: 예정 (회색)
-                let badgeText = '예정';
-
-                // 시간 비교 로직
-                if (hour > task.time) {
-                    // 시간이 지났으면 '완료'
-                    badgeClass = 'status-done';
-                    badgeText = '완료';
-                } else if (hour === task.time) {
-                    // 지금 딱 그 시간이면 '진행 중'
-                    badgeClass = 'status-prog';
-                    badgeText = '진행 중';
-                }
-                // 아직 안 왔으면 그대로 '예정'
-
-                // 시간 포맷 (07:00, 14:00 등)
+                let badgeClass = 'status-wait'; let badgeText = '예정';
+                if (hour > task.time) { badgeClass = 'status-done'; badgeText = '완료'; } else if (hour === task.time) { badgeClass = 'status-prog'; badgeText = '진행 중'; }
                 const timeStr = task.time.toString().padStart(2, '0') + ":00";
-
-                html += `
-                    <li class="schedule-item">
-                        <span class="schedule-time">${timeStr}</span>
-                        <span class="schedule-task">${task.text}</span>
-                        <span class="schedule-status ${badgeClass}">${badgeText}</span>
-                    </li>
-                `;
+                html += `<li class="schedule-item"><span class="schedule-time">${timeStr}</span><span class="schedule-task">${task.text}</span><span class="schedule-status ${badgeClass}">${badgeText}</span></li>`;
             });
-
             if(scheduleList) scheduleList.innerHTML = html;
         }
-        
-        // 1분마다 스케줄 상태 체크
-        updateSchedule();
-        setInterval(updateSchedule, 60000); 
+        updateSchedule(); setInterval(updateSchedule, 60000); 
 
-        // 모브 로그 (랜덤)
         function updateMobLogs() {
             const tbody = document.getElementById('mob-logs');
-            const statuses = [
-                { badge: 's-fail', text: 'FAILURE', desc: '심정지로 인한 사망. 폐기 처리.', color: 'var(--danger)' },
-                { badge: 's-fail', text: 'DISPOSAL', desc: '과다출혈 쇼크. 회생 불가.', color: 'var(--danger)' },
-                { badge: 's-wait', text: 'STABLE', desc: '약물 적응 중. 특이사항 없음.', color: 'var(--warning)' },
-                { badge: 's-adapt', text: 'ADAPTING', desc: '신체 변이 시작. 관찰 필요.', color: '#fff' },
-                { badge: 's-fail', text: 'CRITICAL', desc: '자해 시도. 구속복 착용.', color: 'var(--danger)' }
-            ];
-
+            const statuses = [ { badge: 's-fail', text: 'FAILURE', desc: '심정지로 인한 사망. 폐기 처리.', color: 'var(--danger)' }, { badge: 's-fail', text: 'DISPOSAL', desc: '과다출혈 쇼크. 회생 불가.', color: 'var(--danger)' }, { badge: 's-wait', text: 'STABLE', desc: '약물 적응 중. 특이사항 없음.', color: 'var(--warning)' }, { badge: 's-adapt', text: 'ADAPTING', desc: '신체 변이 시작. 관찰 필요.', color: '#fff' }, { badge: 's-fail', text: 'CRITICAL', desc: '자해 시도. 구속복 착용.', color: 'var(--danger)' } ];
             let html = '';
             for(let i=0; i<5; i++) {
                 const id = 'S-' + Math.floor(Math.random() * 300 + 1000);
                 const status = statuses[Math.floor(Math.random() * statuses.length)];
                 const time = Math.floor(Math.random() * 12 + 1) + ' hours ago';
-
-                html += `
-                    <tr>
-                        <td>${id}</td>
-                        <td><span class="status-badge ${status.badge}">${status.text}</span></td>
-                        <td>${status.desc}</td>
-                        <td>${time}</td>
-                    </tr>
-                `;
+                html += `<tr><td>${id}</td><td><span class="status-badge ${status.badge}">${status.text}</span></td><td>${status.desc}</td><td>${time}</td></tr>`;
             }
             if(tbody) tbody.innerHTML = html;
         }
         updateMobLogs();
 
-        // 숫자 계산
         function updateCount() {
             const startDate = new Date("2026-01-01T00:00:00+09:00").getTime();
             const today = new Date().getTime();
             const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-
-            const total = 1000 + (daysPassed * 3);
-            const dead = Math.floor(total * 0.58);
-            const ripley = 1;
-            const phase1Active = total - dead - ripley;
-
-            const el = document.getElementById('count-p1');
-            if(el) el.innerText = phase1Active.toLocaleString();
+            const total = 1000 + (daysPassed * 3); const dead = Math.floor(total * 0.58); const ripley = 1; const phase1Active = total - dead - ripley;
+            const el = document.getElementById('count-p1'); if(el) el.innerText = phase1Active.toLocaleString();
         }
         updateCount();
+
+        function checkMessages() {
+            const list = JSON.parse(localStorage.getItem('eden_applicants')) || [];
+            if (list.length === 0) { alert('수신된 메시지가 없습니다.'); } else {
+                let msg = `[📩 신규 지원자 명단: 총 ${list.length}명]\n\n`;
+                list.forEach((p, i) => { msg += `${i+1}. 이름: ${p.name}\n   연락처: ${p.phone}\n   생년월일: ${p.birth}\n   특이사항: ${p.note ? p.note : '없음'}\n\n`; });
+                msg += '----------------------------------\n확인 후 인사팀으로 전달 바랍니다.'; alert(msg);
+            }
+        }
     </script>
 </body>
 </html>
