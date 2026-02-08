@@ -245,13 +245,13 @@
     <div class="intercom-box" id="intercomBox">
         <div class="intercom-header">
             <span>🔊 INTERCOM: CELL B-02</span>
-            <span style="cursor:pointer;" onclick="toggleIntercom()">&times;</span>
+            <div>
+                <span style="cursor:pointer; margin-right:10px;" onclick="resetIntercom()" title="초기화">🗑️</span>
+                <span style="cursor:pointer;" onclick="toggleIntercom()">&times;</span>
+            </div>
         </div>
         <div class="intercom-body" id="intercomMessages">
-            <div class="i-msg sys">Connecting to containment grid...</div>
-            <div class="i-msg sys">Audio link established.</div>
-            <div class="i-msg bot">"리플리, 내 말 들리나?"</div>
-        </div>
+            </div>
         <div class="intercom-input-area">
             <input type="password" id="intercomKeyInput" class="intercom-input" placeholder="Google API Key 입력" style="display:none;">
             <input type="text" id="intercomInput" class="intercom-input" placeholder="Transmit voice message..." style="display:none;">
@@ -343,13 +343,22 @@
             contentArea.innerHTML = `<div class="view-header"><div class="view-subject">${msg.title}</div><div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div></div><div class="view-body">${msg.body}</div>`;
         }
 
-        /* ================= INTERCOM (수정됨: 모델 최신화 & 캐릭터 설정 강화) ================= */
+        /* ================= INTERCOM (수정됨: 첫인사 버그 수정 & 리셋 기능) ================= */
         let intercomHistory = JSON.parse(localStorage.getItem('eden_subject_chat_history')) || [];
         let userApiKey = localStorage.getItem('eden_gemini_key');
         
         const iInput = document.getElementById('intercomInput');
         const iKeyInput = document.getElementById('intercomKeyInput');
         const iBox = document.getElementById('intercomMessages');
+
+        // [핵심] 대화 내용이 없으면 강제로 첫인사 저장
+        function ensureGreeting() {
+            if (intercomHistory.length === 0) {
+                intercomHistory.push({ role: 'model', parts: [{ text: '"리플리, 내 말 들리나?"' }] });
+                localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
+            }
+        }
+        ensureGreeting();
 
         function updateIntercomUI() {
             if(userApiKey) {
@@ -362,12 +371,33 @@
         }
         updateIntercomUI();
 
-        if(intercomHistory.length > 0) {
-            iBox.innerHTML = ''; 
+        // 렌더링 함수
+        function renderMessages() {
+            iBox.innerHTML = '';
+            // 장식용 시스템 메시지 추가
+            iBox.innerHTML += `<div class="i-msg sys">Connecting to containment grid...</div>`;
+            iBox.innerHTML += `<div class="i-msg sys">Audio link established.</div>`;
+            
             intercomHistory.forEach(msg => {
                 const type = msg.role === 'user' ? 'user' : 'bot';
-                addIntercomMsg(msg.parts[0].text, type, false);
+                // 화면에 뿌릴 때만 DOM 생성
+                const div = document.createElement('div');
+                div.className = `i-msg ${type}`;
+                div.innerText = msg.parts[0].text;
+                iBox.appendChild(div);
             });
+            iBox.scrollTop = iBox.scrollHeight;
+        }
+        renderMessages(); // 페이지 로드 시 렌더링 실행
+
+        // 리셋 함수 (휴지통)
+        function resetIntercom() {
+            if(confirm("기억을 초기화하시겠습니까? (되돌릴 수 없습니다)")) {
+                localStorage.removeItem('eden_subject_chat_history');
+                intercomHistory = [];
+                ensureGreeting(); // 첫인사 다시 넣기
+                renderMessages(); // 화면 갱신
+            }
         }
 
         function toggleIntercom() {
@@ -404,8 +434,6 @@
 
             try {
                 const contentsToSend = [...intercomHistory];
-                
-                // ★ 모델명을 최신(Latest)으로 수정하여 API 오류 해결 ★
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${userApiKey}`;
                 
                 const response = await fetch(url, {
@@ -413,7 +441,6 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: contentsToSend,
-                        // ★ 시스템 설정: 구체적인 외모와 성격 부여 ★
                         systemInstruction: {
                             parts: [{ text: `
                                 [Roleplay Setup]
