@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDEN - Message from Director</title>
+    <title>About EDEN - Message from Director</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&family=Playfair+Display:wght@700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
@@ -15,15 +15,19 @@
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .logo { font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: -1px; text-decoration: none; display: flex; align-items: center; gap: 8px;}
         .logo span { color: var(--secondary); font-family: 'Inter', sans-serif; }
+        
         .nav-links { display: flex; gap: 40px; align-items: center; }
-        .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; }
+        .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; cursor: pointer; white-space: nowrap; }
         .nav-item:hover { color: var(--primary); }
 
         .container { max-width: 1000px; margin: 80px auto; padding: 0 40px; animation: fadeUp 0.8s ease-out; }
         
         .page-header { margin-bottom: 60px; text-align: center; }
         .page-title { font-family: 'Playfair Display'; font-size: 48px; color: var(--primary); margin-bottom: 15px; }
-        .page-subtitle { font-size: 18px; color: #666; font-weight: 300; }
+        .page-subtitle { 
+            font-size: 18px; color: #666; font-weight: 300; 
+            word-break: keep-all; line-height: 1.6;
+        }
 
         .director-section { display: flex; gap: 60px; align-items: flex-start; border-top: 1px solid #ddd; padding-top: 60px; }
         .director-img-box { width: 350px; height: 450px; background-color: #e0e0e0; flex-shrink: 0; display: flex; justify-content: center; align-items: center; border-radius: 4px; overflow: hidden; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
@@ -35,9 +39,10 @@
         .director-name { font-size: 40px; font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 30px; font-weight: 700; }
         
         .director-bio { 
-            font-size: 16px; color: #444; line-height: 1.9; margin-bottom: 40px; 
+            font-size: 16px; color: #444; line-height: 1.8; margin-bottom: 40px; 
             text-align: justify; word-break: keep-all; 
         }
+        .director-bio p { margin-bottom: 25px; }
         
         .sign { font-family: 'Cedarville Cursive', serif; font-size: 28px; color: #555; text-align: right; margin-top: 30px; }
 
@@ -50,9 +55,15 @@
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 768px) {
+            header { flex-direction: column; gap: 20px; }
+            .nav-links { gap: 20px; justify-content: center; width: 100%; flex-wrap: wrap; }
+            .nav-item { font-size: 14px; }
             .director-section { flex-direction: column; }
             .director-img-box { width: 100%; height: 400px; }
-            header { flex-direction: column; gap: 20px; }
+            .page-subtitle br { display: none; }
+            .container { padding: 0 25px; }
+            .page-title { font-size: 36px; }
+            .page-subtitle { font-size: 15px; }
         }
     </style>
 </head>
@@ -63,13 +74,18 @@
         <nav class="nav-links">
             <a href="public.html" class="nav-item">홈으로</a>
             <a href="about.html" class="nav-item" style="color:var(--primary);">인사말</a>
+            <a href="#" class="nav-item" onclick="alert('준비 중입니다.')">연구소 소개</a>
+            <a href="#" class="nav-item" onclick="alert('준비 중입니다.')">윤리 경영</a>
         </nav>
     </header>
 
     <div class="container">
         <div class="page-header">
             <h1 class="page-title">Message from Director</h1>
-            <p class="page-subtitle">에덴 연구소는 생명의 한계를 규정하지 않습니다.<br>우리는 오직 증명하고, 극복하며, 진화할 뿐입니다.</p>
+            <p class="page-subtitle">
+                에덴 연구소는 생명의 한계를 규정하지 않습니다.<br>
+                우리는 오직 증명하고, 극복하며, 진화할 뿐입니다.
+            </p>
         </div>
 
         <div class="director-section">
@@ -82,18 +98,20 @@
                 
                 <div class="director-bio">
                     <p><strong>"신은 인간을 빚어냈지만, 그 인간을 완성하는 것은 과학입니다."</strong></p>
-                    <br>
+                    
                     <p>
                         반갑습니다. 에덴 연구소장 카이로입니다.
                         인류는 아주 오랜 시간 동안 '죽음'과 '노화'라는 질병에 시달려 왔습니다.
                         우리는 이것을 자연의 섭리라 부르며 체념해왔지만, 에덴의 생각은 다릅니다.
                         질병은 치료되어야 하며, 한계는 극복되어야 합니다.
                     </p>
+                    
                     <p>
                         제가 설립한 에덴 연구소는 유전자 가위 기술과 신경 세포 재생 분야에서
                         독보적인 데이터를 축적해왔습니다. 우리의 연구는 윤리적 논쟁을 넘어,
                         실질적인 '인류 구원'을 향해 나아가고 있습니다.
                     </p>
+                    
                     <p>
                         여러분의 숭고한 참여가 미래의 역사가 됩니다.
                         두려워하지 말고, 에덴의 문을 두드리십시오.
@@ -103,6 +121,7 @@
                 <table class="profile-table">
                     <tr><th>NAME</th><td>KAIRO (카이로)</td></tr>
                     <tr><th>BIRTH</th><td>19XX. 08. 26</td></tr>
+                    <tr><th>EDUCATION</th><td>Wernher Medical Univ. (M.D. / Ph.D.)</td></tr>
                     <tr><th>FIELD</th><td>Bio-Engineering / Neuro-Science</td></tr>
                     <tr><th>CAREER</th><td>現 에덴 생명공학 연구소장<br>前 [REDACTED] 국가 수석 연구원</td></tr>
                 </table>
