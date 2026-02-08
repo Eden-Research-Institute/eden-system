@@ -15,7 +15,6 @@
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .logo { font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: -1px; text-decoration: none; display: flex; align-items: center; gap: 8px;}
         .logo span { color: var(--secondary); font-family: 'Inter', sans-serif; }
-        
         .nav-links { display: flex; gap: 40px; align-items: center; }
         .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; cursor: pointer; white-space: nowrap; }
         .nav-item:hover { color: var(--primary); }
@@ -38,9 +37,16 @@
         .director-label { color: var(--secondary); font-weight: 700; font-size: 14px; letter-spacing: 2px; margin-bottom: 15px; display: block; }
         .director-name { font-size: 40px; font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 30px; font-weight: 700; }
         
+        /* ▼▼▼ [수정] 자간과 정렬을 튜닝하여 깔끔하게 만듦 ▼▼▼ */
         .director-bio { 
-            font-size: 16px; color: #444; line-height: 1.8; margin-bottom: 40px; 
-            text-align: justify; word-break: keep-all; 
+            font-size: 16px; 
+            color: #444; 
+            line-height: 1.9; /* 줄간격 넓힘 */
+            margin-bottom: 40px; 
+            
+            text-align: left; /* 왼쪽 정렬 (공백 구멍 해결) */
+            word-break: keep-all; /* 단어 유지 */
+            letter-spacing: -0.5px; /* 자간을 좁혀서 단단하고 전문적인 느낌 줌 */
         }
         .director-bio p { margin-bottom: 25px; }
         
