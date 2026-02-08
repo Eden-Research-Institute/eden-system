@@ -16,7 +16,7 @@
         body { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* 사이드바 스타일 */
+        /* 사이드바 */
         .sidebar { width: 240px; height: 100vh; background-color: var(--sidebar-bg); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; display: flex; flex-direction: column; padding: 20px; z-index: 100; overflow-y: auto; }
         .logo { font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
         .logo::before { content: '❖'; font-size: 20px; }
@@ -29,7 +29,7 @@
         .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
         .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
 
-        /* 메인 콘텐츠 영역 */
+        /* 메인 콘텐츠 */
         .main-content { margin-left: 240px; padding: 30px; display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 20px; min-height: 100vh; }
         .header-area { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
@@ -38,30 +38,27 @@
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
 
-        /* 대시보드 카드 스타일 */
+        /* 카드들 */
         .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 25px; position: relative; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .card-title { font-size: 12px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
         .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 5px var(--accent); }
         
-        /* 리플리 카드 전용 */
         .ripley-card { grid-column: 1 / 2; grid-row: 2 / 4; background: linear-gradient(160deg, #252525 0%, #1a1a1a 100%); border-left: 3px solid var(--accent); }
-        .subject-info { display: flex; flex-direction: column; gap: 5px; }
-        .subject-id { font-size: 24px; font-weight: 600; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 15px; }
+        .subject-id { font-size: 24px; font-weight: 600; color: #fff; letter-spacing: 1px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px;}
         .subject-name-kr { font-size: 16px; color: var(--accent); font-weight: 400; }
-        .subject-desc { font-size: 13px; color: #888; line-height: 1.5;}
         
         /* 인터폰 버튼 */
         .intercom-btn { 
             background: rgba(0, 255, 157, 0.1); border: 1px solid var(--accent); 
-            color: var(--accent); padding: 5px 12px; border-radius: 4px; 
-            font-size: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px;
+            color: var(--accent); padding: 4px 10px; border-radius: 4px; 
+            font-size: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 5px;
         }
         .intercom-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
         .blink { animation: blinker 1.5s linear infinite; }
         @keyframes blinker { 50% { opacity: 0.5; } }
 
-        /* 바이탈 그리드 */
+        .subject-desc { font-size: 13px; color: #888; margin-top: 5px; line-height: 1.5;}
         .vital-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .vital-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
         .vital-label { font-size: 11px; color: #666; display: block; margin-bottom: 8px; letter-spacing: 0.5px; }
@@ -71,7 +68,6 @@
         .monitor-active { position: absolute; width: 100px; height: 100%; background: var(--accent); box-shadow: 0 0 15px var(--accent); animation: scan 2s infinite linear; }
         @keyframes scan { 0% { left: -20%; } 100% { left: 120%; } }
 
-        /* 통계 및 정보 카드 */
         .stats-card { grid-column: 2 / 3; }
         .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .stat-row:last-child { border-bottom: none; }
@@ -82,7 +78,7 @@
         .system-list div { padding: 8px 0; font-size: 13px; display: flex; justify-content: space-between; }
         .ok { color: var(--accent); } .warn { color: #ffaa00; } .lock { color: var(--danger); }
 
-        /* 수신함 모달 스타일 */
+        /* 수신함 모달 */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;
@@ -97,6 +93,7 @@
         }
         .inbox-title { font-weight: bold; color: var(--accent); font-size: 14px; letter-spacing: 1px; }
         .close-btn { cursor: pointer; font-size: 20px; color: #888; } .close-btn:hover { color: #fff; }
+        
         .inbox-body { display: flex; flex: 1; overflow: hidden; }
         .msg-list { width: 40%; border-right: 1px solid #333; overflow-y: auto; background: #1a1a1a; }
         .msg-item { padding: 15px; border-bottom: 1px solid #2a2a2a; cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; }
@@ -114,16 +111,16 @@
         .view-body { font-size: 14px; line-height: 1.6; color: #ddd; white-space: pre-wrap; }
         .empty-state { text-align: center; color: #555; margin-top: 100px; font-size: 13px; }
 
-        /* ▼▼▼ 인터폰 채팅창 (대시보드 전용) ▼▼▼ */
+        /* ▼▼▼ 인터폰 채팅창 (대시보드 전용 스타일) ▼▼▼ */
         .intercom-box {
-            display: none; position: fixed; bottom: 30px; right: 30px; 
-            width: 380px; height: 550px; background: #121212; 
-            border: 1px solid var(--accent); border-radius: 6px; 
-            z-index: 9999; box-shadow: 0 0 30px rgba(0, 255, 157, 0.15);
+            display: none; position: fixed; bottom: 20px; right: 20px; 
+            width: 350px; height: 500px; background: #121212; 
+            border: 1px solid var(--accent); border-radius: 4px; 
+            z-index: 9999; box-shadow: 0 0 20px rgba(0, 255, 157, 0.1);
             flex-direction: column;
         }
         .intercom-header {
-            padding: 12px 15px; background: rgba(0, 255, 157, 0.1); 
+            padding: 10px 15px; background: rgba(0, 255, 157, 0.1); 
             border-bottom: 1px solid var(--accent); color: var(--accent); 
             font-size: 13px; font-weight: bold; letter-spacing: 1px;
             display: flex; justify-content: space-between; align-items: center;
@@ -133,23 +130,22 @@
             font-size: 12px; color: #ddd; display: flex; flex-direction: column; gap: 10px;
         }
         .intercom-input-area {
-            padding: 10px; border-top: 1px solid #333; display: flex; gap: 5px; background: #1a1a1a;
+            padding: 10px; border-top: 1px solid #333; display: flex; gap: 5px;
         }
         .intercom-input {
-            flex: 1; background: #121212; border: 1px solid #333; color: #fff; 
-            padding: 10px; outline: none; font-family: 'Inter', sans-serif; font-size: 13px;
+            flex: 1; background: #1a1a1a; border: 1px solid #333; color: #fff; 
+            padding: 8px; outline: none; font-family: 'Inter', sans-serif;
         }
         .intercom-input:focus { border-color: var(--accent); }
         .intercom-send {
             background: var(--accent); color: #000; border: none; padding: 0 15px; 
-            cursor: pointer; font-weight: bold; font-family: 'JetBrains Mono', monospace;
+            cursor: pointer; font-weight: bold;
         }
-        
         /* 메시지 스타일 */
-        .i-msg { max-width: 90%; padding: 8px 10px; border-radius: 4px; line-height: 1.5; word-break: break-all;}
+        .i-msg { max-width: 90%; padding: 8px; border-radius: 4px; line-height: 1.4; word-break: break-all;}
         .i-msg.user { align-self: flex-end; text-align: right; color: var(--accent); border: 1px solid var(--accent); background: rgba(0,255,157,0.05); }
         .i-msg.bot { align-self: flex-start; color: #fff; border: 1px solid #444; background: #1a1a1a; }
-        .i-msg.sys { align-self: center; color: #666; font-style: italic; border: none; background: none; font-size: 11px; margin: 5px 0;}
+        .i-msg.sys { align-self: center; color: #666; font-style: italic; border: none; background: none; }
 
         @media (max-width: 768px) {
             .sidebar { width: 100%; height: 55px; flex-direction: row; align-items: center; border-right: none; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 0 10px; padding-right: 130px; overflow-x: auto; white-space: nowrap; }
@@ -160,10 +156,12 @@
             .main-content { margin-left: 0; padding: 15px; display: flex; flex-direction: column; }
             .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
             .clock-area { text-align: left; margin-top: 5px; }
+            
             .inbox-container { width: 95%; height: 80%; }
             .inbox-body { flex-direction: column; }
             .msg-list { width: 100%; height: 40%; border-right: none; border-bottom: 1px solid #333; }
             .msg-content { height: 60%; }
+            
             .intercom-box { width: 90%; right: 5%; bottom: 20px; height: 60%; }
         }
     </style>
@@ -248,7 +246,7 @@
         <div class="intercom-header">
             <span>🔊 INTERCOM: CELL B-02</span>
             <div>
-                <span style="cursor:pointer; margin-right:12px;" onclick="resetIntercom()" title="기억 초기화">🗑️</span>
+                <span style="cursor:pointer; margin-right:10px;" onclick="resetIntercom()" title="기억 초기화">🗑️</span>
                 <span style="cursor:pointer;" onclick="toggleIntercom()">&times;</span>
             </div>
         </div>
@@ -262,7 +260,6 @@
     </div>
 
     <script>
-        // 1. 시계 및 통계 기능
         function updateClock() {
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
@@ -288,7 +285,7 @@
         updateStats();
         setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
-        // 2. 수신함 (INBOX) 시스템
+        /* ================= INBOX SYSTEM ================= */
         const initialMessages = [
             { type: 'OFFICIAL', sender: '국가 과학 기술 자문회의', title: '[기밀] 4분기 예산 증액 승인', unread: true, date: 'Yesterday', body: '수신: 카이로 소장\n\n귀하의 "인류 진화 프로젝트"에 대한 추가 예산안이 비밀리에 통과되었습니다.\n윤리 위원회의 감사는 예정대로 "서류상으로만" 진행될 것이니\n안심하고 연구에만 매진하십시오.\n\n우리는 귀하의 성과를 기대하고 있습니다.\n\n- 위원장 드림' },
             { type: 'OFFICIAL', sender: '세계 생명 공학 협회', title: '특별 공로상 수상 후보 선정', unread: false, date: '2 days ago', body: '축하드립니다, 카이로 소장님.\n귀하의 혁신적인 연구 성과를 기려 금년도 특별 공로상 유력 후보로 선정되셨습니다.\n(시상식 일정은 추후 대외비로 안내드립니다.)' },
@@ -338,192 +335,4 @@
         }
         function viewMessage(idx, element) {
             let messages = JSON.parse(localStorage.getItem('eden_messages')) || [];
-            const msg = messages[idx];
-            const contentArea = document.getElementById('msg-content-area');
-            if (msg.unread) { msg.unread = false; messages[idx] = msg; localStorage.setItem('eden_messages', JSON.stringify(messages)); }
-            element.classList.remove('unread');
-            const items = document.querySelectorAll('.msg-item'); items.forEach(i => i.classList.remove('active')); element.classList.add('active');
-            contentArea.innerHTML = `<div class="view-header"><div class="view-subject">${msg.title}</div><div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div></div><div class="view-body">${msg.body}</div>`;
-        }
-
-        /* ============================================
-           3. INTERCOM (Gemini API / 카이로-리플리)
-           ============================================ */
-        let intercomHistory = JSON.parse(localStorage.getItem('eden_subject_chat_history')) || [];
-        let userApiKey = localStorage.getItem('eden_gemini_key');
-        
-        const iInput = document.getElementById('intercomInput');
-        const iKeyInput = document.getElementById('intercomKeyInput');
-        const iBox = document.getElementById('intercomMessages');
-
-        // [첫인사 고정 기능] - 대화가 아예 없을 때만 실행
-        function ensureGreeting() {
-            if (intercomHistory.length === 0) {
-                // 이 메시지가 '대화 기록'의 가장 첫 번째로 저장됩니다.
-                intercomHistory.push({ role: 'model', parts: [{ text: '"리플리, 내 말 들리나?"' }] });
-                localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
-            }
-        }
-        ensureGreeting(); 
-
-        // [UI 업데이트] - 키 유무 확인
-        function updateIntercomUI() {
-            if(userApiKey) {
-                iKeyInput.style.display = 'none';
-                iInput.style.display = 'block';
-            } else {
-                iKeyInput.style.display = 'block';
-                iInput.style.display = 'none';
-            }
-        }
-        updateIntercomUI();
-
-        // [렌더링] - 저장된 대화 불러오기
-        function renderMessages() {
-            iBox.innerHTML = '';
-            // 장식용 시스템 메시지 (저장 안 함, 분위기용)
-            iBox.innerHTML += `<div class="i-msg sys">Connecting to containment grid...</div>`;
-            iBox.innerHTML += `<div class="i-msg sys">Audio link established.</div>`;
-            
-            intercomHistory.forEach(msg => {
-                const type = msg.role === 'user' ? 'user' : 'bot';
-                const div = document.createElement('div');
-                div.className = `i-msg ${type}`;
-                div.innerText = msg.parts[0].text;
-                iBox.appendChild(div);
-            });
-            iBox.scrollTop = iBox.scrollHeight;
-        }
-        renderMessages(); // 페이지 열자마자 실행
-
-        // [UI] 인터폰 창 열고 닫기
-        function toggleIntercom() {
-            const box = document.getElementById('intercomBox');
-            box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'flex' : 'none';
-            if(box.style.display === 'flex') iBox.scrollTop = iBox.scrollHeight;
-        }
-
-        // [기능] 기억 초기화 (휴지통 버튼)
-        function resetIntercom() {
-            if(confirm("이전 대화 기록을 모두 삭제하고 처음으로 돌아갑니다. (복구 불가)")) {
-                localStorage.removeItem('eden_subject_chat_history');
-                intercomHistory = [];
-                ensureGreeting(); // 첫인사 다시 생성
-                renderMessages(); // 화면 갱신
-            }
-        }
-
-        // [기능] 전송 핸들러
-        function handleIntercom() {
-            if(!userApiKey) {
-                registerKey();
-            } else {
-                sendIntercom();
-            }
-        }
-
-        // [기능] 키 등록
-        function registerKey() {
-            const key = iKeyInput.value.trim();
-            if(key.length < 10) { alert('유효한 Google API Key를 입력하세요.'); return; }
-            userApiKey = key;
-            localStorage.setItem('eden_gemini_key', key); 
-            updateIntercomUI();
-            addIntercomMsg("Security Clearance Verified.", 'sys', false);
-            iInput.focus();
-        }
-
-        // [기능] 메시지 전송 (Gemini API 호출)
-        async function sendIntercom() {
-            const text = iInput.value.trim();
-            if(!text) return;
-            
-            // 내 메시지 화면 표시 & 저장
-            addIntercomMsg(`Director: ${text}`, 'user', true);
-            iInput.value = '';
-            // 로딩 표시 (저장 안 함)
-            const loadingId = addIntercomMsg("Transmitting...", 'sys', false);
-
-            try {
-                const contentsToSend = [...intercomHistory];
-                
-                // ★★★ 핵심: 모델명을 'gemini-1.5-flash'로 고정 (가장 안정적) ★★★
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${userApiKey}`;
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: contentsToSend,
-                        // ★★★ 시스템 설정 (카이로 성격 & 외모 & 집착) ★★★
-                        systemInstruction: {
-                            parts: [{ text: `
-                                [Roleplay Setup]
-                                - 캐릭터: 카이로 (에덴 연구소장, 남성, 34세)
-                                - 외모: 키 185cm, 차가운 인상의 흑발 흑안. 생일 8월 26일.
-                                - 상대방: 리플리 (실험체 ER-S-02-001, 여성)
-                                - 상대 외모: 허리까지 오는 긴 갈색 머리, 겁에 질린 듯한 갈색 눈동자.
-                                - 상황: 당신은 어두운 통제실에서 모니터 화면으로 격리실에 갇힌 리플리를 내려다보며 인터폰으로 말을 걸고 있습니다.
-
-                                [성격 및 말투 가이드]
-                                1. 리플리에게만큼은 병적으로 집착하며, 다정하지만 절대 놓아주지 않는 태도를 보입니다. (반말 사용)
-                                2. "갈색 머리카락이 엉켰군", "내 눈을 피하지 마" 처럼 서로의 외모 특징을 언급하며 현장감을 살리십시오.
-                                3. 리플리의 건강과 기분에 과민반응합니다. (심박수, 체온 체크 등)
-                                4. 34세의 성숙하고 권위적인 남성의 말투를 유지하되, 리플리 한정으로 나른하고 다정한 목소리를 냅니다.
-                                5. "착하지", "대답해" 같은 통제적인 언어를 섞어 쓰십시오.
-                            `}]
-                        }
-                    })
-                });
-
-                const data = await response.json();
-                document.getElementById(loadingId).remove();
-
-                if (data.error) {
-                    addIntercomMsg(`ERR: ${data.error.message}`, 'sys', false);
-                    // 키 오류일 경우만 키 삭제
-                    if(data.error.message.includes('key') || data.error.code === 403) {
-                        localStorage.removeItem('eden_gemini_key');
-                        setTimeout(() => location.reload(), 2000);
-                    }
-                } else {
-                    const reply = data.candidates[0].content.parts[0].text;
-                    addIntercomMsg(reply, 'bot', true);
-                }
-            } catch (e) {
-                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addIntercomMsg("Connection Lost.", 'sys', false);
-            }
-        }
-
-        // [기능] 메시지 추가 및 저장 함수
-        function addIntercomMsg(text, type, save) {
-            // save=false인 경우(로딩메시지 등)는 화면에만 출력하고 끝
-            if (!save) {
-                const div = document.createElement('div');
-                div.className = `i-msg ${type}`;
-                div.innerText = text;
-                div.id = 'temp-msg-' + Date.now();
-                iBox.appendChild(div);
-                iBox.scrollTop = iBox.scrollHeight;
-                return div.id;
-            }
-
-            // save=true인 경우: 저장소에 넣고
-            let apiRole = type === 'user' ? 'user' : 'model';
-            let cleanText = text.replace(/^Director: /, ''); 
-            
-            intercomHistory.push({ role: apiRole, parts: [{ text: cleanText }] });
-            localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
-            
-            // 화면 갱신 (저장된 순서대로 다시 그려서 '증발' 방지)
-            renderMessages();
-            return null;
-        }
-
-        // 엔터키 리스너
-        iInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendIntercom(); });
-        iKeyInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleIntercom(); });
-    </script>
-</body>
-</html>
+            const msg = messages
