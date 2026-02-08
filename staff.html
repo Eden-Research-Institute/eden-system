@@ -6,38 +6,11 @@
     <title>EDEN INSTITUTE - STAFF</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap');
-
-        :root {
-            --bg-color: #121212;
-            --sidebar-bg: #1e1e1e;
-            --card-bg: #252525;
-            --border: #333;
-            --accent: #00ff9d;
-            --danger: #ff4b4b;
-            --warning: #ffaa00;
-            --blue: #4facfe;
-            --text-main: #ffffff;
-            --text-sub: #888;
-        }
-
+        :root { --bg-color: #121212; --sidebar-bg: #1e1e1e; --card-bg: #252525; --border: #333; --accent: #00ff9d; --danger: #ff4b4b; --warning: #ffaa00; --blue: #4facfe; --text-main: #ffffff; --text-sub: #888; }
         * { box-sizing: border-box; }
-
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
+        body { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-
-        /* === 사이드바 === */
-        .sidebar {
-            width: 240px; height: 100vh; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
-            position: fixed; top: 0; left: 0; display: flex; flex-direction: column; padding: 20px; z-index: 100; overflow-y: auto;
-        }
+        .sidebar { width: 240px; height: 100vh; background-color: var(--sidebar-bg); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; display: flex; flex-direction: column; padding: 20px; z-index: 100; overflow-y: auto; }
         .logo { font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
         .logo::before { content: '❖'; font-size: 20px; }
         .menu-item { padding: 12px 15px; color: var(--text-sub); border-radius: 6px; margin-bottom: 4px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 12px; font-weight: 500; text-decoration: none; flex-shrink: 0; }
@@ -48,8 +21,6 @@
         .user-info:hover h4 { color: var(--accent); text-decoration: underline; }
         .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
         .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
-
-        /* === 메인 콘텐츠 === */
         .main-content { margin-left: 240px; padding: 30px; display: flex; flex-direction: column; gap: 20px; min-height: 100vh; }
         .header-area { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
@@ -57,71 +28,36 @@
         .clock-area { text-align: right; display: block !important; }
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
-
-        /* === 카드 스타일 === */
         .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 25px; position: relative; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .card-title { font-size: 14px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
-
-        /* 1. 지휘 체계 (Command Chain) */
         .command-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center; }
-        .command-card { 
-            background: rgba(255,255,255,0.03); border: 1px solid #444; border-radius: 6px; padding: 20px; 
-            display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.3s;
-        }
+        .command-card { background: rgba(255,255,255,0.03); border: 1px solid #444; border-radius: 6px; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.3s; }
         .command-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-        
-        /* 소장님 전용 스타일 */
         .boss-card { grid-column: span 4; border: 1px solid var(--danger); background: rgba(255, 75, 75, 0.05); margin-bottom: 10px; }
         .boss-card:hover { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.2); }
-        
         .role-badge { font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: bold; letter-spacing: 1px; }
-        .lv5 { background: var(--danger); color: #fff; }
-        .lv4 { background: var(--accent); color: #000; }
-        .lv3 { background: var(--blue); color: #fff; }
-
-        .staff-name { font-size: 16px; font-weight: bold; color: #fff; margin-top: 5px; }
-        .staff-role { font-size: 12px; color: #888; }
-
-        /* 2. 부서별 통계 */
+        .lv5 { background: var(--danger); color: #fff; } .lv4 { background: var(--accent); color: #000; } .lv3 { background: var(--blue); color: #fff; }
+        .staff-name { font-size: 16px; font-weight: bold; color: #fff; margin-top: 5px; } .staff-role { font-size: 12px; color: #888; }
         .dept-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
         .dept-item { background: #1a1a1a; padding: 15px; border-radius: 6px; border-left: 3px solid #555; }
         .dept-name { font-size: 11px; color: #888; display: block; margin-bottom: 5px; text-transform: uppercase; }
         .dept-val { font-size: 20px; font-weight: bold; color: #fff; }
-        
-        /* 3. 직원 리스트 (테이블) */
         .table-container { width: 100%; overflow-x: auto; padding-bottom: 10px; }
         .staff-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; min-width: 600px; }
         .staff-table th { color: #666; font-weight: normal; padding: 15px 10px; border-bottom: 1px solid #444; }
         .staff-table td { padding: 15px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); color: #ccc; }
-        
         .status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
-        .on-duty { background: var(--accent); box-shadow: 0 0 5px var(--accent); }
-        .off-duty { background: #666; }
-        .warning { background: var(--warning); }
-        .dead { background: var(--danger); }
-
-        /* 모바일 최적화 */
+        .on-duty { background: var(--accent); box-shadow: 0 0 5px var(--accent); } .off-duty { background: #666; } .warning { background: var(--warning); } .dead { background: var(--danger); }
         @media (max-width: 768px) {
-            .sidebar { 
-                width: 100%; height: 55px; flex-direction: row; align-items: center;
-                border-right: none; border-bottom: 1px solid var(--border); 
-                position: sticky; top: 0; padding: 0 10px; padding-right: 130px; 
-                overflow-x: auto; white-space: nowrap; 
-            }
+            .sidebar { width: 100%; height: 55px; flex-direction: row; align-items: center; border-right: none; border-bottom: 1px solid var(--border); position: sticky; top: 0; padding: 0 10px; padding-right: 130px; overflow-x: auto; white-space: nowrap; }
             .sidebar::-webkit-scrollbar { display: none; }
             .logo { display: none; }
             .menu-item { margin-bottom: 0; margin-right: 5px; background: #222; padding: 6px 10px; height: 36px; }
-            .profile-box { 
-                position: fixed; top: 0; right: 0; width: 120px; height: 55px;
-                background: #1a1a1a; border-left: 2px solid var(--border); border-top: none;
-                display: flex !important; justify-content: center; z-index: 1000;
-                padding: 0; margin: 0; box-shadow: -5px 0 10px rgba(0,0,0,0.5);
-            }
+            .profile-box { position: fixed; top: 0; right: 0; width: 120px; height: 55px; background: #1a1a1a; border-left: 2px solid var(--border); border-top: none; display: flex !important; justify-content: center; z-index: 1000; padding: 0; margin: 0; box-shadow: -5px 0 10px rgba(0,0,0,0.5); }
             .main-content { margin-left: 0; padding: 15px; }
             .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
             .clock-area { text-align: left; margin-top: 5px; }
-            
             .command-grid, .dept-grid { grid-template-columns: 1fr; }
             .boss-card { grid-column: span 1; }
         }
@@ -134,105 +70,48 @@
         <a href="subjects.html" class="menu-item"><span>🧬</span> <span>실험체 관리</span></a>
         <a href="facility.html" class="menu-item"><span>🏢</span> <span>시설 관리</span></a>
         <a href="staff.html" class="menu-item active"><span>👥</span> <span>조직/인사</span></a>
-        <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>🌐</span> <span>대외 홈페이지</span></a>
+        <a href="public.html" target="_blank" class="menu-item"><span>🌐</span> <span>대외 홈페이지</span></a>
         <div class="profile-box">
             <div class="avatar">K</div>
-            <div class="user-info" onclick="alert('수신된 메시지가 없습니다.')">
-                <h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p>
-            </div>
+            <div class="user-info" onclick="checkMessages()"><h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p></div>
         </div>
     </nav>
-
     <main class="main-content">
         <div class="header-area">
-            <div class="page-title">
-                <h1>Organization</h1> <p>PERSONNEL DATABASE & CLEARANCE</p>
-            </div>
-            <div class="clock-area mono">
-                <div class="clock-time" id="clock">00:00:00</div>
-                <div class="clock-date" id="date">YYYY-MM-DD</div>
-            </div>
+            <div class="page-title"><h1>Organization</h1> <p>PERSONNEL DATABASE & CLEARANCE</p></div>
+            <div class="clock-area mono"><div class="clock-time" id="clock">00:00:00</div><div class="clock-date" id="date">YYYY-MM-DD</div></div>
         </div>
-
         <div class="card">
             <div class="card-header"><span class="card-title">COMMAND CHAIN</span></div>
             <div class="command-grid mono">
                 <div class="command-card boss-card">
-                    <span class="role-badge lv5">LEVEL 5</span>
-                    <div class="staff-name">KAIRO (카이로)</div>
-                    <div class="staff-role">DIRECTOR OF EDEN (연구소장)</div>
+                    <span class="role-badge lv5">LEVEL 5</span><div class="staff-name">KAIRO (카이로)</div><div class="staff-role">DIRECTOR OF EDEN (연구소장)</div>
                 </div>
-                
-                <div class="command-card">
-                    <span class="role-badge lv4">LEVEL 4</span>
-                    <div class="staff-name">Dr. VOGEL</div>
-                    <div class="staff-role">HEAD OF RESEARCH (연구실장)</div>
-                </div>
-                <div class="command-card">
-                    <span class="role-badge lv4">LEVEL 4</span>
-                    <div class="staff-name">Cpt. BRAUN</div>
-                    <div class="staff-role">HEAD OF SECURITY (보안실장)</div>
-                </div>
-                <div class="command-card">
-                    <span class="role-badge lv4">LEVEL 4</span>
-                    <div class="staff-name">Dr. WEISS</div>
-                    <div class="staff-role">CHIEF MEDICAL OFFICER (의료실장)</div>
-                </div>
-                <div class="command-card">
-                    <span class="role-badge lv4">LEVEL 4</span>
-                    <div class="staff-name">Eng. HANS</div>
-                    <div class="staff-role">FACILITY MANAGER (시설관리장)</div>
-                </div>
+                <div class="command-card"><span class="role-badge lv4">LEVEL 4</span><div class="staff-name">Dr. VOGEL</div><div class="staff-role">HEAD OF RESEARCH (연구실장)</div></div>
+                <div class="command-card"><span class="role-badge lv4">LEVEL 4</span><div class="staff-name">Cpt. BRAUN</div><div class="staff-role">HEAD OF SECURITY (보안실장)</div></div>
+                <div class="command-card"><span class="role-badge lv4">LEVEL 4</span><div class="staff-name">Dr. WEISS</div><div class="staff-role">CHIEF MEDICAL OFFICER (의료실장)</div></div>
+                <div class="command-card"><span class="role-badge lv4">LEVEL 4</span><div class="staff-name">Eng. HANS</div><div class="staff-role">FACILITY MANAGER (시설관리장)</div></div>
             </div>
         </div>
-
         <div class="card">
             <div class="card-header"><span class="card-title">DEPT. STATUS</span></div>
             <div class="dept-grid mono">
-                <div class="dept-item" style="border-color: #4facfe;">
-                    <span class="dept-name">RESEARCH (연구)</span>
-                    <span class="dept-val">102 <span style="font-size:12px; color:#666;">/ 105</span></span>
-                </div>
-                <div class="dept-item" style="border-color: #ffaa00;">
-                    <span class="dept-name">SECURITY (보안)</span>
-                    <span class="dept-val">58 <span style="font-size:12px; color:#666;">/ 60</span></span>
-                </div>
-                <div class="dept-item" style="border-color: #00ff9d;">
-                    <span class="dept-name">MEDICAL (의료)</span>
-                    <span class="dept-val">24 <span style="font-size:12px; color:#666;">/ 25</span></span>
-                </div>
-                <div class="dept-item" style="border-color: #ff4b4b;">
-                    <span class="dept-name">MAINTENANCE (시설)</span>
-                    <span class="dept-val">15 <span style="font-size:12px; color:#666;">/ 15</span></span>
-                </div>
+                <div class="dept-item" style="border-color: #4facfe;"><span class="dept-name">RESEARCH (연구)</span><span class="dept-val">102 <span style="font-size:12px; color:#666;">/ 105</span></span></div>
+                <div class="dept-item" style="border-color: #ffaa00;"><span class="dept-name">SECURITY (보안)</span><span class="dept-val">58 <span style="font-size:12px; color:#666;">/ 60</span></span></div>
+                <div class="dept-item" style="border-color: #00ff9d;"><span class="dept-name">MEDICAL (의료)</span><span class="dept-val">24 <span style="font-size:12px; color:#666;">/ 25</span></span></div>
+                <div class="dept-item" style="border-color: #ff4b4b;"><span class="dept-name">MAINTENANCE (시설)</span><span class="dept-val">15 <span style="font-size:12px; color:#666;">/ 15</span></span></div>
             </div>
         </div>
-
         <div class="card">
-            <div class="card-header">
-                <span class="card-title">PERSONNEL LIST</span>
-                <span style="font-size:11px; color:#666;">*최근 접속 기록 (Log)</span>
-            </div>
+            <div class="card-header"><span class="card-title">PERSONNEL LIST</span><span style="font-size:11px; color:#666;">*최근 접속 기록 (Log)</span></div>
             <div class="table-container">
                 <table class="staff-table mono">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Dept.</th>
-                            <th>Level</th>
-                            <th>Status</th>
-                            <th>Location</th>
-                        </tr>
-                    </thead>
-                    <tbody id="staff-list">
-                        </tbody>
+                    <thead><tr><th>ID</th><th>Name</th><th>Dept.</th><th>Level</th><th>Status</th><th>Location</th></tr></thead>
+                    <tbody id="staff-list"></tbody>
                 </table>
             </div>
         </div>
-
     </main>
-
     <script>
         function updateClock() {
             const now = new Date();
@@ -242,54 +121,37 @@
             document.getElementById('date').innerText = kstDate;
         }
         setInterval(updateClock, 1000); updateClock();
-
-        // 독일식 이름 생성기
         function generateStaff() {
             const tbody = document.getElementById('staff-list');
             const depts = ['Research', 'Security', 'Medical', 'Facility'];
             const locations = ['2F Office', 'B1 Lab', '1F Lobby', '3F Control', 'B2 Infra'];
-            
-            // 독일/유럽식 성씨 (Surnames)
             const lastNames = ['Müller', 'Schmidt', 'Schneider', 'Fischer', 'Weber', 'Meyer', 'Wagner', 'Becker', 'Schulz', 'Hoffmann', 'Schäfer', 'Koch', 'Bauer', 'Richter', 'Klein', 'Wolf', 'Schröder'];
-            // 이니셜
             const firstInitials = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'R', 'S', 'T', 'V', 'W'];
-            
             let html = '';
-            
-            // 15명 샘플 생성
             for(let i=0; i<15; i++) {
                 const id = 'E-' + Math.floor(Math.random() * 8999 + 1000);
-                
-                // 이름 생성: Initial. Surname (예: J. Schmidt)
                 const lName = lastNames[Math.floor(Math.random() * lastNames.length)];
                 const fInitial = firstInitials[Math.floor(Math.random() * firstInitials.length)];
                 const name = `${fInitial}. ${lName}`;
-
                 const dept = depts[Math.floor(Math.random() * depts.length)];
                 const loc = locations[Math.floor(Math.random() * locations.length)];
                 const lvl = Math.floor(Math.random() * 3) + 1; 
-                
-                // 상태 랜덤
                 let statusHtml = '<span style="color:#888;">Unknown</span>';
                 const r = Math.random();
-                if(r > 0.3) statusHtml = '<span class="status-dot on-duty"></span>Active';
-                else if(r > 0.1) statusHtml = '<span class="status-dot off-duty"></span>Off-Duty';
-                else statusHtml = '<span class="status-dot warning"></span>Missing'; 
-
-                html += `
-                    <tr>
-                        <td style="color:#fff;">${id}</td>
-                        <td>${name}</td>
-                        <td>${dept}</td>
-                        <td>LV.${lvl}</td>
-                        <td>${statusHtml}</td>
-                        <td>${loc}</td>
-                    </tr>
-                `;
+                if(r > 0.3) statusHtml = '<span class="status-dot on-duty"></span>Active'; else if(r > 0.1) statusHtml = '<span class="status-dot off-duty"></span>Off-Duty'; else statusHtml = '<span class="status-dot warning"></span>Missing'; 
+                html += `<tr><td style="color:#fff;">${id}</td><td>${name}</td><td>${dept}</td><td>LV.${lvl}</td><td>${statusHtml}</td><td>${loc}</td></tr>`;
             }
             tbody.innerHTML = html;
         }
         generateStaff();
+        function checkMessages() {
+            const list = JSON.parse(localStorage.getItem('eden_applicants')) || [];
+            if (list.length === 0) { alert('수신된 메시지가 없습니다.'); } else {
+                let msg = `[📩 신규 지원자 명단: 총 ${list.length}명]\n\n`;
+                list.forEach((p, i) => { msg += `${i+1}. 이름: ${p.name}\n   연락처: ${p.phone}\n   생년월일: ${p.birth}\n   특이사항: ${p.note ? p.note : '없음'}\n\n`; });
+                msg += '----------------------------------\n확인 후 인사팀으로 전달 바랍니다.'; alert(msg);
+            }
+        }
     </script>
 </body>
 </html>
