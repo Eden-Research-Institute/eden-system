@@ -44,6 +44,7 @@
         
         .profile-box { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
         .avatar { width: 32px; height: 32px; background: #333; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #fff; font-size: 14px; }
+        /* ▼▼▼ 클릭 가능 커서 추가 ▼▼▼ */
         .user-info { cursor: pointer; } 
         .user-info:hover h4 { color: var(--accent); text-decoration: underline; }
         .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
@@ -78,8 +79,8 @@
         /* 인원 표시 아이콘 */
         .occupancy { display: flex; flex-direction: column; gap: 4px; font-size: 12px; margin-top: auto; }
         .occ-item { display: flex; align-items: center; gap: 6px; }
-        .icon-staff { color: #4facfe; } /* 연구원: 파랑 */
-        .icon-sub { color: #ffaa00; } /* 실험체: 주황 */
+        .icon-staff { color: #4facfe; } 
+        .icon-sub { color: #ffaa00; } 
         
         /* 카이로 & 리플리 전용 스타일 */
         .special-badge { 
@@ -137,9 +138,12 @@
         <a href="facility.html" class="menu-item active"><span>🏢</span> <span>시설 관리</span></a>
         <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>👥</span> <span>조직/인사</span></a>
         <a href="#" class="menu-item" onclick="alert('준비 중입니다.')"><span>🌐</span> <span>대외 홈페이지</span></a>
+        
         <div class="profile-box">
             <div class="avatar">K</div>
-            <div class="user-info"><h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p></div>
+            <div class="user-info" onclick="alert('수신된 메시지가 없습니다.')">
+                <h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p>
+            </div>
         </div>
     </nav>
 
@@ -212,14 +216,11 @@
         function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
         function updateLocations() {
-            // 현재 시간에 따라 카이로 위치 결정
-            // 짝수 시간: 집무실 / 홀수 시간: 리플리 격리실 방문 (단순화된 예시)
-            // 소장님 요청: "실험 스케줄에 따라" -> subjects.html 스케줄과 비슷하게 오후 시간대에 방문한다고 가정
-            
             const hour = new Date().getHours();
             
             // 14시~16시는 리플리 관리 시간 (B1 이동)
             const isVisitTime = (hour >= 14 && hour < 16); 
+            const isWorkTime = (hour >= 9 && hour < 18);
             
             // 카이로 위치 설정
             let kairoLocationName = "";
@@ -234,10 +235,10 @@
                 kairoLocationName = "3F 소장 집무실";
             }
 
-            // 상태 배너 업데이트
+            // 상태 배너 업데이트 (중복 시간 삭제)
             const banner = document.getElementById('status-banner');
             banner.innerHTML = `
-                <div><span style="color:#888;">CURRENT TIME:</span> <span style="color:#fff;">${hour}:00 Cycle</span></div>
+                <div><span style="color:#888;">STATUS:</span> <span style="color:#fff; font-weight:bold;">${isWorkTime ? "EXPERIMENT CYCLE" : "NIGHT CYCLE"}</span></div>
                 <div class="kairo-status">
                     <span style="color:var(--danger);">★ DIRECTOR KAIRO LOC:</span> 
                     <span style="border-bottom:1px solid var(--danger);">${kairoLocationName}</span>
