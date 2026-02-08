@@ -6,10 +6,17 @@
     <title>EDEN INSTITUTE - DASHBOARD</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap');
-        :root { --bg-color: #121212; --sidebar-bg: #1e1e1e; --card-bg: #252525; --border: #333; --accent: #00ff9d; --danger: #ff4b4b; --text-main: #ffffff; --text-sub: #888; }
+
+        :root {
+            --bg-color: #121212; --sidebar-bg: #1e1e1e; --card-bg: #252525;
+            --border: #333; --accent: #00ff9d; --danger: #ff4b4b; --text-main: #ffffff; --text-sub: #888;
+        }
+
         * { box-sizing: border-box; }
         body { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
         .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* 사이드바 */
         .sidebar { width: 240px; height: 100vh; background-color: var(--sidebar-bg); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; display: flex; flex-direction: column; padding: 20px; z-index: 100; overflow-y: auto; }
         .logo { font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
         .logo::before { content: '❖'; font-size: 20px; }
@@ -21,6 +28,8 @@
         .user-info:hover h4 { color: var(--accent); text-decoration: underline; }
         .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
         .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
+
+        /* 메인 콘텐츠 */
         .main-content { margin-left: 240px; padding: 30px; display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 20px; min-height: 100vh; }
         .header-area { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
@@ -28,10 +37,13 @@
         .clock-area { text-align: right; display: block !important; }
         .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
         .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
+
+        /* 카드들 */
         .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 25px; position: relative; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .card-title { font-size: 12px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
         .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 5px var(--accent); }
+        
         .ripley-card { grid-column: 1 / 2; grid-row: 2 / 4; background: linear-gradient(160deg, #252525 0%, #1a1a1a 100%); border-left: 3px solid var(--accent); }
         .subject-id { font-size: 24px; font-weight: 600; color: #fff; letter-spacing: 1px; margin-bottom: 5px; }
         .subject-name-kr { font-size: 16px; color: var(--accent); margin-left: 10px; font-weight: 400; }
@@ -44,15 +56,57 @@
         .monitor-line { width: 100%; height: 2px; background: #333; margin: 30px 0; position: relative; overflow: hidden; }
         .monitor-active { position: absolute; width: 100px; height: 100%; background: var(--accent); box-shadow: 0 0 15px var(--accent); animation: scan 2s infinite linear; }
         @keyframes scan { 0% { left: -20%; } 100% { left: 120%; } }
+
         .stats-card { grid-column: 2 / 3; }
         .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .stat-row:last-child { border-bottom: none; }
         .stat-label { font-size: 13px; color: #aaa; }
         .stat-num { font-size: 14px; font-weight: 600; color: #fff; }
+
         .info-card { grid-column: 2 / 3; }
         .system-list div { padding: 8px 0; font-size: 13px; display: flex; justify-content: space-between; }
         .ok { color: var(--accent); } .warn { color: #ffaa00; } .lock { color: var(--danger); }
+
+        /* 수신함 모달 */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;
+        }
+        .inbox-container {
+            width: 800px; height: 600px; background: #1e1e1e; border: 1px solid #444; border-radius: 8px;
+            display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .inbox-header {
+            padding: 15px 20px; background: #252525; border-bottom: 1px solid #333;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .inbox-title { font-weight: bold; color: var(--accent); font-size: 14px; letter-spacing: 1px; }
+        .close-btn { cursor: pointer; font-size: 20px; color: #888; } .close-btn:hover { color: #fff; }
         
+        .inbox-body { display: flex; flex: 1; overflow: hidden; }
+        
+        .msg-list { width: 40%; border-right: 1px solid #333; overflow-y: auto; background: #1a1a1a; }
+        .msg-item {
+            padding: 15px; border-bottom: 1px solid #2a2a2a; cursor: pointer; transition: 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .msg-item:hover { background: #252525; }
+        .msg-item.active { background: #2a2a2a; border-left-color: var(--accent); }
+        .msg-item.unread .msg-sender, .msg-item.unread .msg-preview { font-weight: bold; color: #fff; }
+        .msg-item.unread::after { content: '●'; float: right; color: var(--danger); font-size: 10px; margin-top: 3px;}
+        
+        .msg-sender { font-size: 12px; color: #ccc; display: block; margin-bottom: 4px; }
+        .msg-type { font-size: 10px; padding: 2px 5px; border-radius: 3px; background: #333; color: #aaa; margin-right: 5px; }
+        .msg-preview { font-size: 13px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .msg-content { flex: 1; padding: 30px; overflow-y: auto; background: #1e1e1e; }
+        .view-header { border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
+        .view-subject { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 10px; }
+        .view-meta { font-size: 12px; color: #666; }
+        .view-body { font-size: 14px; line-height: 1.6; color: #ddd; white-space: pre-wrap; }
+        
+        .empty-state { text-align: center; color: #555; margin-top: 100px; font-size: 13px; }
+
         @media (max-width: 768px) {
             .sidebar { width: 100%; height: 55px; flex-direction: row; align-items: center; border-right: none; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 0 10px; padding-right: 130px; overflow-x: auto; white-space: nowrap; }
             .sidebar::-webkit-scrollbar { display: none; }
@@ -62,6 +116,11 @@
             .main-content { margin-left: 0; padding: 15px; display: flex; flex-direction: column; }
             .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
             .clock-area { text-align: left; margin-top: 5px; }
+            
+            .inbox-container { width: 95%; height: 80%; }
+            .inbox-body { flex-direction: column; }
+            .msg-list { width: 100%; height: 40%; border-right: none; border-bottom: 1px solid #333; }
+            .msg-content { height: 60%; }
         }
     </style>
 </head>
@@ -75,7 +134,7 @@
         <a href="public.html" target="_blank" class="menu-item"><span>🌐</span> <span>대외 홈페이지</span></a>
         <div class="profile-box">
             <div class="avatar">K</div>
-            <div class="user-info" onclick="checkMessages()">
+            <div class="user-info" onclick="openInbox()">
                 <h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p>
             </div>
         </div>
@@ -86,6 +145,7 @@
             <div class="page-title"><h1>Main Console</h1> <p>INTEGRATED CONTROL SYSTEM</p></div>
             <div class="clock-area mono"><div class="clock-time" id="clock">00:00:00</div><div class="clock-date" id="date">YYYY-MM-DD</div></div>
         </div>
+
         <div class="card ripley-card">
             <div class="card-header"><span class="card-title" style="color:var(--accent);">CORE ASSET MONITORING</span> <span class="status-dot"></span></div>
             <div class="subject-info"><div class="subject-id mono">ER-S-02-001 <span class="subject-name-kr">(리플리)</span></div><div class="subject-desc">현재 유일한 2단계(재생) 도달 개체.<br>신체 재생 효율 420% 유지 중.</div></div>
@@ -97,6 +157,7 @@
                 <div class="vital-item"><span class="vital-label">CONDITION</span><span class="vital-value" style="color:var(--accent);">STABLE</span></div>
             </div>
         </div>
+
         <div class="card stats-card">
             <div class="card-header"><span class="card-title">SUBJECT STATUS</span></div>
             <div class="mono">
@@ -106,6 +167,7 @@
                 <div class="stat-row"><span class="stat-label">금일 신규 입소 (New)</span><span class="stat-num" id="stat-new" style="color:#fff;">Loading...</span></div>
             </div>
         </div>
+
         <div class="card info-card">
             <div class="card-header"><span class="card-title">SYSTEM CHECK</span></div>
             <div class="system-list mono">
@@ -116,6 +178,21 @@
             </div>
         </div>
     </main>
+
+    <div class="modal-overlay" id="inbox-modal">
+        <div class="inbox-container">
+            <div class="inbox-header">
+                <span class="inbox-title">SECURE INBOX (KAIRO)</span>
+                <span class="close-btn" onclick="closeInbox()">&times;</span>
+            </div>
+            <div class="inbox-body">
+                <div class="msg-list" id="msg-list-area"></div>
+                <div class="msg-content" id="msg-content-area">
+                    <div class="empty-state">메시지를 선택하여 내용을 확인하십시오.</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function updateClock() {
@@ -143,19 +220,147 @@
         updateStats();
         setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
-        // 지원서 확인 기능
-        function checkMessages() {
-            const list = JSON.parse(localStorage.getItem('eden_applicants')) || [];
-            if (list.length === 0) {
-                alert('수신된 메시지가 없습니다.');
-            } else {
-                let msg = `[📩 신규 지원자 명단: 총 ${list.length}명]\n\n`;
-                list.forEach((p, i) => {
-                    msg += `${i+1}. 이름: ${p.name}\n   연락처: ${p.phone}\n   생년월일: ${p.birth}\n   특이사항: ${p.note ? p.note : '없음'}\n\n`;
-                });
-                msg += '----------------------------------\n확인 후 인사팀으로 전달 바랍니다.';
-                alert(msg);
+        /* ================= INBOX SYSTEM (영구 보존 & 랜덤 이벤트) ================= */
+        
+        // 1. 초기 고정 메시지 (한 번만 생성됨)
+        const initialMessages = [
+            {
+                type: 'OFFICIAL', sender: '국가 과학 기술 자문회의', title: '[기밀] 4분기 예산 증액 승인', unread: true, date: 'Yesterday',
+                body: '수신: 카이로 소장\n\n귀하의 "인류 진화 프로젝트"에 대한 추가 예산안이 비밀리에 통과되었습니다.\n윤리 위원회의 감사는 예정대로 "서류상으로만" 진행될 것이니\n안심하고 연구에만 매진하십시오.\n\n우리는 귀하의 성과를 기대하고 있습니다.\n\n- 위원장 드림'
+            },
+            {
+                type: 'OFFICIAL', sender: '세계 생명 공학 협회', title: '특별 공로상 수상 후보 선정', unread: false, date: '2 days ago',
+                body: '축하드립니다, 카이로 소장님.\n귀하의 혁신적인 연구 성과를 기려 금년도 특별 공로상 유력 후보로 선정되셨습니다.\n(시상식 일정은 추후 대외비로 안내드립니다.)'
+            },
+            {
+                type: 'APPLY', sender: '지원서 접수 시스템', title: '[신규 지원] Elias Weber', unread: true, date: 'Today',
+                body: '[지원자 정보]\n- 성명: Elias Weber\n- 생년월일: 1998-04-12\n- 연락처: +49 151 4920 3819\n\n[특이사항]\n급전 필요함\n\n----------------\n* 1차 적합성 판정 완료. B2 대기실 이송 권장.'
+            },
+            {
+                type: 'APPLY', sender: '지원서 접수 시스템', title: '[신규 지원] Mia Wagner', unread: true, date: 'Today',
+                body: '[지원자 정보]\n- 성명: Mia Wagner\n- 생년월일: 2001-11-23\n- 연락처: +49 170 3829 1023\n\n[특이사항]\n가족 없음, 연고지 불명\n\n----------------\n* 1차 적합성 판정 완료. B2 대기실 이송 권장.'
             }
+        ];
+
+        // 2. 랜덤 연구원 메시지 풀 (긴급 + 일상 섞음)
+        const randomEvents = [
+            // 긴급
+            { sender: 'Dr. Vogel (Research)', title: '❗ 402번 개체 쇼크사 보고', body: '소장님, 402번 개체에서 리플리와 유사한 신경 반응이 감지되었으나\n약물 투여 10분 만에 심정지로 사망했습니다.\n\n해부 데이터 서버에 올렸습니다. 확인 부탁드립니다.' },
+            { sender: 'Eng. Hans (Facility)', title: '⚡ B2 전력 공급 불안정', body: '소장님, 지하 2층 전력 공급 장치에서 미세한 전압 강하가 감지됩니다.\n즉시 복구 작업 중입니다만, 만약을 위해 비상 발전기를 대기시켰습니다.' },
+            { sender: 'Dr. Weiss (Medical)', title: '⚠️ 진정제 재고 부족 알림', body: '현재 B구역 실험체들의 난동 빈도가 늘어 진정제 소모가 빠릅니다.\n추가 발주 승인을 부탁드립니다. (현재 재고: 15%)' },
+            { sender: 'Security System', title: '🚨 [경고] 허가되지 않은 접근', body: '3층 데이터 서버실에 허가되지 않은 ID카드로 접근 시도가 있었습니다.\n보안팀이 즉시 출동하여 상황 종료되었습니다.' },
+            
+            // 일상 & 평범
+            { sender: 'System Administrator', title: '💾 정기 데이터 백업 완료', body: '금일 오전 04:00 기준으로 전체 연구 데이터의 클라우드 백업이 정상적으로 완료되었습니다.\n데이터 무결성 검사 결과: 양호.' },
+            { sender: 'Facility Management', title: 'B구역 정기 소독 완료', body: '금일 예정된 지하 1층 B구역 격리실 및 복도의 정기 방역/소독 작업을 마쳤습니다.\n다음 소독 일정은 3일 뒤입니다.' },
+            { sender: 'Cpt. Braun (Security)', title: '금일 오전 순찰 특이사항 없음', body: '로비 및 외곽 경비 구역 순찰 결과 특이사항 없습니다.\n현재 연구소 보안 등급: LEVEL 3 (평시) 유지 중입니다.' },
+            { sender: 'Research Team 2', title: '비품(기록용 태블릿) 신청 건', body: '소장님, 2팀에서 사용하는 관찰 기록용 태블릿 3대가 파손되어 교체 신청서 올렸습니다.\n결재 부탁드립니다.' },
+            { sender: 'Dr. Vogel (Research)', title: '야간 근무자 식단 개선 요청', body: '최근 야간 연장 근무가 늘어나고 있는데, 야식 메뉴가 너무 부실하다는 연구원들의 불만이 접수되었습니다.\n예산 범위 내에서 개선이 가능할지 검토 부탁드립니다.' }
+        ];
+
+        function initializeInbox() {
+            // 저장된 메시지 불러오기 (없으면 빈 배열)
+            let messages = JSON.parse(localStorage.getItem('eden_messages'));
+
+            // 처음 실행 시 (저장된 게 없으면) 초기 메시지 세팅
+            if (!messages) {
+                messages = [...initialMessages];
+                localStorage.setItem('eden_messages', JSON.stringify(messages));
+            }
+
+            // 1. 실제 지원자(public.html) 데이터 가져와서 합치기
+            const newApplicants = JSON.parse(localStorage.getItem('eden_applicants')) || [];
+            if (newApplicants.length > 0) {
+                newApplicants.forEach(p => {
+                    messages.unshift({
+                        type: 'APPLY', sender: '지원서 접수 시스템', 
+                        title: `[신규 지원] ${p.name}`, unread: true,
+                        date: p.time,
+                        body: `[지원자 정보]\n- 성명: ${p.name}\n- 생년월일: ${p.birth}\n- 연락처: ${p.phone}\n\n[특이사항]\n${p.note ? p.note : '없음'}\n\n----------------\n* 1차 적합성 판정 대기 중.`
+                    });
+                });
+                // 합친 후 임시 저장소 비우기 (중복 방지)
+                localStorage.removeItem('eden_applicants');
+                localStorage.setItem('eden_messages', JSON.stringify(messages));
+            }
+
+            // 2. 랜덤 이벤트 발생 (약 30% 확률)
+            if (Math.random() < 0.3) { 
+                const event = randomEvents[Math.floor(Math.random() * randomEvents.length)];
+                // 중복 방지 (가장 최근 메시지와 제목이 같으면 추가 안 함)
+                if (messages.length === 0 || messages[0].title !== event.title) {
+                    messages.unshift({
+                        type: 'MSG', sender: event.sender, title: event.title, unread: true, date: 'Now',
+                        body: event.body
+                    });
+                    localStorage.setItem('eden_messages', JSON.stringify(messages));
+                }
+            }
+        }
+
+        // 페이지 로드 시 실행
+        initializeInbox();
+
+        // 모달 열기
+        function openInbox() {
+            renderList();
+            document.getElementById('inbox-modal').style.display = 'flex';
+        }
+
+        function closeInbox() {
+            document.getElementById('inbox-modal').style.display = 'none';
+        }
+
+        function renderList() {
+            const messages = JSON.parse(localStorage.getItem('eden_messages')) || [];
+            const listArea = document.getElementById('msg-list-area');
+            let html = '';
+            
+            messages.forEach((msg, idx) => {
+                let badgeColor = '#888';
+                if(msg.type === 'APPLY') badgeColor = '#ffaa00'; 
+                if(msg.type === 'OFFICIAL') badgeColor = '#4facfe'; 
+                if(msg.type === 'MSG') badgeColor = '#00ff9d'; 
+
+                const unreadClass = msg.unread ? 'unread' : '';
+
+                html += `
+                    <div class="msg-item ${unreadClass}" onclick="viewMessage(${idx}, this)">
+                        <span class="msg-sender">
+                            <span class="msg-type" style="color:${badgeColor}; border:1px solid ${badgeColor};">${msg.type}</span>
+                            ${msg.sender}
+                        </span>
+                        <div class="msg-preview">${msg.title}</div>
+                    </div>
+                `;
+            });
+            listArea.innerHTML = html;
+        }
+
+        function viewMessage(idx, element) {
+            let messages = JSON.parse(localStorage.getItem('eden_messages')) || [];
+            const msg = messages[idx];
+            const contentArea = document.getElementById('msg-content-area');
+            
+            // 읽음 처리 및 저장
+            if (msg.unread) {
+                msg.unread = false;
+                messages[idx] = msg;
+                localStorage.setItem('eden_messages', JSON.stringify(messages));
+            }
+            
+            element.classList.remove('unread');
+            const items = document.querySelectorAll('.msg-item');
+            items.forEach(i => i.classList.remove('active'));
+            element.classList.add('active');
+
+            contentArea.innerHTML = `
+                <div class="view-header">
+                    <div class="view-subject">${msg.title}</div>
+                    <div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div>
+                </div>
+                <div class="view-body">${msg.body}</div>
+            `;
         }
     </script>
 </body>
