@@ -1,265 +1,7 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDEN INSTITUTE - DASHBOARD</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap');
-
-        :root {
-            --bg-color: #121212; --sidebar-bg: #1e1e1e; --card-bg: #252525;
-            --border: #333; --accent: #00ff9d; --danger: #ff4b4b; --text-main: #ffffff; --text-sub: #888;
-        }
-
-        * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-
-        /* 사이드바 */
-        .sidebar { width: 240px; height: 100vh; background-color: var(--sidebar-bg); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; display: flex; flex-direction: column; padding: 20px; z-index: 100; overflow-y: auto; }
-        .logo { font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
-        .logo::before { content: '❖'; font-size: 20px; }
-        .menu-item { padding: 12px 15px; color: var(--text-sub); border-radius: 6px; margin-bottom: 4px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 12px; font-weight: 500; text-decoration: none; }
-        .menu-item:hover, .menu-item.active { background-color: rgba(0, 255, 157, 0.05); color: var(--accent); }
-        .profile-box { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 32px; height: 32px; background: #333; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #fff; font-size: 14px; }
-        .user-info { cursor: pointer; }
-        .user-info:hover h4 { color: var(--accent); text-decoration: underline; }
-        .user-info h4 { margin: 0; font-size: 13px; color: #fff; font-weight: 600; }
-        .user-info p { margin: 0; font-size: 11px; color: var(--danger); margin-top: 3px; font-weight: bold;}
-
-        /* 메인 콘텐츠 */
-        .main-content { margin-left: 240px; padding: 30px; display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 20px; min-height: 100vh; }
-        .header-area { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .page-title h1 { margin: 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
-        .page-title p { margin: 5px 0 0; color: var(--text-sub); font-size: 12px; }
-        .clock-area { text-align: right; display: block !important; }
-        .clock-time { font-size: 24px; font-weight: 600; color: var(--text-main); letter-spacing: 1px; }
-        .clock-date { font-size: 11px; color: var(--text-sub); margin-top: 2px; text-transform: uppercase; text-align: right;}
-
-        /* 카드들 */
-        .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 25px; position: relative; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .card-title { font-size: 12px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
-        .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 5px var(--accent); }
-        
-        .ripley-card { grid-column: 1 / 2; grid-row: 2 / 4; background: linear-gradient(160deg, #252525 0%, #1a1a1a 100%); border-left: 3px solid var(--accent); }
-        .subject-id { font-size: 24px; font-weight: 600; color: #fff; letter-spacing: 1px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px;}
-        .subject-name-kr { font-size: 16px; color: var(--accent); font-weight: 400; }
-        
-        /* 인터폰 버튼 */
-        .intercom-btn { 
-            background: rgba(0, 255, 157, 0.1); border: 1px solid var(--accent); 
-            color: var(--accent); padding: 4px 10px; border-radius: 4px; 
-            font-size: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 5px;
-        }
-        .intercom-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
-        .blink { animation: blinker 1.5s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0.5; } }
-
-        .subject-desc { font-size: 13px; color: #888; margin-top: 5px; line-height: 1.5;}
-        .vital-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .vital-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
-        .vital-label { font-size: 11px; color: #666; display: block; margin-bottom: 8px; letter-spacing: 0.5px; }
-        .vital-value { font-size: 18px; font-weight: 600; color: #e0e0e0; }
-        .bpm-value { color: var(--accent); font-size: 24px; }
-        .monitor-line { width: 100%; height: 2px; background: #333; margin: 30px 0; position: relative; overflow: hidden; }
-        .monitor-active { position: absolute; width: 100px; height: 100%; background: var(--accent); box-shadow: 0 0 15px var(--accent); animation: scan 2s infinite linear; }
-        @keyframes scan { 0% { left: -20%; } 100% { left: 120%; } }
-
-        .stats-card { grid-column: 2 / 3; }
-        .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .stat-row:last-child { border-bottom: none; }
-        .stat-label { font-size: 13px; color: #aaa; }
-        .stat-num { font-size: 14px; font-weight: 600; color: #fff; }
-
-        .info-card { grid-column: 2 / 3; }
-        .system-list div { padding: 8px 0; font-size: 13px; display: flex; justify-content: space-between; }
-        .ok { color: var(--accent); } .warn { color: #ffaa00; } .lock { color: var(--danger); }
-
-        /* 수신함 모달 */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;
-        }
-        .inbox-container {
-            width: 800px; height: 600px; background: #1e1e1e; border: 1px solid #444; border-radius: 8px;
-            display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 30px rgba(0,0,0,0.5);
-        }
-        .inbox-header {
-            padding: 15px 20px; background: #252525; border-bottom: 1px solid #333;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .inbox-title { font-weight: bold; color: var(--accent); font-size: 14px; letter-spacing: 1px; }
-        .close-btn { cursor: pointer; font-size: 20px; color: #888; } .close-btn:hover { color: #fff; }
-        
-        .inbox-body { display: flex; flex: 1; overflow: hidden; }
-        .msg-list { width: 40%; border-right: 1px solid #333; overflow-y: auto; background: #1a1a1a; }
-        .msg-item { padding: 15px; border-bottom: 1px solid #2a2a2a; cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; }
-        .msg-item:hover { background: #252525; }
-        .msg-item.active { background: #2a2a2a; border-left-color: var(--accent); }
-        .msg-item.unread .msg-sender, .msg-item.unread .msg-preview { font-weight: bold; color: #fff; }
-        .msg-item.unread::after { content: '●'; float: right; color: var(--danger); font-size: 10px; margin-top: 3px;}
-        .msg-sender { font-size: 12px; color: #ccc; display: block; margin-bottom: 4px; }
-        .msg-type { font-size: 10px; padding: 2px 5px; border-radius: 3px; background: #333; color: #aaa; margin-right: 5px; }
-        .msg-preview { font-size: 13px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .msg-content { flex: 1; padding: 30px; overflow-y: auto; background: #1e1e1e; }
-        .view-header { border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
-        .view-subject { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 10px; }
-        .view-meta { font-size: 12px; color: #666; }
-        .view-body { font-size: 14px; line-height: 1.6; color: #ddd; white-space: pre-wrap; }
-        .empty-state { text-align: center; color: #555; margin-top: 100px; font-size: 13px; }
-
-        /* ▼▼▼ 인터폰 채팅창 (대시보드 전용 스타일) ▼▼▼ */
-        .intercom-box {
-            display: none; position: fixed; bottom: 20px; right: 20px; 
-            width: 350px; height: 500px; background: #121212; 
-            border: 1px solid var(--accent); border-radius: 4px; 
-            z-index: 9999; box-shadow: 0 0 20px rgba(0, 255, 157, 0.1);
-            flex-direction: column;
-        }
-        .intercom-header {
-            padding: 10px 15px; background: rgba(0, 255, 157, 0.1); 
-            border-bottom: 1px solid var(--accent); color: var(--accent); 
-            font-size: 13px; font-weight: bold; letter-spacing: 1px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .intercom-body {
-            flex: 1; padding: 15px; overflow-y: auto; font-family: 'JetBrains Mono', monospace;
-            font-size: 12px; color: #ddd; display: flex; flex-direction: column; gap: 10px;
-        }
-        .intercom-input-area {
-            padding: 10px; border-top: 1px solid #333; display: flex; gap: 5px;
-        }
-        .intercom-input {
-            flex: 1; background: #1a1a1a; border: 1px solid #333; color: #fff; 
-            padding: 8px; outline: none; font-family: 'Inter', sans-serif;
-        }
-        .intercom-input:focus { border-color: var(--accent); }
-        .intercom-send {
-            background: var(--accent); color: #000; border: none; padding: 0 15px; 
-            cursor: pointer; font-weight: bold;
-        }
-        /* 메시지 스타일 */
-        .i-msg { max-width: 90%; padding: 8px; border-radius: 4px; line-height: 1.4; word-break: break-all;}
-        .i-msg.user { align-self: flex-end; text-align: right; color: var(--accent); border: 1px solid var(--accent); background: rgba(0,255,157,0.05); }
-        .i-msg.bot { align-self: flex-start; color: #fff; border: 1px solid #444; background: #1a1a1a; }
-        .i-msg.sys { align-self: center; color: #666; font-style: italic; border: none; background: none; }
-
-        @media (max-width: 768px) {
-            .sidebar { width: 100%; height: 55px; flex-direction: row; align-items: center; border-right: none; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 0 10px; padding-right: 130px; overflow-x: auto; white-space: nowrap; }
-            .sidebar::-webkit-scrollbar { display: none; }
-            .logo { display: none; }
-            .menu-item { margin-bottom: 0; margin-right: 5px; background: #222; padding: 6px 10px; height: 36px; }
-            .profile-box { position: fixed; top: 0; right: 0; width: 120px; height: 55px; background: #1a1a1a; border-left: 2px solid var(--border); border-top: none; display: flex !important; justify-content: center; z-index: 1000; padding: 0; margin: 0; box-shadow: -5px 0 10px rgba(0,0,0,0.5); }
-            .main-content { margin-left: 0; padding: 15px; display: flex; flex-direction: column; }
-            .header-area { flex-direction: column; align-items: flex-start; gap: 5px; }
-            .clock-area { text-align: left; margin-top: 5px; }
-            
-            .inbox-container { width: 95%; height: 80%; }
-            .inbox-body { flex-direction: column; }
-            .msg-list { width: 100%; height: 40%; border-right: none; border-bottom: 1px solid #333; }
-            .msg-content { height: 60%; }
-            
-            .intercom-box { width: 90%; right: 5%; bottom: 20px; height: 60%; }
-        }
-    </style>
-</head>
-<body>
-    <nav class="sidebar">
-        <div class="logo">EDEN LAB.</div>
-        <a href="main.html" class="menu-item active"><span>📊</span> <span>대시보드</span></a>
-        <a href="subjects.html" class="menu-item"><span>🧬</span> <span>실험체 관리</span></a>
-        <a href="facility.html" class="menu-item"><span>🏢</span> <span>시설 관리</span></a>
-        <a href="staff.html" class="menu-item"><span>👥</span> <span>조직/인사</span></a>
-        <a href="public.html" target="_blank" class="menu-item"><span>🌐</span> <span>대외 홈페이지</span></a>
-        <div class="profile-box">
-            <div class="avatar">K</div>
-            <div class="user-info" onclick="openInbox()">
-                <h4>KAIRO</h4> <p style="color:var(--danger);">LEVEL 5</p>
-            </div>
-        </div>
-    </nav>
-
-    <main class="main-content">
-        <div class="header-area">
-            <div class="page-title"><h1>Main Console</h1> <p>INTEGRATED CONTROL SYSTEM</p></div>
-            <div class="clock-area mono"><div class="clock-time" id="clock">00:00:00</div><div class="clock-date" id="date">YYYY-MM-DD</div></div>
-        </div>
-
-        <div class="card ripley-card">
-            <div class="card-header"><span class="card-title" style="color:var(--accent);">CORE ASSET MONITORING</span> <span class="status-dot"></span></div>
-            <div class="subject-info">
-                <div class="subject-id mono">
-                    ER-S-02-001 <span class="subject-name-kr">(리플리)</span>
-                    <button class="intercom-btn" onclick="toggleIntercom()"><span class="blink">💬</span> INTERCOM</button>
-                </div>
-                <div class="subject-desc">현재 유일한 2단계(재생) 도달 개체.<br>신체 재생 효율 420% 유지 중.</div>
-            </div>
-            <div class="monitor-line"><div class="monitor-active"></div></div>
-            <div class="vital-grid mono">
-                <div class="vital-item"><span class="vital-label">HEART RATE</span><span class="vital-value bpm-value"><span id="bpm">72</span> <span style="font-size:12px;">BPM</span></span></div>
-                <div class="vital-item"><span class="vital-label">CURRENT PHASE</span><span class="vital-value" style="color:#fff;">STAGE 2</span></div>
-                <div class="vital-item"><span class="vital-label">BIOLOGICAL SEX</span><span class="vital-value" style="color:#fff;">FEMALE</span></div>
-                <div class="vital-item"><span class="vital-label">CONDITION</span><span class="vital-value" style="color:var(--accent);">STABLE</span></div>
-            </div>
-        </div>
-
-        <div class="card stats-card">
-            <div class="card-header"><span class="card-title">SUBJECT STATUS</span></div>
-            <div class="mono">
-                <div class="stat-row"><span class="stat-label">총 실험체 수 (Total)</span><span class="stat-num" id="stat-total">Loading...</span></div>
-                <div class="stat-row"><span class="stat-label">현재 수용 (In Custody)</span><span class="stat-num" id="stat-active" style="color:var(--accent);">Loading...</span></div>
-                <div class="stat-row"><span class="stat-label">사망/폐기 (Deceased)</span><span class="stat-num" id="stat-dead" style="color:#666;">Loading...</span></div>
-                <div class="stat-row"><span class="stat-label">금일 신규 입소 (New)</span><span class="stat-num" id="stat-new" style="color:#fff;">Loading...</span></div>
-            </div>
-        </div>
-
-        <div class="card info-card">
-            <div class="card-header"><span class="card-title">SYSTEM CHECK</span></div>
-            <div class="system-list mono">
-                <div><span>메인 서버 (Main Server)</span> <span class="ok">ONLINE</span></div>
-                <div><span>보안망 (Security Grid)</span> <span class="ok">ARMED</span></div>
-                <div><span>격리 시스템 (Containment)</span> <span class="warn">CHECK</span></div>
-                <div><span>외부 통신망 (Network)</span> <span class="lock">OFFLINE</span></div>
-            </div>
-        </div>
-    </main>
-
-    <div class="modal-overlay" id="inbox-modal">
-        <div class="inbox-container">
-            <div class="inbox-header">
-                <span class="inbox-title">SECURE INBOX (KAIRO)</span>
-                <span class="close-btn" onclick="closeInbox()">&times;</span>
-            </div>
-            <div class="inbox-body">
-                <div class="msg-list" id="msg-list-area"></div>
-                <div class="msg-content" id="msg-content-area">
-                    <div class="empty-state">메시지를 선택하여 내용을 확인하십시오.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="intercom-box" id="intercomBox">
-        <div class="intercom-header">
-            <span>🔊 INTERCOM: CELL B-02</span>
-            <div>
-                <span style="cursor:pointer; margin-right:10px;" onclick="resetIntercom()" title="초기화">🗑️</span>
-                <span style="cursor:pointer;" onclick="toggleIntercom()">&times;</span>
-            </div>
-        </div>
-        <div class="intercom-body" id="intercomMessages">
-            </div>
-        <div class="intercom-input-area">
-            <input type="password" id="intercomKeyInput" class="intercom-input" placeholder="Google API Key 입력" style="display:none;">
-            <input type="text" id="intercomInput" class="intercom-input" placeholder="Transmit voice message..." style="display:none;">
-            <button class="intercom-send" onclick="handleIntercom()">SEND</button>
-        </div>
-    </div>
-
-    <script>
+<script>
+        // ============================================
+        // 1. 시계 및 통계 (2026년 기준)
+        // ============================================
         function updateClock() {
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
@@ -285,7 +27,9 @@
         updateStats();
         setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
-        /* ================= INBOX SYSTEM ================= */
+        /* ============================================
+           2. 수신함 (INBOX) 시스템
+           ============================================ */
         const initialMessages = [
             { type: 'OFFICIAL', sender: '국가 과학 기술 자문회의', title: '[기밀] 4분기 예산 증액 승인', unread: true, date: 'Yesterday', body: '수신: 카이로 소장\n\n귀하의 "인류 진화 프로젝트"에 대한 추가 예산안이 비밀리에 통과되었습니다.\n윤리 위원회의 감사는 예정대로 "서류상으로만" 진행될 것이니\n안심하고 연구에만 매진하십시오.\n\n우리는 귀하의 성과를 기대하고 있습니다.\n\n- 위원장 드림' },
             { type: 'OFFICIAL', sender: '세계 생명 공학 협회', title: '특별 공로상 수상 후보 선정', unread: false, date: '2 days ago', body: '축하드립니다, 카이로 소장님.\n귀하의 혁신적인 연구 성과를 기려 금년도 특별 공로상 유력 후보로 선정되셨습니다.\n(시상식 일정은 추후 대외비로 안내드립니다.)' },
@@ -343,7 +87,9 @@
             contentArea.innerHTML = `<div class="view-header"><div class="view-subject">${msg.title}</div><div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div></div><div class="view-body">${msg.body}</div>`;
         }
 
-        /* ================= INTERCOM (수정됨: 첫인사 버그 수정 & 리셋 기능) ================= */
+        /* ============================================
+           3. INTERCOM (Gemini API / 카이로-리플리)
+           ============================================ */
         let intercomHistory = JSON.parse(localStorage.getItem('eden_subject_chat_history')) || [];
         let userApiKey = localStorage.getItem('eden_gemini_key');
         
@@ -351,15 +97,16 @@
         const iKeyInput = document.getElementById('intercomKeyInput');
         const iBox = document.getElementById('intercomMessages');
 
-        // [핵심] 대화 내용이 없으면 강제로 첫인사 저장
+        // [첫인사 고정] 대화 기록 없으면 강제로 첫인사 삽입
         function ensureGreeting() {
             if (intercomHistory.length === 0) {
                 intercomHistory.push({ role: 'model', parts: [{ text: '"리플리, 내 말 들리나?"' }] });
                 localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
             }
         }
-        ensureGreeting();
+        ensureGreeting(); 
 
+        // [화면 갱신] 키 입력 상태에 따라 UI 변경
         function updateIntercomUI() {
             if(userApiKey) {
                 iKeyInput.style.display = 'none';
@@ -371,16 +118,15 @@
         }
         updateIntercomUI();
 
-        // 렌더링 함수
+        // [렌더링] 저장된 대화 불러오기
         function renderMessages() {
             iBox.innerHTML = '';
-            // 장식용 시스템 메시지 추가
+            // 장식용 텍스트 (저장 안 함)
             iBox.innerHTML += `<div class="i-msg sys">Connecting to containment grid...</div>`;
             iBox.innerHTML += `<div class="i-msg sys">Audio link established.</div>`;
             
             intercomHistory.forEach(msg => {
                 const type = msg.role === 'user' ? 'user' : 'bot';
-                // 화면에 뿌릴 때만 DOM 생성
                 const div = document.createElement('div');
                 div.className = `i-msg ${type}`;
                 div.innerText = msg.parts[0].text;
@@ -388,24 +134,26 @@
             });
             iBox.scrollTop = iBox.scrollHeight;
         }
-        renderMessages(); // 페이지 로드 시 렌더링 실행
+        renderMessages();
 
-        // 리셋 함수 (휴지통)
-        function resetIntercom() {
-            if(confirm("기억을 초기화하시겠습니까? (되돌릴 수 없습니다)")) {
-                localStorage.removeItem('eden_subject_chat_history');
-                intercomHistory = [];
-                ensureGreeting(); // 첫인사 다시 넣기
-                renderMessages(); // 화면 갱신
-            }
-        }
-
+        // [기능] 인터폰 열기/닫기
         function toggleIntercom() {
             const box = document.getElementById('intercomBox');
             box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'flex' : 'none';
             if(box.style.display === 'flex') iBox.scrollTop = iBox.scrollHeight;
         }
 
+        // [기능] 기억 초기화 (휴지통)
+        function resetIntercom() {
+            if(confirm("이전 대화 기록을 모두 삭제하고 처음으로 돌아갑니다. (복구 불가)")) {
+                localStorage.removeItem('eden_subject_chat_history');
+                intercomHistory = [];
+                ensureGreeting(); 
+                renderMessages(); 
+            }
+        }
+
+        // [기능] 전송 핸들러
         function handleIntercom() {
             if(!userApiKey) {
                 registerKey();
@@ -414,6 +162,7 @@
             }
         }
 
+        // [기능] 키 등록
         function registerKey() {
             const key = iKeyInput.value.trim();
             if(key.length < 10) { alert('유효한 Google API Key를 입력하세요.'); return; }
@@ -424,6 +173,7 @@
             iInput.focus();
         }
 
+        // [기능] 메시지 전송 (Gemini API 호출)
         async function sendIntercom() {
             const text = iInput.value.trim();
             if(!text) return;
@@ -434,13 +184,16 @@
 
             try {
                 const contentsToSend = [...intercomHistory];
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${userApiKey}`;
+                
+                // ★★★ [수정 완료] 가장 안정적인 모델명 'gemini-1.5-flash' 사용 ★★★
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${userApiKey}`;
                 
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: contentsToSend,
+                        // ★★★ 시스템 설정 (카이로 성격 & 외모 & 집착) ★★★
                         systemInstruction: {
                             parts: [{ text: `
                                 [Roleplay Setup]
@@ -466,9 +219,10 @@
 
                 if (data.error) {
                     addIntercomMsg(`ERR: ${data.error.message}`, 'sys', false);
-                    if(data.error.message.includes('key')) {
+                    // 키 오류일 경우만 키 삭제
+                    if(data.error.message.includes('key') || data.error.code === 403) {
                         localStorage.removeItem('eden_gemini_key');
-                        location.reload();
+                        setTimeout(() => location.reload(), 2000);
                     }
                 } else {
                     const reply = data.candidates[0].content.parts[0].text;
@@ -480,25 +234,32 @@
             }
         }
 
+        // [기능] 메시지 추가 및 저장
         function addIntercomMsg(text, type, save) {
-            const div = document.createElement('div');
-            div.className = `i-msg ${type}`;
-            div.innerText = text;
-            div.id = 'imsg-' + Date.now();
-            iBox.appendChild(div);
-            iBox.scrollTop = iBox.scrollHeight;
-
-            if(save) {
-                let apiRole = type === 'user' ? 'user' : 'model';
-                let cleanText = text.replace(/^Director: /, ''); 
-                intercomHistory.push({ role: apiRole, parts: [{ text: cleanText }] });
-                localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
+            // 로딩 메시지 등은 저장 안 함
+            if (!save) {
+                const div = document.createElement('div');
+                div.className = `i-msg ${type}`;
+                div.innerText = text;
+                div.id = 'temp-msg-' + Date.now();
+                iBox.appendChild(div);
+                iBox.scrollTop = iBox.scrollHeight;
+                return div.id;
             }
-            return div.id;
+
+            // 실제 대화는 저장
+            let apiRole = type === 'user' ? 'user' : 'model';
+            let cleanText = text.replace(/^Director: /, ''); // 화면엔 Director 붙여도 저장은 깔끔하게
+            
+            intercomHistory.push({ role: apiRole, parts: [{ text: cleanText }] });
+            localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
+            
+            // 화면 갱신 (저장된 순서대로 다시 그림)
+            renderMessages();
+            return null;
         }
 
+        // 엔터키 리스너
         iInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendIntercom(); });
         iKeyInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleIntercom(); });
     </script>
-</body>
-</html>
