@@ -50,8 +50,7 @@
         .form-textarea { resize: none; height: 100px; }
         .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 15px; border-radius: 6px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         
-        footer { background: #111; color: #888; padding: 60px 20px; text-align: center; font-size: 13px; font-weight: 300; }
-        
+        footer { background: #111; color: #555; padding: 60px 20px; text-align: center; font-size: 13px; font-weight: 300; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @media (max-width: 768px) { header { flex-direction: column; padding: 20px; gap: 20px; } .nav-links { gap: 25px; justify-content: center; width: 100%; } .nav-item { font-size: 14px; } .hero h1 { font-size: 32px; word-break: keep-all; } .features { grid-template-columns: 1fr; padding: 50px 20px; } .modal-box { padding: 25px; } }
@@ -89,10 +88,11 @@
         <p style="font-weight: 600; color: #fff; margin-bottom: 10px;">EDEN INSTITUTE</p>
         <p>Innovative Bio-Technology for a Better Future.</p>
         <br>
-        <p>Headquarters: Friedrichstraße 88, 10117 Berlin, Germany</p>
-        <p>Contact: contact@eden-institute.org | Tel: +49 30 2023 9999</p>
+        <p>Headquarters: XX District, XX City, Germany</p>
+        <p>Contact: info@eden-lab.public | Tel: +XX XX-XXXX-XXXX</p>
         <br>
         <p style="opacity: 0.5; font-size: 11px;">© 2026 EDEN INSTITUTE. All Rights Reserved. | Privacy Policy | Terms of Use</p>
+        <p style="margin-top: 10px; opacity: 0.3; font-size: 10px;">Authorized Personnel Only Access Portal Hidden.</p>
     </footer>
 
     <div class="modal-overlay" id="applyModal">
@@ -102,7 +102,9 @@
             <div class="form-desc">안전하고 쾌적한 환경에서 진행됩니다. <br>작성해주신 정보는 엄격히 보호됩니다.</div>
             <div class="form-group"><label class="form-label">성명 (Name)</label><input type="text" id="app_name" class="form-input" placeholder="실명을 입력하세요"></div>
             <div class="form-group"><label class="form-label">생년월일 (Birth Date)</label><input type="date" id="app_birth" class="form-input"></div>
-            <div class="form-group"><label class="form-label">연락처 (Contact)</label><input type="tel" id="app_phone" class="form-input" placeholder="010-0000-0000"></div>
+            
+            <div class="form-group"><label class="form-label">연락처 (Contact)</label><input type="text" id="app_phone" class="form-input" placeholder="+XX-XXXX-XXXX"></div>
+            
             <div class="form-group"><label class="form-label">특이사항 (Medical Note)</label><textarea id="app_note" class="form-textarea" placeholder="복용 중인 약물이나 질환이 있다면 기재해주세요."></textarea></div>
             <button class="btn-submit" onclick="submitForm()">지원서 제출하기</button>
         </div>
