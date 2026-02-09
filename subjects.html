@@ -153,23 +153,26 @@
         }
         updateMobLogs();
 
+        // ★★★ 핵심: 대시보드(main.html)와 수학적으로 동일한 로직 적용 ★★★
         function updateCount() {
             const startDate = new Date("2026-01-01T00:00:00+09:00").getTime();
             const today = new Date().getTime();
             const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-            const total = 1000 + (daysPassed * 3); const dead = Math.floor(total * 0.58); const ripley = 1; const phase1Active = total - dead - ripley;
-            const el = document.getElementById('count-p1'); if(el) el.innerText = phase1Active.toLocaleString();
+            
+            // 메인 대시보드와 동일한 계산 공식
+            const total = 1000 + (daysPassed * 3); 
+            const dead = Math.floor(total * 0.58);
+            const active = total - dead; // 현재 살아있는 전체 수
+            
+            // 2단계(리플리) 1명과 3단계 0명을 뺀 나머지가 1단계
+            const ripley = 1;
+            const phase3 = 0;
+            const phase1Active = active - ripley - phase3;
+            
+            const el = document.getElementById('count-p1'); 
+            if(el) el.innerText = phase1Active.toLocaleString();
         }
         updateCount();
-
-        function checkMessages() {
-            const list = JSON.parse(localStorage.getItem('eden_applicants')) || [];
-            if (list.length === 0) { alert('수신된 메시지가 없습니다.'); } else {
-                let msg = `[📩 신규 지원자 명단: 총 ${list.length}명]\n\n`;
-                list.forEach((p, i) => { msg += `${i+1}. 이름: ${p.name}\n   연락처: ${p.phone}\n   생년월일: ${p.birth}\n   특이사항: ${p.note ? p.note : '없음'}\n\n`; });
-                msg += '----------------------------------\n확인 후 인사팀으로 전달 바랍니다.'; alert(msg);
-            }
-        }
     </script>
 </body>
 </html>
