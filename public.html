@@ -81,7 +81,7 @@
     <section class="cta-section">
         <h2>Change Your Life Today</h2>
         <p>당신의 참여가 의학의 미래를 바꿉니다. <br>지금 에덴 연구소의 정기 임상 프로젝트에 지원하세요. 학력, 경력 무관.</p>
-        <a class="apply-big" onclick="openModal()">지금 지원하기</a>
+        <a class="apply-big" onclick="openModal('apply')">지금 지원하기</a>
     </section>
 
     <footer>
@@ -89,7 +89,7 @@
         <p>Innovative Bio-Technology for a Better Future.</p>
         <br>
         <p>Headquarters: XX District, XX City, Germany</p>
-        <p>Contact: info@eden-lab.public | Tel: +XX XX-XXXX-XXXX</p>
+        <p>Contact: <a href="javascript:openModal('contact')" style="color:#aaa; text-decoration:underline;">info@eden-lab.public</a> | Tel: +XX XX-XXXX-XXXX</p>
         <br>
         <p style="opacity: 0.5; font-size: 11px;">© 2026 EDEN INSTITUTE. All Rights Reserved. | Privacy Policy | Terms of Use</p>
         <p style="margin-top: 10px; opacity: 0.3; font-size: 10px;">Authorized Personnel Only Access Portal Hidden.</p>
@@ -97,38 +97,91 @@
 
     <div class="modal-overlay" id="applyModal">
         <div class="modal-box">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <span class="modal-close" onclick="closeModal('apply')">&times;</span>
             <div class="form-title">임상 실험 지원서</div>
             <div class="form-desc">안전하고 쾌적한 환경에서 진행됩니다. <br>작성해주신 정보는 엄격히 보호됩니다.</div>
             <div class="form-group"><label class="form-label">성명 (Name)</label><input type="text" id="app_name" class="form-input" placeholder="실명을 입력하세요"></div>
             <div class="form-group"><label class="form-label">생년월일 (Birth Date)</label><input type="date" id="app_birth" class="form-input"></div>
-            
             <div class="form-group"><label class="form-label">연락처 (Contact)</label><input type="text" id="app_phone" class="form-input" placeholder="+XX-XXXX-XXXX"></div>
-            
             <div class="form-group"><label class="form-label">특이사항 (Medical Note)</label><textarea id="app_note" class="form-textarea" placeholder="복용 중인 약물이나 질환이 있다면 기재해주세요."></textarea></div>
-            <button class="btn-submit" onclick="submitForm()">지원서 제출하기</button>
+            <button class="btn-submit" onclick="submitApply()">지원서 제출하기</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeModal('contact')">&times;</span>
+            <div class="form-title">문의하기 (Contact Us)</div>
+            <div class="form-desc">연구소에 궁금한 점이 있으신가요?<br>담당자에게 메시지를 남겨주세요.</div>
+            <div class="form-group"><label class="form-label">보내는 분 (Email / Name)</label><input type="text" id="ct_sender" class="form-input" placeholder="답장받을 연락처를 입력하세요"></div>
+            <div class="form-group"><label class="form-label">제목 (Subject)</label><input type="text" id="ct_subject" class="form-input" placeholder="제목을 입력하세요"></div>
+            <div class="form-group"><label class="form-label">내용 (Message)</label><textarea id="ct_msg" class="form-textarea" placeholder="내용을 입력하세요"></textarea></div>
+            <button class="btn-submit" onclick="submitContact()">메시지 전송하기</button>
         </div>
     </div>
 
     <script>
-        function openModal() { const m = document.getElementById('applyModal'); m.style.display = 'flex'; setTimeout(() => { m.style.opacity = '1'; m.querySelector('.modal-box').style.transform = 'translateY(0)'; }, 10); }
-        function closeModal() { const m = document.getElementById('applyModal'); m.style.opacity = '0'; m.querySelector('.modal-box').style.transform = 'translateY(20px)'; setTimeout(() => { m.style.display = 'none'; }, 300); }
-        function submitForm() {
+        function openModal(type) { 
+            const id = type === 'apply' ? 'applyModal' : 'contactModal';
+            const m = document.getElementById(id); 
+            m.style.display = 'flex'; 
+            setTimeout(() => { m.style.opacity = '1'; m.querySelector('.modal-box').style.transform = 'translateY(0)'; }, 10); 
+        }
+        function closeModal(type) { 
+            const id = type === 'apply' ? 'applyModal' : 'contactModal';
+            const m = document.getElementById(id); 
+            m.style.opacity = '0'; 
+            m.querySelector('.modal-box').style.transform = 'translateY(20px)'; 
+            setTimeout(() => { m.style.display = 'none'; }, 300); 
+        }
+
+        function submitApply() {
             const name = document.getElementById('app_name').value;
             const birth = document.getElementById('app_birth').value;
             const phone = document.getElementById('app_phone').value;
             const note = document.getElementById('app_note').value;
             if(!name || !phone) { alert('성명과 연락처는 필수 항목입니다.'); return; }
-            const btn = document.querySelector('.btn-submit'); btn.innerText = "처리 중..."; btn.style.opacity = "0.7";
+            
+            // 처리중 효과
+            const btn = document.querySelector('#applyModal .btn-submit'); 
+            const originalText = btn.innerText;
+            btn.innerText = "처리 중..."; btn.style.opacity = "0.7";
+
             setTimeout(() => {
                 alert('지원이 정상적으로 접수되었습니다.\n\n인류의 더 나은 미래를 위한 귀하의 용기 있는 선택에 감사드립니다.\n담당자가 검토 후 기재하신 연락처로 개별 안내 드릴 예정입니다.');
                 const data = { name: name, birth: birth, phone: phone, note: note, time: new Date().toLocaleString() };
                 let list = JSON.parse(localStorage.getItem('eden_applicants')) || [];
                 list.push(data); localStorage.setItem('eden_applicants', JSON.stringify(list));
-                closeModal();
+                closeModal('apply');
                 document.getElementById('app_name').value = ''; document.getElementById('app_birth').value = ''; document.getElementById('app_phone').value = ''; document.getElementById('app_note').value = '';
-                btn.innerText = "지원서 제출하기"; btn.style.opacity = "1";
+                btn.innerText = originalText; btn.style.opacity = "1";
             }, 1500);
+        }
+
+        // ▼▼▼ 문의 메일 전송 로직 (메인 대시보드로 보냄) ▼▼▼
+        function submitContact() {
+            const sender = document.getElementById('ct_sender').value;
+            const subject = document.getElementById('ct_subject').value;
+            const msg = document.getElementById('ct_msg').value;
+            if(!sender || !subject) { alert('보내는 분과 제목을 입력해주세요.'); return; }
+
+            const btn = document.querySelector('#contactModal .btn-submit'); 
+            const originalText = btn.innerText;
+            btn.innerText = "전송 중..."; btn.style.opacity = "0.7";
+
+            setTimeout(() => {
+                alert('메시지가 성공적으로 전송되었습니다.\n담당자가 확인 후 답변 드리겠습니다.');
+                
+                // 메인 대시보드가 읽을 수 있는 별도 우편함(eden_contact_mails)에 저장
+                const mailData = { sender: sender, title: subject, body: msg, time: new Date().toLocaleString() };
+                let mails = JSON.parse(localStorage.getItem('eden_contact_mails')) || [];
+                mails.push(mailData); 
+                localStorage.setItem('eden_contact_mails', JSON.stringify(mails));
+
+                closeModal('contact');
+                document.getElementById('ct_sender').value = ''; document.getElementById('ct_subject').value = ''; document.getElementById('ct_msg').value = '';
+                btn.innerText = originalText; btn.style.opacity = "1";
+            }, 1000);
         }
     </script>
 </body>
