@@ -358,7 +358,7 @@
         /* ================= INTERCOM (Auto-Detect Logic) ================= */
         let intercomHistory = safeLoad('eden_subject_chat_history') || [];
         let userApiKey = localStorage.getItem('eden_gemini_key');
-        let selectedModel = localStorage.getItem('eden_gemini_model') || 'gemini-1.5-flash'; // 기본값
+        let selectedModel = localStorage.getItem('eden_gemini_model') || 'gemini-3-flash'; // 기본값
         
         const iInput = document.getElementById('intercomInput');
         const iKeyInput = document.getElementById('intercomKeyInput');
@@ -439,15 +439,16 @@
                 const data = await response.json();
                 
                 if (data.models) {
-                    // 사용 가능한 모델 찾기 (우선순위: 1.5 Pro > 1.5 Flash > 1.0 Pro)
-                    const availableModels = data.models.map(m => m.name.replace('models/', ''));
-                    if(availableModels.some(m => m.includes('gemini-1.5-pro'))) {
-                        selectedModel = availableModels.find(m => m.includes('gemini-1.5-pro') && !m.includes('vision')); // vision 제외
-                    } else if(availableModels.some(m => m.includes('gemini-1.5-flash'))) {
-                        selectedModel = availableModels.find(m => m.includes('gemini-1.5-flash') && !m.includes('vision'));
-                    } else {
-                        selectedModel = 'gemini-pro'; // 최후의 수단
-                    }
+    const availableModels = data.models.map(m => m.name.replace('models/', ''));
+    
+    // 2026년 기준 모델 우선순위로 변경
+    selectedModel = availableModels.find(m => m.includes('gemini-3-flash')) || 
+                    availableModels.find(m => m.includes('gemini-2.0-flash')) ||
+                    availableModels.find(m => m.includes('gemini-1.5-flash')) ||
+                    'gemini-pro'; 
+    
+    // ... 나머지 저장 로직은 그대로 두기
+}
                     
                     // 성공 처리
                     userApiKey = key;
@@ -479,8 +480,8 @@
             try {
                 const contentsToSend = [...intercomHistory];
                 // 자동으로 찾아낸 모델명 사용
-                const targetModel = localStorage.getItem('eden_gemini_model') || 'gemini-1.5-flash';
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:generateContent?key=${userApiKey}`;
+               const targetModel = localStorage.getItem('eden_gemini_model') || 'gemini-3-flash';
+                const url = `https://generativelanguage.googleapis.com/v1/models/${targetModel}:generateContent?key=${userApiKey}`;
                 
                 const response = await fetch(url, {
                     method: 'POST',
