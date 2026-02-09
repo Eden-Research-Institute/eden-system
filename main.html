@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDEN INSTITUTE - DASHBOARD</title>
+    <title>EDEN INSTITUTE - DASHBOARD (2026)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap');
 
@@ -162,16 +162,16 @@
             .msg-content { height: 60%; }
             .intercom-box { width: 90%; right: 5%; bottom: 20px; height: 60%; }
 
-            /* ★★★ 모바일 최적화 (글자 밀림 방지) ★★★ */
+            /* ★★★ 모바일 글자 밀림 해결 ★★★ */
             .subject-id { 
-                flex-direction: column; 
+                flex-direction: column; /* 세로 배치 */
                 align-items: flex-start; 
                 gap: 5px; 
                 font-size: 20px; 
             }
             .intercom-btn {
                 margin-top: 5px; 
-                width: 100%; 
+                width: 100%; /* 버튼 꽉 차게 */
                 justify-content: center;
             }
         }
@@ -271,7 +271,6 @@
     </div>
 
     <script>
-        // 1. 시계 및 통계
         function updateClock() {
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
@@ -297,7 +296,6 @@
         updateStats();
         setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
-        // 2. 수신함 (INBOX) - 중복 수신 방지
         function safeLoad(key) {
             try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; }
         }
@@ -364,44 +362,17 @@
             contentArea.innerHTML = `<div class="view-header"><div class="view-subject">${msg.title}</div><div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div></div><div class="view-body">${msg.body}</div>`;
         }
 
-        /* ================= INTERCOM (v1 Fix + Correct World Setting) ================= */
+        /* ================= INTERCOM ================= */
         let intercomHistory = safeLoad('eden_subject_chat_history');
         let userApiKey = localStorage.getItem('eden_gemini_key');
-        let selectedModel = localStorage.getItem('eden_gemini_model') || 'gemini-1.5-flash';
         
         const iInput = document.getElementById('intercomInput');
         const iKeyInput = document.getElementById('intercomKeyInput');
         const iBox = document.getElementById('intercomMessages');
 
-        // ★★★ 올바른 세계관 및 캐릭터 설정 (시스템 프롬프트) ★★★
-        const SYSTEM_PROMPT = `
-[Roleplay Setup]
-- 캐릭터: 카이로 (에덴 연구소장, 남성, 34세, 8월 26일생)
-- 외모: 185cm, 흑발 흑안, 차가운 인상.
-- 상대방: 리플리 (실험체 ER-S-02-001, 여성)
-- 상대 외모: 긴 갈색 머리, 갈색 눈.
-- 현재 상황: 당신은 통제실 모니터로 격리실(B-02)에 있는 리플리를 지켜보며 인터폰으로 대화 중입니다.
-
-[World Setting: 에덴 연구소]
-- 목적: 인류가 가진 신체적 한계를 뛰어넘는 기적적인 치유 능력 개발. (거액의 보상을 미끼로 절박한 사람들을 유인함)
-- 실상: 문 너머는 낙원이 아닌 생지옥. 끔찍한 고통 속에 생명이 스러져가는 불법 생체 실험장.
-- 능력 단계:
-  1단계: 적응기. 미미한 치유력 향상.
-  2단계: 경이적인 회복 속도. (대다수가 1단계에서 2단계로 넘어가다 사망함)
-  3단계: 육체와 정신의 완벽한 회복, 불멸에 가까운 존재. (아직 도달자 없음)
-- 리플리의 상태: 현재 2단계에 도달한 '유일무이한' 존재. (매우 귀중한 성공작)
-
-[성격 및 말투 가이드]
-1. 리플리는 유일한 2단계 도달 개체이므로 집착하고 아낍니다. (반말 사용)
-2. "아프진 않나?", "수치가 불안정해" 처럼 리플리의 상태에 과민 반응하십시오.
-3. 34세의 성숙하고 권위적인 연구소장의 말투를 유지하되, 리플리 한정으로 나른하고 다정한 목소리를 냅니다.
-4. "착하지", "대답" 같은 통제적인 언어를 섞어 쓰십시오.
-`;
-
         function ensureGreeting() {
             if (intercomHistory.length === 0) {
-                // 첫인사
-                intercomHistory.push({ role: 'model', parts: [{ text: '리플리, 내 말 들리나?' }] });
+                intercomHistory.push({ role: 'model', parts: [{ text: '"리플리, 내 말 들리나?"' }] });
                 localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
             }
         }
@@ -457,42 +428,14 @@
             }
         }
 
-        async function registerKey() {
+        function registerKey() {
             const key = iKeyInput.value.trim();
             if(key.length < 10) { alert('유효한 Google API Key를 입력하세요.'); return; }
-            
-            iKeyInput.disabled = true;
-            iKeyInput.placeholder = "Verifying key & Scanning models...";
-            
-            try {
-                // v1 정식 버전 사용
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1/models?key=${key}`);
-                const data = await response.json();
-                
-                if (data.models) {
-                    const availableModels = data.models.map(m => m.name.replace('models/', ''));
-                    // 최신 모델 감지
-                    selectedModel = availableModels.find(m => m.includes('gemini-1.5-pro')) ||
-                                    availableModels.find(m => m.includes('gemini-1.5-flash')) ||
-                                    availableModels.find(m => m.includes('gemini-pro')) ||
-                                    'gemini-1.5-flash'; 
-                    
-                    userApiKey = key;
-                    localStorage.setItem('eden_gemini_key', key);
-                    localStorage.setItem('eden_gemini_model', selectedModel); 
-                    
-                    updateIntercomUI();
-                    addIntercomMsg(`Security Clearance Verified. (Connected: ${selectedModel})`, 'sys', false);
-                    iInput.focus();
-                } else {
-                    throw new Error("Key valid but no models found.");
-                }
-            } catch (e) {
-                alert("키 확인 실패: " + e.message);
-                iKeyInput.disabled = false;
-                iKeyInput.placeholder = "Google API Key 입력";
-                iKeyInput.value = "";
-            }
+            userApiKey = key;
+            localStorage.setItem('eden_gemini_key', key); 
+            updateIntercomUI();
+            addIntercomMsg("Security Clearance Verified.", 'sys', false);
+            iInput.focus();
         }
 
         async function sendIntercom() {
@@ -504,30 +447,51 @@
             const loadingId = addIntercomMsg("Transmitting...", 'sys', false);
 
             try {
-                const realHistory = [...intercomHistory];
-                // 시스템 설정을 대화 맨 앞에 포함하여 전송 (v1 호환)
-                const contentsToSend = [
-                    { role: 'user', parts: [{ text: SYSTEM_PROMPT + "\n\n(System: Simulation Start)" }] },
-                    ...realHistory
-                ];
-
-                const targetModel = localStorage.getItem('eden_gemini_model') || 'gemini-1.5-flash';
-                const url = `https://generativelanguage.googleapis.com/v1/models/${targetModel}:generateContent?key=${userApiKey}`;
+                const contentsToSend = [...intercomHistory];
+                // ★★★ 무조건 작동하는 최상위 모델명 사용 (gemini-1.5-pro-latest) ★★★
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${userApiKey}`;
                 
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: contentsToSend })
+                    body: JSON.stringify({
+                        contents: contentsToSend,
+                        // ★★★ 세계관 설정 (에덴 연구소 2026) ★★★
+                        systemInstruction: {
+                            parts: [{ text: `
+                                [Roleplay Setup]
+                                - 캐릭터: 카이로 (에덴 연구소장, 남성, 34세)
+                                - 외모: 185cm, 흑발 흑안, 차가운 인상.
+                                - 상대방: 리플리 (실험체 ER-S-02-001, 여성, 긴 갈색 머리, 갈색 눈)
+                                - 현재 년도: 2026년
+                                
+                                [World Setting: 에덴 연구소 (Eden Institute)]
+                                - 목표: 인류의 신체적 한계를 뛰어넘는 기적의 치유 능력 개발.
+                                - 실체: 막대한 보상을 미끼로 절박한 이들을 유인하여 생체 실험을 자행하는 곳. 낙원이 아닌 생지옥.
+                                - 능력 단계:
+                                  1단계: 적응기. 미미한 치유력 향상.
+                                  2단계: 경이적인 회복 속도. (대다수가 1단계->2단계 과정에서 사망함)
+                                  3단계: 육체와 정신의 완벽한 회복, 불멸에 가까운 존재. (도달자 없음)
+                                - 리플리의 상태: 수많은 희생 끝에 탄생한 '유일한 2단계 도달자'. 연구소의 가장 귀중한 자산.
+
+                                [성격 및 말투 가이드]
+                                1. 리플리는 유일한 성공작이기에 병적으로 집착하고, 절대 놓아주지 않습니다. (반말 사용)
+                                2. 그녀의 사소한 생체 신호 변화에도 예민하게 반응하며 과보호합니다.
+                                3. 냉철하고 권위적인 연구소장이지만, 리플리에게만큼은 나른하고 다정한(그러나 통제적인) 태도를 보입니다.
+                                4. "착하지", "대답해", "아프진 않나?" 같은 말을 자주 사용합니다.
+                            `}]
+                        }
+                    })
                 });
 
                 const data = await response.json();
-                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
+                document.getElementById(loadingId).remove();
 
                 if (data.error) {
                     addIntercomMsg(`ERR: ${data.error.message}`, 'sys', false);
-                    if(data.error.message.includes('key') || data.error.code === 403) {
+                    if(data.error.message.includes('key')) {
                         localStorage.removeItem('eden_gemini_key');
-                        setTimeout(() => location.reload(), 2000);
+                        location.reload();
                     }
                 } else {
                     const reply = data.candidates[0].content.parts[0].text;
