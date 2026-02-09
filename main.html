@@ -111,7 +111,7 @@
         .view-body { font-size: 14px; line-height: 1.6; color: #ddd; white-space: pre-wrap; }
         .empty-state { text-align: center; color: #555; margin-top: 100px; font-size: 13px; }
 
-        /* ▼▼▼ 인터폰 채팅창 (대시보드 전용 스타일) ▼▼▼ */
+        /* ▼▼▼ 인터폰 채팅창 (대시보드 전용) ▼▼▼ */
         .intercom-box {
             display: none; position: fixed; bottom: 20px; right: 20px; 
             width: 350px; height: 500px; background: #121212; 
@@ -163,6 +163,17 @@
             .msg-content { height: 60%; }
             
             .intercom-box { width: 90%; right: 5%; bottom: 20px; height: 60%; }
+
+            /* ★★★ 모바일 최적화 수정 ★★★ */
+            .subject-id { 
+                flex-direction: column; /* 이름과 버튼을 세로로 쌓음 */
+                align-items: flex-start; /* 왼쪽 정렬 */
+                gap: 5px; /* 간격 */
+                font-size: 20px; /* 글자 크기 약간 줄임 */
+            }
+            .intercom-btn {
+                margin-top: 5px; /* 버튼 위쪽 간격 추가 */
+            }
         }
     </style>
 </head>
@@ -260,7 +271,7 @@
     </div>
 
     <script>
-        // 1. 시계 및 통계 기능
+        // 1. 시계 및 통계
         function updateClock() {
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
@@ -286,7 +297,7 @@
         updateStats();
         setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
-        // 2. 수신함 (INBOX) 시스템
+        // 2. 수신함 (INBOX)
         function safeLoad(key) {
             try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; }
         }
@@ -318,7 +329,13 @@
             }
             if (Math.random() < 0.3) { 
                 const event = randomEvents[Math.floor(Math.random() * randomEvents.length)];
-                if (messages.length === 0 || messages[0].title !== event.title) { messages.unshift({ type: 'MSG', sender: event.sender, title: event.title, unread: true, date: 'Now', body: event.body }); localStorage.setItem('eden_messages', JSON.stringify(messages)); }
+                // ★★★ 중복 검사 (이미 있는 제목이면 추가 안 함) ★★★
+                const isDuplicate = messages.some(msg => msg.title === event.title);
+                
+                if (!isDuplicate) { 
+                    messages.unshift({ type: 'MSG', sender: event.sender, title: event.title, unread: true, date: 'Now', body: event.body }); 
+                    localStorage.setItem('eden_messages', JSON.stringify(messages)); 
+                }
             }
         }
         initializeInbox();
@@ -349,7 +366,7 @@
             contentArea.innerHTML = `<div class="view-header"><div class="view-subject">${msg.title}</div><div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div></div><div class="view-body">${msg.body}</div>`;
         }
 
-        /* ================= INTERCOM (v1 Stable + Auto Detect) ================= */
+        /* ================= INTERCOM (Auto-Detect + V1 정식) ================= */
         let intercomHistory = safeLoad('eden_subject_chat_history');
         let userApiKey = localStorage.getItem('eden_gemini_key');
         let selectedModel = localStorage.getItem('eden_gemini_model') || 'gemini-1.5-flash';
@@ -427,19 +444,20 @@
             iKeyInput.placeholder = "Verifying key & Scanning models...";
             
             try {
-                // v1 정식 버전 주소 사용
+                // v1 정식 버전 주소 사용 (가장 안전)
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1/models?key=${key}`);
                 const data = await response.json();
                 
                 if (data.models) {
                     const availableModels = data.models.map(m => m.name.replace('models/', ''));
                     
-                    // 우선순위: 1.5 Pro > 1.5 Flash > 1.0 Pro
+                    // 우선순위: 3.0 > 2.0 > 1.5 Pro > 1.5 Flash > Pro
                     // 실제 존재하는 모델명만 찾도록 수정
-                    selectedModel = availableModels.find(m => m.includes('gemini-1.5-pro')) ||
+                    selectedModel = availableModels.find(m => m.includes('gemini-3')) ||
+                                    availableModels.find(m => m.includes('gemini-2')) ||
+                                    availableModels.find(m => m.includes('gemini-1.5-pro')) ||
                                     availableModels.find(m => m.includes('gemini-1.5-flash')) ||
-                                    availableModels.find(m => m.includes('gemini-pro')) ||
-                                    'gemini-1.5-flash'; 
+                                    'gemini-pro'; 
                     
                     userApiKey = key;
                     localStorage.setItem('eden_gemini_key', key);
@@ -449,7 +467,7 @@
                     addIntercomMsg(`Security Clearance Verified. (Connected: ${selectedModel})`, 'sys', false);
                     iInput.focus();
                 } else {
-                    throw new Error("Key valid but no models found.");
+                    throw new Error("API 키는 맞지만 모델을 찾을 수 없습니다.");
                 }
             } catch (e) {
                 alert("키 확인 실패: " + e.message);
