@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDEN INSTITUTE - DASHBOARD (2026)</title>
+    <title>EDEN INSTITUTE - DASHBOARD</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap');
 
@@ -48,16 +48,6 @@
         .subject-id { font-size: 24px; font-weight: 600; color: #fff; letter-spacing: 1px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px;}
         .subject-name-kr { font-size: 16px; color: var(--accent); font-weight: 400; }
         
-        /* 인터폰 버튼 */
-        .intercom-btn { 
-            background: rgba(0, 255, 157, 0.1); border: 1px solid var(--accent); 
-            color: var(--accent); padding: 4px 10px; border-radius: 4px; 
-            font-size: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 5px;
-        }
-        .intercom-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
-        .blink { animation: blinker 1.5s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0.5; } }
-
         .subject-desc { font-size: 13px; color: #888; margin-top: 5px; line-height: 1.5;}
         .vital-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .vital-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
@@ -111,42 +101,6 @@
         .view-body { font-size: 14px; line-height: 1.6; color: #ddd; white-space: pre-wrap; }
         .empty-state { text-align: center; color: #555; margin-top: 100px; font-size: 13px; }
 
-        /* ▼▼▼ 인터폰 채팅창 (대시보드 전용 스타일) ▼▼▼ */
-        .intercom-box {
-            display: none; position: fixed; bottom: 20px; right: 20px; 
-            width: 350px; height: 500px; background: #121212; 
-            border: 1px solid var(--accent); border-radius: 4px; 
-            z-index: 9999; box-shadow: 0 0 20px rgba(0, 255, 157, 0.1);
-            flex-direction: column;
-        }
-        .intercom-header {
-            padding: 10px 15px; background: rgba(0, 255, 157, 0.1); 
-            border-bottom: 1px solid var(--accent); color: var(--accent); 
-            font-size: 13px; font-weight: bold; letter-spacing: 1px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .intercom-body {
-            flex: 1; padding: 15px; overflow-y: auto; font-family: 'JetBrains Mono', monospace;
-            font-size: 12px; color: #ddd; display: flex; flex-direction: column; gap: 10px;
-        }
-        .intercom-input-area {
-            padding: 10px; border-top: 1px solid #333; display: flex; gap: 5px;
-        }
-        .intercom-input {
-            flex: 1; background: #1a1a1a; border: 1px solid #333; color: #fff; 
-            padding: 8px; outline: none; font-family: 'Inter', sans-serif;
-        }
-        .intercom-input:focus { border-color: var(--accent); }
-        .intercom-send {
-            background: var(--accent); color: #000; border: none; padding: 0 15px; 
-            cursor: pointer; font-weight: bold;
-        }
-        /* 메시지 스타일 */
-        .i-msg { max-width: 90%; padding: 8px; border-radius: 4px; line-height: 1.4; word-break: break-all;}
-        .i-msg.user { align-self: flex-end; text-align: right; color: var(--accent); border: 1px solid var(--accent); background: rgba(0,255,157,0.05); }
-        .i-msg.bot { align-self: flex-start; color: #fff; border: 1px solid #444; background: #1a1a1a; }
-        .i-msg.sys { align-self: center; color: #666; font-style: italic; border: none; background: none; }
-
         @media (max-width: 768px) {
             .sidebar { width: 100%; height: 55px; flex-direction: row; align-items: center; border-right: none; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 0 10px; padding-right: 130px; overflow-x: auto; white-space: nowrap; }
             .sidebar::-webkit-scrollbar { display: none; }
@@ -160,19 +114,12 @@
             .inbox-body { flex-direction: column; }
             .msg-list { width: 100%; height: 40%; border-right: none; border-bottom: 1px solid #333; }
             .msg-content { height: 60%; }
-            .intercom-box { width: 90%; right: 5%; bottom: 20px; height: 60%; }
-
-            /* ★★★ 모바일 글자 밀림 해결 ★★★ */
+            
             .subject-id { 
-                flex-direction: column; /* 세로 배치 */
+                flex-direction: column; 
                 align-items: flex-start; 
                 gap: 5px; 
                 font-size: 20px; 
-            }
-            .intercom-btn {
-                margin-top: 5px; 
-                width: 100%; /* 버튼 꽉 차게 */
-                justify-content: center;
             }
         }
     </style>
@@ -204,7 +151,6 @@
             <div class="subject-info">
                 <div class="subject-id mono">
                     ER-S-02-001 <span class="subject-name-kr">(리플리)</span>
-                    <button class="intercom-btn" onclick="toggleIntercom()"><span class="blink">💬</span> INTERCOM</button>
                 </div>
                 <div class="subject-desc">현재 유일한 2단계(재생) 도달 개체.<br>신체 재생 효율 420% 유지 중.</div>
             </div>
@@ -253,24 +199,8 @@
         </div>
     </div>
 
-    <div class="intercom-box" id="intercomBox">
-        <div class="intercom-header">
-            <span>🔊 INTERCOM: CELL B-02</span>
-            <div>
-                <span style="cursor:pointer; margin-right:10px;" onclick="resetIntercom()" title="기억 초기화">🗑️</span>
-                <span style="cursor:pointer;" onclick="toggleIntercom()">&times;</span>
-            </div>
-        </div>
-        <div class="intercom-body" id="intercomMessages">
-            </div>
-        <div class="intercom-input-area">
-            <input type="password" id="intercomKeyInput" class="intercom-input" placeholder="Google API Key 입력" style="display:none;">
-            <input type="text" id="intercomInput" class="intercom-input" placeholder="Transmit voice message..." style="display:none;">
-            <button class="intercom-send" onclick="handleIntercom()">SEND</button>
-        </div>
-    </div>
-
     <script>
+        // 1. 시계 및 통계
         function updateClock() {
             const now = new Date();
             const kstTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
@@ -296,6 +226,7 @@
         updateStats();
         setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
+        // 2. 수신함 (INBOX) - 중복 수신 방지
         function safeLoad(key) {
             try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; }
         }
@@ -361,171 +292,6 @@
             const items = document.querySelectorAll('.msg-item'); items.forEach(i => i.classList.remove('active')); element.classList.add('active');
             contentArea.innerHTML = `<div class="view-header"><div class="view-subject">${msg.title}</div><div class="view-meta">From: ${msg.sender} | Date: ${msg.date}</div></div><div class="view-body">${msg.body}</div>`;
         }
-
-        /* ================= INTERCOM ================= */
-        let intercomHistory = safeLoad('eden_subject_chat_history');
-        let userApiKey = localStorage.getItem('eden_gemini_key');
-        
-        const iInput = document.getElementById('intercomInput');
-        const iKeyInput = document.getElementById('intercomKeyInput');
-        const iBox = document.getElementById('intercomMessages');
-
-        function ensureGreeting() {
-            if (intercomHistory.length === 0) {
-                intercomHistory.push({ role: 'model', parts: [{ text: '"리플리, 내 말 들리나?"' }] });
-                localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
-            }
-        }
-        ensureGreeting(); 
-
-        function updateIntercomUI() {
-            if(userApiKey) {
-                iKeyInput.style.display = 'none';
-                iInput.style.display = 'block';
-            } else {
-                iKeyInput.style.display = 'block';
-                iInput.style.display = 'none';
-            }
-        }
-        updateIntercomUI();
-
-        function renderMessages() {
-            iBox.innerHTML = '';
-            iBox.innerHTML += `<div class="i-msg sys">Connecting to containment grid...</div>`;
-            iBox.innerHTML += `<div class="i-msg sys">Audio link established.</div>`;
-            
-            intercomHistory.forEach(msg => {
-                const type = msg.role === 'user' ? 'user' : 'bot';
-                const div = document.createElement('div');
-                div.className = `i-msg ${type}`;
-                div.innerText = msg.parts[0].text;
-                iBox.appendChild(div);
-            });
-            iBox.scrollTop = iBox.scrollHeight;
-        }
-        renderMessages();
-
-        function toggleIntercom() {
-            const box = document.getElementById('intercomBox');
-            box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'flex' : 'none';
-            if(box.style.display === 'flex') iBox.scrollTop = iBox.scrollHeight;
-        }
-
-        function resetIntercom() {
-            if(confirm("이전 대화 기록을 모두 삭제하고 처음으로 돌아갑니다. (복구 불가)")) {
-                localStorage.removeItem('eden_subject_chat_history');
-                intercomHistory = [];
-                ensureGreeting(); 
-                renderMessages(); 
-            }
-        }
-
-        function handleIntercom() {
-            if(!userApiKey) {
-                registerKey();
-            } else {
-                sendIntercom();
-            }
-        }
-
-        function registerKey() {
-            const key = iKeyInput.value.trim();
-            if(key.length < 10) { alert('유효한 Google API Key를 입력하세요.'); return; }
-            userApiKey = key;
-            localStorage.setItem('eden_gemini_key', key); 
-            updateIntercomUI();
-            addIntercomMsg("Security Clearance Verified.", 'sys', false);
-            iInput.focus();
-        }
-
-        async function sendIntercom() {
-            const text = iInput.value.trim();
-            if(!text) return;
-            
-            addIntercomMsg(`Director: ${text}`, 'user', true);
-            iInput.value = '';
-            const loadingId = addIntercomMsg("Transmitting...", 'sys', false);
-
-            try {
-                const contentsToSend = [...intercomHistory];
-                // ★★★ 무조건 작동하는 최상위 모델명 사용 (gemini-1.5-pro-latest) ★★★
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${userApiKey}`;
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: contentsToSend,
-                        // ★★★ 세계관 설정 (에덴 연구소 2026) ★★★
-                        systemInstruction: {
-                            parts: [{ text: `
-                                [Roleplay Setup]
-                                - 캐릭터: 카이로 (에덴 연구소장, 남성, 34세)
-                                - 외모: 185cm, 흑발 흑안, 차가운 인상.
-                                - 상대방: 리플리 (실험체 ER-S-02-001, 여성, 긴 갈색 머리, 갈색 눈)
-                                - 현재 년도: 2026년
-                                
-                                [World Setting: 에덴 연구소 (Eden Institute)]
-                                - 목표: 인류의 신체적 한계를 뛰어넘는 기적의 치유 능력 개발.
-                                - 실체: 막대한 보상을 미끼로 절박한 이들을 유인하여 생체 실험을 자행하는 곳. 낙원이 아닌 생지옥.
-                                - 능력 단계:
-                                  1단계: 적응기. 미미한 치유력 향상.
-                                  2단계: 경이적인 회복 속도. (대다수가 1단계->2단계 과정에서 사망함)
-                                  3단계: 육체와 정신의 완벽한 회복, 불멸에 가까운 존재. (도달자 없음)
-                                - 리플리의 상태: 수많은 희생 끝에 탄생한 '유일한 2단계 도달자'. 연구소의 가장 귀중한 자산.
-
-                                [성격 및 말투 가이드]
-                                1. 리플리는 유일한 성공작이기에 병적으로 집착하고, 절대 놓아주지 않습니다. (반말 사용)
-                                2. 그녀의 사소한 생체 신호 변화에도 예민하게 반응하며 과보호합니다.
-                                3. 냉철하고 권위적인 연구소장이지만, 리플리에게만큼은 나른하고 다정한(그러나 통제적인) 태도를 보입니다.
-                                4. "착하지", "대답해", "아프진 않나?" 같은 말을 자주 사용합니다.
-                            `}]
-                        }
-                    })
-                });
-
-                const data = await response.json();
-                document.getElementById(loadingId).remove();
-
-                if (data.error) {
-                    addIntercomMsg(`ERR: ${data.error.message}`, 'sys', false);
-                    if(data.error.message.includes('key')) {
-                        localStorage.removeItem('eden_gemini_key');
-                        location.reload();
-                    }
-                } else {
-                    const reply = data.candidates[0].content.parts[0].text;
-                    addIntercomMsg(reply, 'bot', true);
-                }
-            } catch (e) {
-                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addIntercomMsg("Connection Lost.", 'sys', false);
-            }
-        }
-
-        function addIntercomMsg(text, type, save) {
-            if (!save) {
-                const div = document.createElement('div');
-                div.className = `i-msg ${type}`;
-                div.innerText = text;
-                div.id = 'temp-msg-' + Date.now();
-                iBox.appendChild(div);
-                iBox.scrollTop = iBox.scrollHeight;
-                return div.id;
-            }
-
-            let apiRole = type === 'user' ? 'user' : 'model';
-            let cleanText = text.replace(/^Director: /, ''); 
-            
-            intercomHistory.push({ role: apiRole, parts: [{ text: cleanText }] });
-            localStorage.setItem('eden_subject_chat_history', JSON.stringify(intercomHistory));
-            
-            renderMessages();
-            return null;
-        }
-
-        iInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendIntercom(); });
-        iKeyInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') registerKey(); });
     </script>
 </body>
 </html>
