@@ -11,19 +11,18 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Noto Sans KR', 'Inter', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; }
 
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: -1px; text-decoration: none; display: flex; align-items: center; gap: 8px;}
         .logo span { color: var(--secondary); font-family: 'Inter', sans-serif; }
         .nav-links { display: flex; gap: 40px; align-items: center; }
         .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; }
         .nav-item:hover { color: var(--primary); }
 
-        /* ▼▼▼ [&] 기호 전용 폰트 스타일 (반듯하게!) ▼▼▼ */
         .amp {
-            font-family: 'Inter', sans-serif; /* 꼬불거리는 Playfair 대신 깔끔한 Inter 사용 */
+            font-family: 'Inter', sans-serif;
             font-style: normal;
-            font-weight: 400; /* 너무 두껍지 않게 */
-            color: var(--secondary); /* 포인트 컬러 살짝 줌 */
+            font-weight: 400;
+            color: var(--secondary);
         }
 
         .container { max-width: 800px; margin: 60px auto; padding: 0 20px; animation: fadeUp 0.5s ease-out; }
@@ -37,13 +36,17 @@
         .qna-item:hover { transform: translateY(-2px); }
 
         .qna-header { 
-            padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; 
-            background: #fff; border-left: 5px solid transparent;
+            padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; 
+            background: #fff; border-left: 5px solid transparent; gap: 15px;
         }
         .qna-header:hover { background: #f8fbff; }
-        .q-title { font-weight: 700; font-size: 16px; color: #333; display: flex; align-items: center; gap: 10px; }
-        .q-icon { color: var(--secondary); font-weight: 800; }
-        .toggle-icon { font-size: 20px; color: #999; transition: 0.3s; }
+        
+        /* ▼▼▼ 모바일 정렬 수정 (Flex 구조 개선) ▼▼▼ */
+        .q-title-wrap { flex: 1; display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+        .q-icon { color: var(--secondary); font-weight: 800; flex-shrink: 0; }
+        .q-text { font-weight: 700; font-size: 16px; color: #333; line-height: 1.5; word-break: keep-all; }
+        
+        .toggle-icon { font-size: 20px; color: #999; transition: 0.3s; flex-shrink: 0; margin-top: 2px; }
 
         .qna-body { 
             display: none; padding: 25px; background: #f9f9f9; border-top: 1px solid #eee; font-size: 14px; color: #555; 
@@ -54,21 +57,38 @@
         .qna-item.active .qna-header { border-left-color: var(--secondary); }
         .qna-item.active .toggle-icon { transform: rotate(180deg); color: var(--secondary); }
 
+        /* 삭제된 게시글 스타일 */
         .qna-item.deleted { opacity: 0.7; cursor: not-allowed; background: #ffeaea; }
         .qna-item.deleted:hover { transform: none; background: #ffeaea; }
         .qna-item.deleted .qna-header { cursor: not-allowed; }
-        .qna-item.deleted .q-title { color: #aaa; text-decoration: line-through; }
+        .qna-item.deleted .q-text { color: #aaa; text-decoration: line-through; }
+        
+        /* ▼▼▼ 삭제 배지 스타일 (모바일 밀림 방지) ▼▼▼ */
         .deleted-badge { 
-            background: var(--danger); color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; 
-            font-weight: bold; margin-left: 10px; text-decoration: none !important; display: inline-block;
+            background: var(--danger); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; 
+            font-weight: bold; text-decoration: none !important; display: inline-block; vertical-align: middle; margin-left: 5px;
+            white-space: nowrap; flex-shrink: 0;
         }
+
+        /* 모달 스타일 (추가됨) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 2000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
+        .modal-box { background: #fff; width: 90%; max-width: 500px; padding: 40px; border-radius: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative; transform: translateY(20px); transition: transform 0.3s; }
+        .modal-close { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #999; }
+        .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 10px; text-align: center; }
+        .form-desc { font-size: 13px; color: #666; margin-bottom: 30px; text-align: center; word-break: keep-all; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; }
+        .form-input, .form-textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s; }
+        .form-input:focus, .form-textarea:focus { border-color: var(--secondary); background: #f9fcff; }
+        .form-textarea { resize: none; height: 100px; }
+        .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 15px; border-radius: 6px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
 
         footer { background: #111; color: #555; padding: 60px 20px; text-align: center; font-size: 12px; margin-top: 100px; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 20px; }
-            .q-title { font-size: 14px; }
+            .q-text { font-size: 14px; }
         }
     </style>
 </head>
@@ -87,14 +107,17 @@
     <div class="container">
         <div class="page-header">
             <h1 class="page-title">Community Q<span class="amp">&</span>A</h1>
-            <p class="page-desc">자주 묻는 질문과 답변을 확인하세요. (일부 게시글은 운영 정책에 의해 숨김 처리될 수 있습니다.)</p>
+            <p class="page-desc">최근 접수된 문의 내역입니다. (일부 게시글은 운영 정책에 의해 숨김 처리될 수 있습니다.)</p>
         </div>
 
         <div class="qna-list">
             
             <div class="qna-item">
                 <div class="qna-header" onclick="toggleQna(this)">
-                    <span class="q-title"><span class="q-icon">Q.</span> 소장님 실물 봤는데 진짜 미치신 거 아닌가요;;;</span>
+                    <div class="q-title-wrap">
+                        <span class="q-icon">Q.</span>
+                        <span class="q-text">소장님 실물 봤는데 진짜 미치신 거 아닌가요;;;</span>
+                    </div>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="qna-body">
@@ -106,7 +129,10 @@
 
             <div class="qna-item">
                 <div class="qna-header" onclick="toggleQna(this)">
-                    <span class="q-title"><span class="q-icon">Q.</span> 임상 실험 참여 시 보수는 얼마나 되나요? 급전이 필요해서요.</span>
+                    <div class="q-title-wrap">
+                        <span class="q-icon">Q.</span>
+                        <span class="q-text">임상 실험 참여 시 보수는 얼마나 되나요? 급전이 필요해서요.</span>
+                    </div>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="qna-body">
@@ -119,16 +145,20 @@
 
             <div class="qna-item deleted">
                 <div class="qna-header" onclick="alert('🚫 [ACCESS DENIED]\n\n해당 게시글은 보안 규정 위반(허위 사실 유포 및 기밀 누설)으로 인해\n관리자에 의해 영구 삭제되었습니다.\n작성자의 IP는 보안팀에 자동 전송되었습니다.')">
-                    <span class="q-title">
-                        <span class="q-icon">Q.</span> 제 동생이 여기 들어간 뒤로 연락이 안 됩니다 <span class="deleted-badge">삭제됨</span>
-                    </span>
+                    <div class="q-title-wrap">
+                        <span class="q-icon">Q.</span>
+                        <span class="q-text">제 동생이 여기 들어간 뒤로 연락이 안 됩니다 <span class="deleted-badge">삭제됨</span></span>
+                    </div>
                     <span class="toggle-icon">🔒</span>
                 </div>
             </div>
 
             <div class="qna-item">
                 <div class="qna-header" onclick="toggleQna(this)">
-                    <span class="q-title"><span class="q-icon">Q.</span> 병원에서 포기한 희귀난치병 환자입니다. 저도 지원 가능한가요?</span>
+                    <div class="q-title-wrap">
+                        <span class="q-icon">Q.</span>
+                        <span class="q-text">병원에서 포기한 희귀난치병 환자입니다. 저도 지원 가능한가요?</span>
+                    </div>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="qna-body">
@@ -140,7 +170,10 @@
 
             <div class="qna-item">
                 <div class="qna-header" onclick="toggleQna(this)">
-                    <span class="q-title"><span class="q-icon">Q.</span> 소장님 인스타그램이나 개인 SNS 하시나요? ㅠㅠ</span>
+                    <div class="q-title-wrap">
+                        <span class="q-icon">Q.</span>
+                        <span class="q-text">소장님 인스타그램이나 개인 SNS 하시나요? ㅠㅠ</span>
+                    </div>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="qna-body">
@@ -152,7 +185,10 @@
 
             <div class="qna-item">
                 <div class="qna-header" onclick="toggleQna(this)">
-                    <span class="q-title"><span class="q-icon">Q.</span> 전과가 있어도 지원할 수 있습니까? 신원 조회가 걸려서요.</span>
+                    <div class="q-title-wrap">
+                        <span class="q-icon">Q.</span>
+                        <span class="q-text">전과가 있어도 지원할 수 있습니까? 신원 조회가 걸려서요.</span>
+                    </div>
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="qna-body">
@@ -163,10 +199,11 @@
             </div>
 
              <div class="qna-item deleted">
-                <div class="qna-header" onclick="alert('🚫 [ACCESS DENIED]\n\n해당 게시글은 관리자 권한으로 삭제되었습니다.\n사유: 불필요한 공포감 조성 및 시설 보안 침해')">
-                    <span class="q-title">
-                        <span class="q-icon">Q.</span> 새벽에 뒷문으로 탑차 실려 나가는 거 봤는데 냄새가... <span class="deleted-badge">삭제됨</span>
-                    </span>
+                <div class="qna-header" onclick="alert('🚫 [ACCESS DENIED]\n\n해당 게시글은 관리자 권한으로 삭제되었습니다.\n사유: 보안 규정 위반 (미허가 시설 및 차량 정보 언급)')">
+                    <div class="q-title-wrap">
+                        <span class="q-icon">Q.</span>
+                        <span class="q-text">지원자 픽업 셔틀버스가 왜 산속으로 들어가나요? <span class="deleted-badge">삭제됨</span></span>
+                    </div>
                     <span class="toggle-icon">🔒</span>
                 </div>
             </div>
@@ -176,9 +213,22 @@
 
     <footer>
         <p>© EDEN INSTITUTE. All Rights Reserved.</p>
-        <p>Headquarters: [REDACTED], Germany | Contact: info@eden-lab.public</p>
+        <p>Headquarters: XX District, XX City, Germany</p>
+        <p>Contact: <a href="javascript:openModal()" style="color:#aaa; text-decoration:underline;">info@eden-lab.public</a> | Tel: +XX XX-XXXX-XXXX</p>
         <p style="margin-top: 10px; opacity: 0.3;">Authorized Personnel Only Access Portal Hidden.</p>
     </footer>
+
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="form-title">문의하기 (Contact Us)</div>
+            <div class="form-desc">연구소에 궁금한 점이 있으신가요?<br>담당자에게 메시지를 남겨주세요.</div>
+            <div class="form-group"><label class="form-label">보내는 분 (Email / Name)</label><input type="text" id="ct_sender" class="form-input" placeholder="답장받을 연락처를 입력하세요"></div>
+            <div class="form-group"><label class="form-label">제목 (Subject)</label><input type="text" id="ct_subject" class="form-input" placeholder="제목을 입력하세요"></div>
+            <div class="form-group"><label class="form-label">내용 (Message)</label><textarea id="ct_msg" class="form-textarea" placeholder="내용을 입력하세요"></textarea></div>
+            <button class="btn-submit" onclick="submitContact()">메시지 전송하기</button>
+        </div>
+    </div>
 
     <script>
         function toggleQna(header) {
@@ -191,6 +241,42 @@
             });
 
             item.classList.toggle('active');
+        }
+
+        // 모달 관련 스크립트
+        function openModal() { 
+            const m = document.getElementById('contactModal'); 
+            m.style.display = 'flex'; 
+            setTimeout(() => { m.style.opacity = '1'; m.querySelector('.modal-box').style.transform = 'translateY(0)'; }, 10); 
+        }
+        function closeModal() { 
+            const m = document.getElementById('contactModal'); 
+            m.style.opacity = '0'; 
+            m.querySelector('.modal-box').style.transform = 'translateY(20px)'; 
+            setTimeout(() => { m.style.display = 'none'; }, 300); 
+        }
+
+        function submitContact() {
+            const sender = document.getElementById('ct_sender').value;
+            const subject = document.getElementById('ct_subject').value;
+            const msg = document.getElementById('ct_msg').value;
+            if(!sender || !subject) { alert('보내는 분과 제목을 입력해주세요.'); return; }
+
+            const btn = document.querySelector('.btn-submit'); 
+            const originalText = btn.innerText;
+            btn.innerText = "전송 중..."; btn.style.opacity = "0.7";
+
+            setTimeout(() => {
+                alert('메시지가 성공적으로 전송되었습니다.\n담당자가 확인 후 답변 드리겠습니다.');
+                const mailData = { sender: sender, title: subject, body: msg, time: new Date().toLocaleString() };
+                let mails = JSON.parse(localStorage.getItem('eden_contact_mails')) || [];
+                mails.push(mailData); 
+                localStorage.setItem('eden_contact_mails', JSON.stringify(mails));
+
+                closeModal();
+                document.getElementById('ct_sender').value = ''; document.getElementById('ct_subject').value = ''; document.getElementById('ct_msg').value = '';
+                btn.innerText = originalText; btn.style.opacity = "1";
+            }, 1000);
         }
     </script>
 
