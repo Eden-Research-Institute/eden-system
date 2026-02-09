@@ -226,7 +226,7 @@
         updateStats();
         setInterval(() => { document.getElementById('bpm').innerText = Math.floor(Math.random() * (85 - 70 + 1)) + 70; }, 2000);
 
-        // 2. 수신함 (INBOX) - 중복 수신 방지
+        // 2. 수신함 (INBOX) - ★ 중복 방지 + 로그 보존 로직 적용 ★
         function safeLoad(key) {
             try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; }
         }
@@ -251,18 +251,64 @@
             let messages = safeLoad('eden_messages');
             if (messages.length === 0) { messages = [...initialMessages]; localStorage.setItem('eden_messages', JSON.stringify(messages)); }
             
-            const newApplicants = safeLoad('eden_applicants');
-            if (newApplicants.length > 0) {
-                newApplicants.forEach(p => { messages.unshift({ type: 'APPLY', sender: '지원서 접수 시스템', title: `[신규 지원] ${p.name}`, unread: true, date: p.time, body: `[지원자 정보]\n- 성명: ${p.name}\n- 생년월일: ${p.birth}\n- 연락처: ${p.phone}\n\n[특이사항]\n${p.note ? p.note : '없음'}\n\n----------------\n* 1차 적합성 판정 대기 중.` }); });
-                localStorage.removeItem('eden_applicants'); localStorage.setItem('eden_messages', JSON.stringify(messages));
+            let isInboxUpdated = false;
+
+            // 1. 지원서 불러오기 (★ 삭제 X, 중복 체크 O ★)
+            const applicants = safeLoad('eden_applicants');
+            if (applicants.length > 0) {
+                applicants.forEach(p => { 
+                    // 중복 검사: 같은 시간(date)에 같은 이름으로 온 메일이 이미 있는지?
+                    const isExist = messages.some(msg => msg.type === 'APPLY' && msg.date === p.time && msg.body.includes(p.name));
+                    
+                    if (!isExist) {
+                        messages.unshift({ 
+                            type: 'APPLY', 
+                            sender: '지원서 접수 시스템', 
+                            title: `[신규 지원] ${p.name}`, 
+                            unread: true, 
+                            date: p.time, 
+                            body: `[지원자 정보]\n- 성명: ${p.name}\n- 생년월일: ${p.birth}\n- 연락처: ${p.phone}\n\n[특이사항]\n${p.note ? p.note : '없음'}\n\n----------------\n* 1차 적합성 판정 대기 중.` 
+                        }); 
+                        isInboxUpdated = true;
+                    }
+                });
+                // localStorage.removeItem 삭제됨 -> 데이터 영구 보존
             }
+
+            // 2. 외부 문의 메일 불러오기 (★ 삭제 X, 중복 체크 O ★)
+            const contacts = safeLoad('eden_contact_mails');
+            if (contacts.length > 0) {
+                contacts.forEach(m => {
+                    // 중복 검사: 같은 시간(date)에 같은 보낸이(sender)가 있는지?
+                    const isExist = messages.some(msg => msg.type === 'EXT_MAIL' && msg.date === m.time && msg.sender === m.sender);
+
+                    if (!isExist) {
+                        messages.unshift({
+                            type: 'EXT_MAIL', 
+                            sender: m.sender,
+                            title: `[문의] ${m.title}`,
+                            unread: true,
+                            date: m.time,
+                            body: `[외부 홈페이지 문의 접수]\n\n보낸 사람: ${m.sender}\n\n[내용]\n${m.body}\n\n----------------\n* 보안 검사 완료된 메시지입니다.`
+                        });
+                        isInboxUpdated = true;
+                    }
+                });
+                // localStorage.removeItem 삭제됨 -> 데이터 영구 보존
+            }
+
+            // 3. 랜덤 이벤트 (기존: 제목 중복 방지)
             if (Math.random() < 0.3) { 
                 const event = randomEvents[Math.floor(Math.random() * randomEvents.length)];
                 const isDuplicate = messages.some(msg => msg.title === event.title);
                 if (!isDuplicate) { 
                     messages.unshift({ type: 'MSG', sender: event.sender, title: event.title, unread: true, date: 'Now', body: event.body }); 
-                    localStorage.setItem('eden_messages', JSON.stringify(messages)); 
+                    isInboxUpdated = true;
                 }
+            }
+
+            if (isInboxUpdated) {
+                localStorage.setItem('eden_messages', JSON.stringify(messages));
             }
         }
         initializeInbox();
@@ -278,6 +324,8 @@
                 if(msg.type === 'APPLY') badgeColor = '#ffaa00'; 
                 if(msg.type === 'OFFICIAL') badgeColor = '#4facfe'; 
                 if(msg.type === 'MSG') badgeColor = '#00ff9d'; 
+                if(msg.type === 'EXT_MAIL') badgeColor = '#d946ef'; // 외부 메일은 보라색
+
                 const unreadClass = msg.unread ? 'unread' : '';
                 html += `<div class="msg-item ${unreadClass}" onclick="viewMessage(${idx}, this)"><span class="msg-sender"><span class="msg-type" style="color:${badgeColor}; border:1px solid ${badgeColor};">${msg.type}</span>${msg.sender}</span><div class="msg-preview">${msg.title}</div></div>`;
             });
