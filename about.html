@@ -3,151 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About EDEN - Message from Director</title>
+    <title>EDEN INSTITUTE - GREETINGS</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&family=Playfair+Display:wght@700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
-
+        
         :root { --primary: #002B5B; --secondary: #00A8CC; --bg: #F8F9FA; --text: #333; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Noto Sans KR', 'Inter', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; }
+        body { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; background-color: #fff; color: var(--text); line-height: 1.8; }
 
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .logo { font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: -1px; text-decoration: none; display: flex; align-items: center; gap: 8px;}
-        .logo span { color: var(--secondary); font-family: 'Inter', sans-serif; }
-        .nav-links { display: flex; gap: 40px; align-items: center; }
-        .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; cursor: pointer; white-space: nowrap; }
-        .nav-item:hover { color: var(--primary); }
+        /* 네비게이션 (공통) */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: -1px; text-decoration: none; }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; }
+        .nav-item:hover, .nav-item.active { color: var(--primary); }
 
-        /* ▼▼▼ [&] 기호 전용 폰트 스타일 추가 ▼▼▼ */
-        .amp {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-weight: 400;
-            color: var(--secondary);
-        }
-
-        .container { max-width: 1000px; margin: 80px auto; padding: 0 40px; animation: fadeUp 0.8s ease-out; }
+        .container { max-width: 800px; margin: 80px auto; padding: 0 20px; }
+        .greetings-title { font-family: 'Playfair Display', serif; font-size: 42px; color: var(--primary); margin-bottom: 50px; text-align: center; }
         
-        .page-header { margin-bottom: 60px; text-align: center; }
-        .page-title { font-family: 'Playfair Display'; font-size: 48px; color: var(--primary); margin-bottom: 15px; }
-        .page-subtitle { 
-            font-size: 18px; color: #666; font-weight: 300; 
-            word-break: keep-all; line-height: 1.6;
-        }
+        .content p { margin-bottom: 25px; font-size: 17px; color: #444; word-break: keep-all; }
+        .highlight { color: var(--secondary); font-weight: 700; }
 
-        .director-section { display: flex; gap: 60px; align-items: flex-start; border-top: 1px solid #ddd; padding-top: 60px; }
-        .director-img-box { width: 350px; height: 450px; background-color: #e0e0e0; flex-shrink: 0; display: flex; justify-content: center; align-items: center; border-radius: 4px; overflow: hidden; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .director-img-box::after { content: 'Director Image'; color: #999; font-weight: bold; }
-        .director-photo { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1; opacity: 0.9; }
+        .signature-box { margin-top: 80px; text-align: right; border-top: 1px solid #eee; padding-top: 40px; }
+        .sig-name { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
+        .sig-title { font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .sig-history { font-size: 13px; color: #888; margin-top: 15px; line-height: 1.6; }
 
-        .director-text { flex: 1; }
-        .director-label { color: var(--secondary); font-weight: 700; font-size: 14px; letter-spacing: 2px; margin-bottom: 15px; display: block; }
-        .director-name { font-size: 40px; font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 30px; font-weight: 700; }
-        
-        .director-bio { 
-            font-size: 16px; 
-            color: #444; 
-            line-height: 1.9; 
-            margin-bottom: 40px; 
-            text-align: left; 
-            word-break: keep-all; 
-            letter-spacing: -0.5px;
-        }
-        .director-bio p { margin-bottom: 25px; }
-        
-        .sign { font-family: 'Cedarville Cursive', serif; font-size: 28px; color: #555; text-align: right; margin-top: 30px; }
+        footer { background: #111; color: #888; padding: 40px 20px; text-align: center; font-size: 12px; margin-top: 100px; }
 
-        .profile-table { width: 100%; border-top: 2px solid #002B5B; margin-top: 30px; border-collapse: collapse; }
-        .profile-table th, .profile-table td { padding: 15px 0; border-bottom: 1px solid #ddd; text-align: left; font-size: 15px; }
-        .profile-table th { width: 120px; color: var(--primary); font-weight: 800; }
-
-        footer { background: #111; color: #555; padding: 60px 20px; text-align: center; font-size: 12px; margin-top: 100px; }
-
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        @media (max-width: 768px) {
-            header { flex-direction: column; gap: 20px; }
-            .nav-links { gap: 20px; justify-content: center; width: 100%; flex-wrap: wrap; }
-            .nav-item { font-size: 14px; }
-            .director-section { flex-direction: column; }
-            .director-img-box { width: 100%; height: 400px; }
-            .page-subtitle br { display: none; }
-            .container { padding: 0 25px; }
-            .page-title { font-size: 36px; }
-            .page-subtitle { font-size: 15px; }
-        }
+        @media (max-width: 768px) { header { flex-direction: column; gap: 20px; } .greetings-title { font-size: 32px; } }
     </style>
 </head>
 <body>
-
     <header>
         <a href="public.html" class="logo">EDEN <span>INSTITUTE</span></a>
         <nav class="nav-links">
             <a href="public.html" class="nav-item">홈으로</a>
-            <a href="about.html" class="nav-item" style="color:var(--primary); font-weight:bold;">인사말</a>
+            <a href="about.html" class="nav-item active" style="color:var(--primary);">인사말</a>
             <a href="intro.html" class="nav-item">연구소 소개</a>
-            <a href="qna.html" class="nav-item">Q<span class="amp">&</span>A</a>
+            <a href="qna.html" class="nav-item">Q&A</a>
         </nav>
     </header>
 
     <div class="container">
-        <div class="page-header">
-            <h1 class="page-title">Message from Director</h1>
-            <p class="page-subtitle">
-                에덴 연구소는 생명의 한계를 규정하지 않습니다.<br>
-                우리는 오직 증명하고, 극복하며, 진화할 뿐입니다.
-            </p>
+        <h1 class="greetings-title">Director's Message</h1>
+        
+        <div class="content">
+            <p>안녕하십니까, <strong>에덴 연구소(Eden Institute)</strong> 소장 <strong>카이로(Kairo)</strong>입니다.</p>
+
+            <p>인류의 역사는 곧 <span class="highlight">'극복'</span>의 역사였습니다. 우리는 추위와 굶주림을 이겨냈고, 수많은 질병을 정복해왔습니다. 그러나 여전히 인간은 육체적 한계라는 벽 앞에 무력함을 느끼곤 합니다.</p>
+
+            <p>사랑하는 가족이 불의의 사고로 고통받을 때, 혹은 노화로 인해 기억과 존엄을 잃어갈 때, 현대 의학은 아직 우리에게 완벽한 해답을 주지 못하고 있습니다.</p>
+
+            <p>저희 에덴 연구소는 바로 그 지점에서 출발했습니다. <br><strong>"왜 인간은 스스로를 치유할 수 없는가?"</strong>라는 근원적인 물음에 답하기 위해, 세계 각국의 저명한 석학들이 이곳 독일 베를린에 모였습니다.</p>
+
+            <p>우리가 개발 중인 <strong>차세대 세포 재생 솔루션</strong>은 단순한 치료제가 아닙니다. 인류가 잃어버린, 혹은 잠재되어 있던 '완벽한 회복력'을 깨우는 열쇠입니다. 이것은 인류 진화의 새로운 장을 여는 위대한 여정이 될 것입니다.</p>
+
+            <p>여러분의 숭고한 참여와 관심이 고통 없는 세상을 앞당길 것입니다. <br>에덴 연구소는 여러분과 함께, 가장 아름다운 미래를 만들어 나가겠습니다.</p>
+
+            <p>감사합니다.</p>
         </div>
 
-        <div class="director-section">
-            <div class="director-img-box">
-                <img src="https://via.placeholder.com/350x450/1a1a1a/ffffff?text=KAIRO" class="director-photo" alt="Director Kairo">
-            </div>
-            <div class="director-text">
-                <span class="director-label">MESSAGE FROM THE DIRECTOR</span>
-                <div class="director-name">KAIRO</div>
-                
-                <div class="director-bio">
-                    <p><strong>"신은 인간을 빚어냈지만, 그 인간을 완성하는 것은 과학입니다."</strong></p>
-                    
-                    <p>
-                        반갑습니다. 에덴 연구소장 카이로입니다.
-                        인류는 아주 오랜 시간 동안 '죽음'과 '노화'라는 질병에 시달려 왔습니다.
-                        우리는 이것을 자연의 섭리라 부르며 체념해왔지만, 에덴의 생각은 다릅니다.
-                        질병은 치료되어야 하며, 한계는 극복되어야 합니다.
-                    </p>
-                    
-                    <p>
-                        제가 설립한 에덴 연구소는 유전자 가위 기술과 신경 세포 재생 분야에서
-                        독보적인 데이터를 축적해왔습니다. 우리의 연구는 윤리적 논쟁을 넘어,
-                        실질적인 '인류 구원'을 향해 나아가고 있습니다.
-                    </p>
-                    
-                    <p>
-                        여러분의 숭고한 참여가 미래의 역사가 됩니다.
-                        두려워하지 말고, 에덴의 문을 두드리십시오.
-                    </p>
-                </div>
-
-                <table class="profile-table">
-                    <tr><th>NAME</th><td>KAIRO (카이로)</td></tr>
-                    <tr><th>BIRTH</th><td>19XX. 08. 26</td></tr>
-                    <tr><th>EDUCATION</th><td>Wernher Medical Univ. (M.D. / Ph.D.)</td></tr>
-                    <tr><th>FIELD</th><td>Bio-Engineering / Neuro-Science</td></tr>
-                    <tr><th>CAREER</th><td>現 에덴 생명공학 연구소장<br>前 [REDACTED] 국가 수석 연구원</td></tr>
-                </table>
-                
-                <div class="sign">Director. Kairo</div>
+        <div class="signature-box">
+            <div class="sig-name">Kairo Von Eckhart</div>
+            <div class="sig-title">Director, Eden Institute</div>
+            
+            <div class="sig-history">
+                Ph.D. in Molecular Biology, Heidelberg University<br>
+                Former Senior Researcher, Max Planck Institute (Department of Genetics)<br>
+                Member of the European Bio-Ethics Committee (2024-2025)
             </div>
         </div>
     </div>
 
     <footer>
-        <p>© EDEN INSTITUTE. All Rights Reserved.</p>
-        <p>Headquarters: [REDACTED], Germany | Contact: info@eden-lab.public</p>
-        <p style="margin-top: 10px; opacity: 0.3;">Authorized Personnel Only Access Portal Hidden.</p>
+        <p>Headquarters: Friedrichstraße 88, 10117 Berlin, Germany</p>
+        <p>© 2026 EDEN INSTITUTE. All Rights Reserved.</p>
     </footer>
-
 </body>
 </html>
