@@ -8,14 +8,15 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&family=Playfair+Display:wght@700&display=swap');
         
         :root { --primary: #002B5B; --secondary: #00A8CC; --bg: #F8F9FA; --text: #333; }
-        body { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; background-color: #fff; color: var(--text); line-height: 1.8; }
+        body { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.8; }
 
-        /* 네비게이션 (공통) */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: -1px; text-decoration: none; }
+        .logo span { color: var(--secondary); font-family: 'Inter', sans-serif; }
         .nav-links { display: flex; gap: 40px; }
         .nav-item { text-decoration: none; color: #555; font-weight: 600; font-size: 15px; transition: 0.3s; }
         .nav-item:hover, .nav-item.active { color: var(--primary); }
+        .amp { font-family: 'Inter', sans-serif; }
 
         .container { max-width: 800px; margin: 80px auto; padding: 0 20px; }
         .greetings-title { font-family: 'Playfair Display', serif; font-size: 42px; color: var(--primary); margin-bottom: 50px; text-align: center; }
@@ -26,9 +27,9 @@
         .signature-box { margin-top: 80px; text-align: right; border-top: 1px solid #eee; padding-top: 40px; }
         .sig-name { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
         .sig-title { font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-        .sig-history { font-size: 13px; color: #888; margin-top: 15px; line-height: 1.6; }
+        .sig-history { font-size: 13px; color: #888; margin-top: 10px; }
 
-        footer { background: #111; color: #888; padding: 40px 20px; text-align: center; font-size: 12px; margin-top: 100px; }
+        footer { background: #111; color: #555; padding: 60px 20px; text-align: center; font-size: 12px; margin-top: 100px; }
 
         @media (max-width: 768px) { header { flex-direction: column; gap: 20px; } .greetings-title { font-size: 32px; } }
     </style>
@@ -40,7 +41,7 @@
             <a href="public.html" class="nav-item">홈으로</a>
             <a href="about.html" class="nav-item active" style="color:var(--primary);">인사말</a>
             <a href="intro.html" class="nav-item">연구소 소개</a>
-            <a href="qna.html" class="nav-item">Q&A</a>
+            <a href="qna.html" class="nav-item">Q<span class="amp">&</span>A</a>
         </nav>
     </header>
 
@@ -64,20 +65,15 @@
         </div>
 
         <div class="signature-box">
-            <div class="sig-name">Kairo Von Eckhart</div>
+            <div class="sig-name">Kairo</div>
             <div class="sig-title">Director, Eden Institute</div>
-            
-            <div class="sig-history">
-                Ph.D. in Molecular Biology, Heidelberg University<br>
-                Former Senior Researcher, Max Planck Institute (Department of Genetics)<br>
-                Member of the European Bio-Ethics Committee (2024-2025)
-            </div>
+            <div class="sig-history">前 막스 플랑크 유전학 연구소 수석 연구원</div>
         </div>
     </div>
 
     <footer>
-        <p>Headquarters: Friedrichstraße 88, 10117 Berlin, Germany</p>
-        <p>© 2026 EDEN INSTITUTE. All Rights Reserved.</p>
+        <p>© EDEN INSTITUTE. All Rights Reserved.</p>
+        <p>Headquarters: Friedrichstraße 88, 10117 Berlin, Germany | Contact: info@eden-lab.public</p>
     </footer>
 </body>
 </html>
