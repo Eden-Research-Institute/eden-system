@@ -53,7 +53,7 @@
         .icon-staff { color: #4facfe; } 
         .icon-sub { color: #ffaa00; } 
         
-        /* 특수 배지 (카이로/리플리) */
+        /* 특수 배지 */
         .special-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; width: fit-content; margin-bottom: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .badge-kairo { background: rgba(255, 75, 75, 0.2); color: var(--danger); border: 1px solid var(--danger); animation: kairo-pulse 3s infinite; }
         .badge-ripley { background: rgba(0, 255, 157, 0.2); color: var(--accent); border: 1px solid var(--accent); animation: pulse 2s infinite; }
@@ -147,47 +147,53 @@
 
         function updateFacilityStatus() {
             const now = new Date();
+            const day = now.getDate();
             const hour = now.getHours();
             
             // 1. 시간대 정의 (스케줄 기반)
-            const isNight = (hour >= 23 || hour < 6); // 23:00 ~ 06:00 (취침/야간)
-            const isMorning = (hour >= 6 && hour < 9); // 06:00 ~ 09:00 (기상/출근)
-            const isWorkTime = (hour >= 9 && hour < 18); // 09:00 ~ 18:00 (일과)
+            const isNight = (hour >= 23 || hour < 6); 
             
-            // ★ 중요: 실험체 관리 스케줄 (14시 실험) 연동 ★
-            const isExperimentTime = (hour >= 14 && hour < 16); 
+            // ★★★ 핵심 수정: subjects.html의 스케줄 데이터와 100% 동기화 ★★★
+            // 홀수일: 07, 10, 14, 19시 시작
+            // 짝수일: 08, 11, 15, 22시 시작
+            const tasksA = [7, 10, 14, 19]; 
+            const tasksB = [8, 11, 15, 22];
+            const todaySchedule = (day % 2 !== 0) ? tasksA : tasksB;
 
-            // 2. 카이로(Kairo) 위치 로직
+            let isExperimentTime = false;
+            // 현재 시간이 스케줄 시작 시간으로부터 2시간 이내(실험 지속 시간)라면 실험 중으로 판정
+            todaySchedule.forEach(startTime => {
+                if (hour >= startTime && hour < startTime + 2) {
+                    isExperimentTime = true;
+                }
+            });
+
+            // 2. 카이로 & 리플리 위치 로직
             let kairoLocName = "";
-            let kairoLocCode = ""; // zone id mapping
+            let kairoLocCode = ""; 
+            let ripleyLocCode = "fb1_iso"; // 기본: 격리실
 
-            if (isNight) {
-                // 심야: 무조건 침실
+            if (isExperimentTime) {
+                // 실험 시간: 둘 다 무조건 실험실
+                kairoLocName = "B1 제1 중앙 실험실 (Direct Exp.)";
+                kairoLocCode = "fb1_lab1";
+                ripleyLocCode = "fb1_lab1"; 
+            } else if (isNight) {
+                // 심야: 카이로는 침실, 리플리는 격리실
                 kairoLocName = "3F 소장 침실 (Resting)";
                 kairoLocCode = "f3_bedroom";
-            } else if (isExperimentTime) {
-                // 실험 시간 (14~16시): B1 격리실 참관
-                kairoLocName = "B1 특수 격리실 (Observation)";
-                kairoLocCode = "fb1_iso";
+                ripleyLocCode = "fb1_iso";
             } else {
-                // 그 외: 집무실
+                // 평시: 카이로는 집무실, 리플리는 격리실
                 kairoLocName = "3F 소장 집무실 (Working)";
                 kairoLocCode = "f3_office";
+                ripleyLocCode = "fb1_iso";
             }
 
-            // 3. 리플리(Ripley) 위치 로직
-            let ripleyLocCode = "fb1_iso"; // 기본: 격리실
-            if (isExperimentTime) {
-                ripleyLocCode = "fb1_lab1"; // 실험 시간에는 실험실로 이동
-            }
-
-            // 4. 직원 수 로직 (야간에는 10%만 잔류)
-            const staffMultiplier = isNight ? 0.1 : 1.0; 
-
-            // 5. 배너 업데이트
+            // 3. 배너 업데이트
             const banner = document.getElementById('status-banner');
             let cycleText = isNight ? "NIGHT CYCLE (SECURITY ONLY)" : "DAY CYCLE (FULL OPERATION)";
-            if(isExperimentTime) cycleText = "⚠ CORE EXPERIMENT IN PROGRESS";
+            if(isExperimentTime) cycleText = "⚠ CORE EXPERIMENT IN PROGRESS (SCHEDULED)";
             
             banner.innerHTML = `
                 <div class="time-cycle">${cycleText}</div>
@@ -197,13 +203,15 @@
                 </div>
             `;
 
-            // 6. 구역 데이터 정의 (코드값으로 제어)
-            // kairoLocCode와 일치하면 kairo: true
+            // 4. 직원 수 로직 (야간 감축)
+            const staffMultiplier = isNight ? 0.1 : 1.0; 
+
+            // 5. 구역 데이터
             const zones = {
                 'f3': [
                     { id: 'f3_office', name: "소장 집무실", staff: 0, kairo: (kairoLocCode === 'f3_office') },
                     { id: 'f3_bedroom', name: "소장 침실/서재", staff: 0, kairo: (kairoLocCode === 'f3_bedroom') },
-                    { id: 'f3_sec', name: "보안 관제실", staff: Math.ceil(rnd(3, 5) * 1.0) }, // 보안팀은 야간에도 상주
+                    { id: 'f3_sec', name: "보안 관제실", staff: Math.ceil(rnd(3, 5) * 1.0) },
                     { id: 'f3_meet', name: "접견실", staff: 0 }
                 ],
                 'f2': [
@@ -214,12 +222,12 @@
                 ],
                 'f1': [
                     { name: "중앙 로비", staff: Math.ceil(rnd(4, 8) * staffMultiplier), sub: 0 },
-                    { name: "보안 검색대", staff: Math.ceil(rnd(4, 6) * 1.0) }, // 보안 유지
+                    { name: "보안 검색대", staff: Math.ceil(rnd(4, 6) * 1.0) },
                     { name: "주 의료동", staff: Math.ceil(rnd(10, 15) * staffMultiplier), sub: rnd(2, 5) },
                     { name: "응급 처치실", staff: Math.ceil(rnd(2, 4) * staffMultiplier), sub: 0 }
                 ],
                 'fb1': [
-                    { id: 'fb1_lab1', name: "제1 중앙 실험실", staff: Math.ceil(rnd(10, 15) * staffMultiplier), sub: 0, ripley: (ripleyLocCode === 'fb1_lab1') },
+                    { id: 'fb1_lab1', name: "제1 중앙 실험실", staff: Math.ceil(rnd(10, 15) * staffMultiplier), sub: 0, ripley: (ripleyLocCode === 'fb1_lab1'), kairo: (kairoLocCode === 'fb1_lab1') },
                     { name: "제2 중앙 실험실", staff: Math.ceil(rnd(8, 12) * staffMultiplier), sub: rnd(2, 4) },
                     { id: 'fb1_iso', name: "특수 격리실 (R-001)", staff: 0, ripley: (ripleyLocCode === 'fb1_iso'), kairo: (kairoLocCode === 'fb1_iso') },
                     { name: "개별 격리실 (A구역)", staff: Math.ceil(rnd(2, 4) * staffMultiplier), sub: rnd(120, 130) },
@@ -232,23 +240,18 @@
                 ]
             };
 
-            // 7. 화면 그리기 함수
+            // 6. 화면 그리기
             const draw = (containerId, zoneList) => {
                 const container = document.getElementById(containerId);
                 let html = '';
                 zoneList.forEach(z => {
                     let icons = '';
-                    // 카이로 배지
                     if (z.kairo) icons += `<div class="special-badge badge-kairo">★ KAIRO</div>`;
-                    // 리플리 배지
                     if (z.ripley) icons += `<div class="special-badge badge-ripley">☣ ER-S-02-001</div>`;
-                    // 직원/실험체 수
                     if (z.staff > 0) icons += `<span class="occ-item icon-staff">👤 연구원 ${z.staff}명</span>`;
                     if (z.sub > 0) icons += `<span class="occ-item icon-sub">🧬 실험체 ${z.sub}체</span>`;
-                    // 빈방 처리
                     if (icons === '') icons = `<span style="color:#444; font-size:11px;">- Empty -</span>`;
                     
-                    // 강조 효과 (카이로가 있는 방은 테두리 붉게)
                     let boxStyle = z.kairo ? 'border-color:var(--danger); background:rgba(255, 75, 75, 0.05);' : '';
 
                     html += `<div class="zone-box" style="${boxStyle}">
@@ -266,7 +269,6 @@
             draw('floor-b2', zones.fb2);
         }
 
-        // 초기 실행 및 3초마다 갱신 (시간 변화 감지)
         updateFacilityStatus();
         setInterval(updateFacilityStatus, 3000); 
     </script>
