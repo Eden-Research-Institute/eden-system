@@ -61,6 +61,19 @@
         .profile-table th, .profile-table td { padding: 15px 0; border-bottom: 1px solid #ddd; text-align: left; font-size: 15px; }
         .profile-table th { width: 120px; color: var(--primary); font-weight: 800; }
 
+        /* ▼▼▼ 모달 스타일 추가 ▼▼▼ */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 2000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
+        .modal-box { background: #fff; width: 90%; max-width: 500px; padding: 40px; border-radius: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative; transform: translateY(20px); transition: transform 0.3s; }
+        .modal-close { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #999; }
+        .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 10px; text-align: center; }
+        .form-desc { font-size: 13px; color: #666; margin-bottom: 30px; text-align: center; word-break: keep-all; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 5px; }
+        .form-input, .form-textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s; }
+        .form-input:focus, .form-textarea:focus { border-color: var(--secondary); background: #f9fcff; }
+        .form-textarea { resize: none; height: 100px; }
+        .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 15px; border-radius: 6px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+
         footer { background: #111; color: #555; padding: 60px 20px; text-align: center; font-size: 12px; margin-top: 100px; }
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -134,7 +147,7 @@
                     <tr><th>BIRTH</th><td>19XX. 08. 26</td></tr>
                     <tr><th>EDUCATION</th><td>Wernher Medical Univ. (M.D. / Ph.D.)</td></tr>
                     <tr><th>FIELD</th><td>Bio-Engineering / Neuro-Science</td></tr>
-                    <tr><th>CAREER</th><td>現 에덴 생명공학 연구소장<br>前 막스 플랑크 유전학 연구소 수석 연구원</td></tr>
+                    <tr><th>CAREER</th><td>現 에덴 생명공학 연구소장<br>前 베르너 국립 바이오 센터 국가 수석 연구원</td></tr>
                 </table>
                 
                 <div class="sign">Director. Kairo</div>
@@ -144,9 +157,60 @@
 
     <footer>
         <p>© EDEN INSTITUTE. All Rights Reserved.</p>
-        <p>Headquarters: Friedrichstraße 88, 10117 Berlin, Germany | Contact: info@eden-lab.public</p>
+        <p>Headquarters: XX District, XX City, Germany</p>
+        <p>Contact: <a href="javascript:openModal()" style="color:#aaa; text-decoration:underline;">info@eden-lab.public</a> | Tel: +XX XX-XXXX-XXXX</p>
         <p style="margin-top: 10px; opacity: 0.3;">Authorized Personnel Only Access Portal Hidden.</p>
     </footer>
 
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="form-title">문의하기 (Contact Us)</div>
+            <div class="form-desc">연구소에 궁금한 점이 있으신가요?<br>담당자에게 메시지를 남겨주세요.</div>
+            <div class="form-group"><label class="form-label">보내는 분 (Email / Name)</label><input type="text" id="ct_sender" class="form-input" placeholder="답장받을 연락처를 입력하세요"></div>
+            <div class="form-group"><label class="form-label">제목 (Subject)</label><input type="text" id="ct_subject" class="form-input" placeholder="제목을 입력하세요"></div>
+            <div class="form-group"><label class="form-label">내용 (Message)</label><textarea id="ct_msg" class="form-textarea" placeholder="내용을 입력하세요"></textarea></div>
+            <button class="btn-submit" onclick="submitContact()">메시지 전송하기</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal() { 
+            const m = document.getElementById('contactModal'); 
+            m.style.display = 'flex'; 
+            setTimeout(() => { m.style.opacity = '1'; m.querySelector('.modal-box').style.transform = 'translateY(0)'; }, 10); 
+        }
+        function closeModal() { 
+            const m = document.getElementById('contactModal'); 
+            m.style.opacity = '0'; 
+            m.querySelector('.modal-box').style.transform = 'translateY(20px)'; 
+            setTimeout(() => { m.style.display = 'none'; }, 300); 
+        }
+
+        function submitContact() {
+            const sender = document.getElementById('ct_sender').value;
+            const subject = document.getElementById('ct_subject').value;
+            const msg = document.getElementById('ct_msg').value;
+            if(!sender || !subject) { alert('보내는 분과 제목을 입력해주세요.'); return; }
+
+            const btn = document.querySelector('.btn-submit'); 
+            const originalText = btn.innerText;
+            btn.innerText = "전송 중..."; btn.style.opacity = "0.7";
+
+            setTimeout(() => {
+                alert('메시지가 성공적으로 전송되었습니다.\n담당자가 확인 후 답변 드리겠습니다.');
+                
+                // Public과 동일한 저장소(eden_contact_mails)를 사용하여 Main 대시보드와 연동
+                const mailData = { sender: sender, title: subject, body: msg, time: new Date().toLocaleString() };
+                let mails = JSON.parse(localStorage.getItem('eden_contact_mails')) || [];
+                mails.push(mailData); 
+                localStorage.setItem('eden_contact_mails', JSON.stringify(mails));
+
+                closeModal();
+                document.getElementById('ct_sender').value = ''; document.getElementById('ct_subject').value = ''; document.getElementById('ct_msg').value = '';
+                btn.innerText = originalText; btn.style.opacity = "1";
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
