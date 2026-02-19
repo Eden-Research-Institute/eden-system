@@ -36,9 +36,16 @@
         }
 
         .director-section { display: flex; gap: 60px; align-items: flex-start; border-top: 1px solid #ddd; padding-top: 60px; }
-        .director-img-box { width: 350px; height: 450px; background-color: #e0e0e0; flex-shrink: 0; display: flex; justify-content: center; align-items: center; border-radius: 4px; overflow: hidden; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .director-img-box::after { content: 'Director Image'; color: #999; font-weight: bold; }
-        .director-photo { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1; opacity: 0.9; }
+        
+        .director-img-box { 
+            width: 350px; height: 450px; flex-shrink: 0; 
+            display: flex; justify-content: center; align-items: center; 
+            border-radius: 4px; overflow: hidden; position: relative; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
+            background-color: #000; 
+        }
+        .director-photo { width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.95; transition: 0.5s; }
+        .director-img-box:hover .director-photo { opacity: 1; transform: scale(1.02); }
 
         .director-text { flex: 1; }
         .director-label { color: var(--secondary); font-weight: 700; font-size: 14px; letter-spacing: 2px; margin-bottom: 15px; display: block; }
@@ -61,7 +68,7 @@
         .profile-table th, .profile-table td { padding: 15px 0; border-bottom: 1px solid #ddd; text-align: left; font-size: 15px; }
         .profile-table th { width: 120px; color: var(--primary); font-weight: 800; }
 
-        /* ▼▼▼ 모달 스타일 추가 ▼▼▼ */
+        /* 모달 스타일 */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 2000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
         .modal-box { background: #fff; width: 90%; max-width: 500px; padding: 40px; border-radius: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative; transform: translateY(20px); transition: transform 0.3s; }
         .modal-close { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #999; }
@@ -114,7 +121,7 @@
 
         <div class="director-section">
             <div class="director-img-box">
-                <img src="https://via.placeholder.com/350x450/1a1a1a/ffffff?text=KAIRO" class="director-photo" alt="Director Kairo">
+                <img src="https://cdn.caveduck.io/cdn-cgi/image/anim=true,dpr=1.5,f=auto,fit=crop,g=top,w=400/charim/86299792-cb3c-4551-9abb-93fb4093a6ec?v=867f00" class="director-photo" alt="Director Kairo">
             </div>
             <div class="director-text">
                 <span class="director-label">MESSAGE FROM THE DIRECTOR</span>
@@ -144,10 +151,10 @@
 
                 <table class="profile-table">
                     <tr><th>NAME</th><td>KAIRO (카이로)</td></tr>
-                    <tr><th>BIRTH</th><td>19XX. 08. 26</td></tr>
+                    <tr><th>BIRTH</th><td>19XX. 08. 16</td></tr>
                     <tr><th>EDUCATION</th><td>Wernher Medical Univ. (M.D. / Ph.D.)</td></tr>
                     <tr><th>FIELD</th><td>Bio-Engineering / Neuro-Science</td></tr>
-                    <tr><th>CAREER</th><td>現 에덴 생명공학 연구소장<br>前 베르너 국립 바이오 센터 수석 연구원</td></tr>
+                    <tr><th>CAREER</th><td>現 에덴 연구소 연구소장<br>前 베르너 국립 바이오 센터 수석 연구원</td></tr>
                 </table>
                 
                 <div class="sign">Director. Kairo</div>
